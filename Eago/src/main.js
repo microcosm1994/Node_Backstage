@@ -5,7 +5,10 @@ import App from './App'
 import router from './router'
 
 Vue.config.productionTip = false
-
+Vue.http.options.emulateJSON = true
+Vue.http.options.headers = {
+  'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+}
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

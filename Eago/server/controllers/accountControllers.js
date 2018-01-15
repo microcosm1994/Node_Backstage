@@ -4,7 +4,8 @@ const db = require(path.join(__dirname, '../mongo/db.js'))
 
 exports.login = (req, res) => {
   let result = {status: 0, message: '登录成功'}
-  db.find('persons', {name: 'dubo', pwd: 123456}, (data) => {
+  console.log(req.query);
+  db.find('persons', req.query, (data) => {
     if (data.length) {
       res.json(result)
     } else {
@@ -13,5 +14,4 @@ exports.login = (req, res) => {
       res.json(result)
     }
   })
-  console.log(req);
 }

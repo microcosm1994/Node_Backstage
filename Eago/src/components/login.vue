@@ -21,13 +21,18 @@
     },
     methods: {
       login () {
+        let self = this
         let user = {
           account: this.account,
           password: this.pwd
         }
         console.log(user)
-        this.$http.post('/api/account/login', user).then((response) => {
+        this.$http.get('/api/account/login?username=' + user.account + '&password=' + user.password).then((response) => {
           console.log(response.body)
+          let data = response.body
+          if (data.status === 0) {
+            self.$router.push({path: '/home'})
+          }
         })
       }
     }
