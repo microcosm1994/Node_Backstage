@@ -6,12 +6,12 @@
         <ul>
           <li>
             <a href="javascript:;">
-              <router-link to="/add">添加素材</router-link>
+              <router-link to="/library">素材库</router-link>
             </a>
           </li>
           <li>
             <a href="javascript:;">
-              <router-link to="/library">素材库</router-link>
+              <router-link to="/add">添加素材</router-link>
             </a>
           </li>
         </ul>
@@ -61,6 +61,7 @@
   }
   html,body{
     height: 100%;
+    background: #F5F5F5;
   }
   .home{
     width: 100%;
@@ -106,6 +107,5 @@
   .home-route{
     width: 100%;
     padding-left: 180px;
-    padding-top: 70px;
   }
 </style>

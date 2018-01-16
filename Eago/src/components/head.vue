@@ -1,7 +1,8 @@
 <template>
   <div class="headers">
     <div class="logo">
-      <img src="" alt="">
+      <span style="color:#fed189;">Ea</span>
+      <span style="color:#00a0df;">go</span>
     </div>
     <div class="headers-nav">
       <a href="javascript:;">图片素材</a>
@@ -50,6 +51,7 @@
   }
   .headers{
     width: 100%;
+    min-width: 1200px;
     height: 70px;
     background: #1a2732;
     padding-left: 100px;
@@ -62,9 +64,16 @@
   .logo{
     display: inline-block;
     vertical-align: middle;
-    width: 200px;
+    width: 150px;
     height: 50px;
-    background: #000;
+    position: absolute;
+    top:10px;
+    left: 15px;
+  }
+  .logo span{
+    line-height: 50px;
+    font-size: 34px;
+    font-weight: 700;
   }
   .headers-nav{
     margin-left: 30px;
