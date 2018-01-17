@@ -25,7 +25,6 @@ exports.find=(collection,query,callback)=>{
   opencollections(collection,(col)=>{
     col.find(query).toArray((err,data)=>{
       if(!err){
-        console.log(data);
         callback(data);
       }else{
         console.log(err);
@@ -38,7 +37,6 @@ exports.insert=(collection,query,callback)=>{
   opencollections(collection,(col)=>{
     col.insert(query,(err,data)=>{
       if(!err){
-        console.log(data);
         callback(data);
       }else{
         console.log(err);
@@ -53,7 +51,6 @@ exports.update=(collection,query,querydata,callback)=>{
   opencollections(collection,(col)=>{
     col.update(query,{ $set: querydata },(err,data)=>{
       if(!err){
-        console.log(data);
         callback(data);
       }else{
         console.log(err);
@@ -67,7 +64,6 @@ exports.delete=(collection,query,callback)=>{
   opencollections(collection,(col)=>{
     col.delete(query,(err,data)=>{
       if(!err){
-        console.log(data);
         callback(data);
       }else{
         console.log(err);

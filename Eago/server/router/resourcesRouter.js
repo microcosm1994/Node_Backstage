@@ -7,5 +7,6 @@ const resourcesRouter=express.Router()
 const resourcesControllers=require(path.join(__dirname,'../controllers/resourcesControllers.js'))
 
 resourcesRouter.get('/all',multipartMiddleware,resourcesControllers.all)
+resourcesRouter.post('/save',multipartMiddleware,resourcesControllers.save)
 
 module.exports=resourcesRouter

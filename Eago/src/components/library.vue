@@ -21,8 +21,8 @@
     methods: {
       getAll: function () {
         this.$http.get('/api/resources/all').then((response) => {
-          console.log(response.body)
-          let data = response.body
+          console.log(response.data)
+          let data = response.data
           if (data.status === 0) {
             console.log(data)
           }

@@ -23,13 +23,13 @@
       login () {
         let self = this
         let user = {
-          account: this.account,
+          username: this.account,
           password: this.pwd
         }
         console.log(user)
-        this.$http.get('/api/account/login?username=' + user.account + '&password=' + user.password).then((response) => {
-          console.log(response.body)
-          let data = response.body
+        this.$http.post('/api/account/login', user).then((response) => {
+          console.log(response.data)
+          let data = response.data
           if (data.status === 0) {
             self.$router.push({path: '/home'})
           }
@@ -64,8 +64,6 @@
   .login-btn {
     width: 360px;
     height: 50px;
-    border-radius: 5px;
-    overflow: hidden;
     margin: 0 auto;
     margin-top: 50px;
   }
@@ -79,6 +77,8 @@
     color: #fff;
     cursor: pointer;
     font-size: 24px;
+    border-radius: 5px;
+    margin: 0;
   }
 
   .login-btn button:hover {
