@@ -12,18 +12,26 @@ const client = new oss.Wrapper({
 })
 
 exports.upload=(req,res)=>{
+  let file = req.files.file
+  let fileName = file.name
+  let filePath = file.path
+  let result = {status: 0, message: '上传成功'}
   co(function* () {
-    var result = yield client.put('object-key', 'local-file');
-    console.log(result);
+    var results = yield client.put(fileName, filePath);
+    console.log('aaaaa'+results);
+    result.status = results.res.status
+    res.json(result);
   }).catch(function (err) {
-    console.log(err);
+    if(err){
+      res.json(err)
+    }
   });
 }
 
-co(function* () {
-  var result = yield client.listBuckets();
-  console.log(result);
-}).catch(function (err) {
-  console.log(err);
-});
+// co(function* () {
+//   var result = yield client.listBuckets();
+//   console.log(result);
+// }).catch(function (err) {
+//   console.log(err);
+// });
 

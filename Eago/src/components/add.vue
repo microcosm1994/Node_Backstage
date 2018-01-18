@@ -3,9 +3,11 @@
     <h1>{{title}}</h1>
     <div class="add-photo">
       <el-upload
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action="/api/picture/upload"
         :headers="headers"
         list-type="picture-card"
+        :on-success="uploadsuccess"
+        :on-error="uploaderr"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove">
         <i class="el-icon-plus"></i>
@@ -56,6 +58,18 @@
           let data = response.data
           console.log(data)
         })
+      },
+      uploadsuccess (response, file, filelist) {
+        console.log(response)
+        console.log(file)
+        if(response.status === -1){
+          alert('服务器错误')
+        }
+      },
+      uploaderr (err, file, filelist) {
+        console.log(err)
+        console.log(file)
+        console.log(filelist)
       },
       handleRemove (file, fileList) {
         console.log(file, fileList)
