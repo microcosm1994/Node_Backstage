@@ -37,6 +37,7 @@
     data () {
       return {
         title: '添加素材',
+        list: [],
         sourceName: '',
         des: '',
         country: '',
@@ -49,27 +50,35 @@
     },
     methods: {
       save: function () {
-        let source = {}
-        source.sourceName = this.sourceName
-        source.des = this.des
-        source.country = this.country
-        console.log(source)
-        this.$http.post('/api/resources/save', source).then((response) => {
+        let result = {}
+        result.sourceName = this.sourceName
+        result.des = this.des
+        result.country = this.country
+        result.list = this.list
+        console.log(result)
+        this.$http.post('/api/resources/save', result).then((response) => {
           let data = response.data
           console.log(data)
         })
       },
       uploadsuccess (response, file, filelist) {
-        console.log(response)
-        console.log(file)
-        if(response.status === -1){
-          alert('服务器错误')
+        if (response.status === 200) {
+          console.log(response)
+          console.log(file)
+          let data={
+            name: response.data.name,
+            url: response.data.url,
+            creatTime: response.data.creatTime,
+            id: file.uid
+          }
+          this.list.push(data)
+          console.log(this.list)
         }
       },
       uploaderr (err, file, filelist) {
-        console.log(err)
-        console.log(file)
-        console.log(filelist)
+        if (err) {
+          alert('服务器错误,' + file.name + '上传失败')
+        }
       },
       handleRemove (file, fileList) {
         console.log(file, fileList)

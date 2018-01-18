@@ -10,7 +10,12 @@ const client = new oss.Wrapper({
   accessKeySecret: '3UgvOW1islp4IVrvXiVk6JfL9eQp4n',
   bucket: 'eago-picture'
 })
-
+co(function* () {
+  var result = yield client.putBucketACL('eago-picture', 'oss-cn-beijing', 'public-read');
+  // console.log(result);
+}).catch(function (err) {
+  console.log(err);
+});
 exports.upload=(req,res)=>{
   let file = req.files.file
   let fileName = file.name
@@ -18,15 +23,22 @@ exports.upload=(req,res)=>{
   let result = {status: 0, message: '上传成功'}
   co(function* () {
     var results = yield client.put(fileName, filePath);
-    console.log('aaaaa'+results);
+    result.data = {
+      name: results.name,
+      url: results.url,
+      creatTime: results.res.headers.date
+    }
     result.status = results.res.status
     res.json(result);
   }).catch(function (err) {
     if(err){
+      res.status(503)
+      res.set('Content-Type', 'application/json; charset=utf-8');
       res.json(err)
     }
   });
 }
+
 
 // co(function* () {
 //   var result = yield client.listBuckets();
