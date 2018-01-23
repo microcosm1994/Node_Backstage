@@ -1,6 +1,6 @@
 const mongodb=require('mongodb')
 const MongoClient = mongodb.MongoClient
-const ObjectId=mongodb.objectId
+const ObjectId=mongodb.ObjectId
 const Server=mongodb.Server;
 const Db=mongodb.Db;
 const server=new Server('127.0.0.1','27017',{auto_reconnect:true})
@@ -21,6 +21,8 @@ function opencollections(colName,callback){
     db.close()
   })
 }
+
+exports.ObjectId =new ObjectId()
 exports.find=(collection,query,callback)=>{
   opencollections(collection,(col)=>{
     col.find(query).toArray((err,data)=>{

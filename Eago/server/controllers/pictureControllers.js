@@ -3,6 +3,8 @@ const path = require('path');
 const db = require(path.join(__dirname, '../mongo/db.js'))
 const oss = require('ali-oss')
 const co = require('co')
+const mongoose = require('mongoose')
+
 
 const client = new oss.Wrapper({
   region: 'oss-cn-beijing',
@@ -39,6 +41,23 @@ exports.upload=(req,res)=>{
   });
 }
 
+
+exports.detailed=(req,res)=>{
+  let result = {status: 0, message: '获取成功'}
+  let query = req.query
+  let id = mongoose.Types.ObjectId(query._id)
+  query._id = id
+  db.find('library',query,(data)=>{
+    if(data.length){
+      result.data = data
+      res.json(result)
+    }else{
+      result.status = 1
+      result.message = '服务器错误'
+      res.json(result)
+    }
+  })
+}
 
 // co(function* () {
 //   var result = yield client.listBuckets();
