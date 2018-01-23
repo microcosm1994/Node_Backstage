@@ -7,6 +7,7 @@ const accountRouter=express.Router();
 const accountControllers=require(path.join(__dirname,'../controllers/accountControllers.js'))
 
 accountRouter.post('/login',multipartMiddleware, accountControllers.login)
+accountRouter.post('/register',multipartMiddleware, accountControllers.register)
 // accountRouter.get('/login',multipartMiddleware,(req,res)=>{
 //   console.log(req.query);
 //   res.json({status:0, message:'请求成功'})

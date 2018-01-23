@@ -1,38 +1,38 @@
 <template>
-  <div class="login">
+  <div class="register">
     <h1>{{title}}</h1>
     <div><input type="text" placeholder="账号" v-model="account"></div>
     <div><input type="password" placeholder="密码" v-model="pwd"></div>
-    <p><a href="javascript:;"><router-link to="./register">注册帐号</router-link></a></p>
-    <div class="login-btn" v-on:click="login()">
-      <button>登 陆</button>
+    <p><a href="javascript:;"><router-link to="./register">返回登陆</router-link></a></p>
+    <div class="register-btn" v-on:click="register()">
+      <button>注 册</button>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'login',
+    name: 'register',
     data () {
       return {
-        title: 'Welcome to Eago',
+        title: '注册账号',
         account: '',
         pwd: ''
       }
     },
     methods: {
-      login () {
+      register () {
         let self = this
         let user = {
           username: this.account,
           password: this.pwd
         }
         console.log(user)
-        this.$http.post('/api/account/login', user).then((response) => {
+        this.$http.post('/api/account/register', user).then((response) => {
           console.log(response.data)
           let data = response.data
           if (data.status === 0) {
-            self.$router.push({path: '/home'})
+            self.$router.push({path: '/login'})
           }
         })
       }
@@ -42,7 +42,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .login {
+  .register {
     padding-top: 200px;
   }
 
@@ -62,14 +62,14 @@
     box-sizing: border-box;
   }
 
-  .login-btn {
+  .register-btn {
     width: 360px;
     height: 50px;
     margin: 0 auto;
     margin-top: 50px;
   }
 
-  .login-btn button {
+  .register-btn button {
     outline: none;
     border: none;
     width: 100%;
@@ -82,11 +82,11 @@
     margin: 0;
   }
 
-  .login-btn button:hover {
+  .register-btn button:hover {
     background: #0d79d1;
   }
 
-  .login-btn button:active {
+  .register-btn button:active {
     background: #0f88eb;
   }
 </style>

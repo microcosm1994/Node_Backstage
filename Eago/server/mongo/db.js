@@ -4,7 +4,7 @@ const ObjectId=mongodb.objectId
 const Server=mongodb.Server;
 const Db=mongodb.Db;
 const server=new Server('127.0.0.1','27017',{auto_reconnect:true})
-const db=new Db('foobar',server)
+const db=new Db('eago',server)
 function opencollections(colName,callback){
   db.open((err)=>{
     if(!err){

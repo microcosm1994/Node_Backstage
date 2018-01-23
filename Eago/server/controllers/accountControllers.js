@@ -16,3 +16,16 @@ exports.login = (req, res) => {
     }
   })
 }
+
+exports.register=(req,res)=>{
+  let result={status:0,message:'注册成功'}
+  db.insert('persons',req.body,(data)=>{
+    if(data){
+      res.json(result)
+    }else{
+      result.status=1
+      result.message='服务器错误'
+      res.json(result)
+    }
+  })
+}

@@ -55,6 +55,7 @@
         result.des = this.des
         result.country = this.country
         result.list = this.list
+        result.titlepage = this.list[0]
         console.log(result)
         this.$http.post('/api/resources/save', result).then((response) => {
           let data = response.data
@@ -63,16 +64,13 @@
       },
       uploadsuccess (response, file, filelist) {
         if (response.status === 200) {
-          console.log(response)
-          console.log(file)
-          let data={
+          let data = {
             name: response.data.name,
             url: response.data.url,
             creatTime: response.data.creatTime,
             id: file.uid
           }
           this.list.push(data)
-          console.log(this.list)
         }
       },
       uploaderr (err, file, filelist) {
@@ -81,7 +79,17 @@
         }
       },
       handleRemove (file, fileList) {
-        console.log(file, fileList)
+        console.log(this.list)
+        console.log(file)
+        let list = this.list
+        let removeId = file.uid
+        for (let i = 0; i < list.length; i++) {
+          if (removeId === list[i].id) {
+            list.splice(i, 1)
+          }
+        }
+        this.list = list
+        console.log(this.list)
       },
       handlePictureCardPreview (file) {
         this.dialogImageUrl = file.url
