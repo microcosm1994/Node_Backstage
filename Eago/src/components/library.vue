@@ -117,6 +117,14 @@
     display: inline-block;
     vertical-align: middle;
   }
+  button, .el-button, .el-dialog__headerbtn{
+    width: auto;
+    height: auto;
+  }
+  .el-dialog__headerbtn, .el-dialog__headerbtn:hover{
+    margin: 0;
+    background: none;
+  }
   .source-modal-picture button,.source-modal-picture button:hover,.source-modal-picture button:active,.source-modal-picture button:focus{
     background: none;
     border: none;
