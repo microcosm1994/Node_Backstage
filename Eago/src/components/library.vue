@@ -102,7 +102,22 @@
         if (this.isUpdate) {
           this.updatebtn = '修 改'
           if (this.updateChange) {
-
+            let data = {}
+            data._id = this.sourceModal._id
+            data.query = this.sourceModal
+            delete data.query._id
+            this.$http.put('/api/picture/update', data).then((response) => {
+              if (response.status === 200) {
+                if (response.data.status === 0) {
+                  this.$message({
+                    message: response.data.message,
+                    type: 'success'
+                  })
+                } else {
+                  this.$message.error(response.data.message)
+                }
+              }
+            })
           }
         } else {
           this.updatebtn = '保 存'

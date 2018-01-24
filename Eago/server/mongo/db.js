@@ -22,6 +22,9 @@ function opencollections (colName, callback) {
   })
 }
 exports.ObjectId = new ObjectId()
+/**
+ * 查找
+ * */
 exports.find = (collection, query, callback) => {
   opencollections(collection, (col) => {
     col.find(query).toArray((err, data) => {
@@ -33,6 +36,9 @@ exports.find = (collection, query, callback) => {
     })
   })
 }
+/**
+ * 插入
+ * */
 exports.insert = (collection, query, callback) => {
   opencollections(collection, (col) => {
     col.insert(query, (err, data) => {
@@ -44,6 +50,9 @@ exports.insert = (collection, query, callback) => {
     })
   })
 }
+/**
+ * 修改
+ * */
 exports.update = (collection, query, querydata, callback) => {
   opencollections(collection, (col) => {
     col.update(query, { $set: querydata }, (err, data) => {
@@ -55,6 +64,9 @@ exports.update = (collection, query, querydata, callback) => {
     })
   })
 }
+/**
+ * 删除
+ * */
 exports.delete = (collection, query, callback) => {
   opencollections(collection, (col) => {
     col.delete(query, (err, data) => {
