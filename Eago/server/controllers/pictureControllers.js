@@ -61,7 +61,7 @@ exports.update = (req, res) => {
   let body = req.body.query
   let id = mongoose.Types.ObjectId(req.body._id)
   let query = {}
-  let result = {status: 0, message: '保存成功'}
+  let result = {status: 0, message: '素材内容已更新'}
   query._id = id
   db.update('library', query, body, (data) => {
     console.log(data.result)

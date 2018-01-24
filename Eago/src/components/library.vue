@@ -48,7 +48,6 @@
         </div>
         <div slot="footer" class="dialog-footer">
           <button class="update-btn" @click="update">{{updatebtn}}</button>
-          <el-button @click="outerVisible = false">关 闭</el-button>
         </div>
       </el-dialog>
     </div>
@@ -115,6 +114,7 @@
                     message: response.data.message,
                     type: 'success'
                   })
+                  this.updateChange = false
                 } else {
                   this.$message.error(response.data.message)
                 }
