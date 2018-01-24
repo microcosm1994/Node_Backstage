@@ -1,80 +1,71 @@
-const mongodb=require('mongodb')
-const MongoClient = mongodb.MongoClient
-const ObjectId=mongodb.ObjectId
-const Server=mongodb.Server;
-const Db=mongodb.Db;
-const server=new Server('127.0.0.1','27017',{auto_reconnect:true})
-const db=new Db('eago',server)
-function opencollections(colName,callback){
-  db.open((err)=>{
-    if(!err){
-      db.collection(colName,(err,col)=>{
-        if(!err){
+const mongodb = require('mongodb')
+// const MongoClient = mongodb.MongoClient
+const ObjectId = mongodb.ObjectId
+const Server = mongodb.Server
+const Db = mongodb.Db
+const server = new Server('127.0.0.1', '27017', {auto_reconnect: true})
+const db = new Db('eago', server)
+function opencollections (colName, callback) {
+  db.open((err) => {
+    if (!err) {
+      db.collection(colName, (err, col) => {
+        if (!err) {
           callback(col)
-        }else{
-          console.log(err);
+        } else {
+          console.log(err)
         }
       })
-    }else{
+    } else {
       throw err
     }
     db.close()
   })
 }
-
-exports.ObjectId =new ObjectId()
-exports.find=(collection,query,callback)=>{
-  opencollections(collection,(col)=>{
-    col.find(query).toArray((err,data)=>{
-      if(!err){
-        callback(data);
-      }else{
-        console.log(err);
+exports.ObjectId = new ObjectId()
+exports.find = (collection, query, callback) => {
+  opencollections(collection, (col) => {
+    col.find(query).toArray((err, data) => {
+      if (!err) {
+        callback(data)
+      } else {
+        console.log(err)
       }
     })
   })
 }
-
-exports.insert=(collection,query,callback)=>{
-  opencollections(collection,(col)=>{
-    col.insert(query,(err,data)=>{
-      if(!err){
-        callback(data);
-      }else{
-        console.log(err);
+exports.insert = (collection, query, callback) => {
+  opencollections(collection, (col) => {
+    col.insert(query, (err, data) => {
+      if (!err) {
+        callback(data)
+      } else {
+        console.log(err)
       }
     })
   })
 }
-
-
-
-exports.update=(collection,query,querydata,callback)=>{
-  opencollections(collection,(col)=>{
-    col.update(query,{ $set: querydata },(err,data)=>{
-      if(!err){
-        callback(data);
-      }else{
-        console.log(err);
+exports.update = (collection, query, querydata, callback) => {
+  opencollections(collection, (col) => {
+    col.update(query, { $set: querydata }, (err, data) => {
+      if (!err) {
+        callback(data)
+      } else {
+        console.log(err)
       }
     })
   })
 }
-
-
-exports.delete=(collection,query,callback)=>{
-  opencollections(collection,(col)=>{
-    col.delete(query,(err,data)=>{
-      if(!err){
-        callback(data);
-      }else{
-        console.log(err);
+exports.delete = (collection, query, callback) => {
+  opencollections(collection, (col) => {
+    col.delete(query, (err, data) => {
+      if (!err) {
+        callback(data)
+      } else {
+        console.log(err)
       }
     })
   })
 }
-
-
 // const DbUrl='mongodb://127.0.0.1:27017/foobar'
 // exports.ObjectId=ObjectId
 //

@@ -30,9 +30,22 @@
             <img :src="item.url" alt="">
           </el-button>
         </div>
-        <p>{{sourceModal.des}}</p>
-        <p>{{sourceModal.country}}</p>
+        <div class="source-modal-detailed">
+          <el-input
+            placeholder="请输入内容"
+            v-model="sourceModal.des"
+            v-on:change="change()"
+            :disabled="isUpdate">
+            ></el-input>
+          <el-input
+            placeholder="请输入内容"
+            v-model="sourceModal.country"
+            v-on:change="change()"
+            :disabled="isUpdate">
+            ></el-input>
+        </div>
         <div slot="footer" class="dialog-footer">
+          <button class="update-btn" @click="update">{{updatebtn}}</button>
           <el-button @click="outerVisible = false">关 闭</el-button>
         </div>
       </el-dialog>
@@ -49,6 +62,9 @@
         source: '',
         sourceModal: '',
         picdetailed: {},
+        isUpdate: true,
+        updatebtn: '修改',
+        updateChange: false,
         outerVisible: false,
         innerVisible: false
       }
@@ -70,7 +86,6 @@
           let data = response.data
           if (data.status === 0) {
             this.sourceModal = data.data[0]
-            console.log(this.sourceModal)
           }
         })
       },
@@ -81,6 +96,24 @@
         list.creatTime = creatTime
         list.id = id
         this.picdetailed = list
+      },
+      update: function () {
+        this.isUpdate = !this.isUpdate
+        if (this.isUpdate) {
+          this.updatebtn = '修 改'
+          if (this.updateChange) {
+
+          }
+        } else {
+          this.updatebtn = '保 存'
+        }
+      },
+      change: function () {
+        this.updateChange = true
+        console.log(this.sourceModal)
+      },
+      save: function () {
+        console.log(1)
       }
     }
   }
@@ -116,6 +149,38 @@
     width: 200px;
     display: inline-block;
     vertical-align: middle;
+  }
+  .source-modal-detailed{
+    width: 50%;
+    margin: 0 auto;
+  }
+  .source-modal-detailed .el-input{
+    margin-top: 20px;
+  }
+  .el-input.is-disabled .el-input__inner{
+    color:#000;
+  }
+  .update-btn{
+    width: 74px;
+    height: 40px;
+    margin: 0;
+    border-radius: 3px;
+    background: #fff;
+    color:#606266;
+    font-size:14px;
+    font-weight: 500;
+    border:1px solid #dcdfe6;
+    line-height:1;
+  }
+  .update-btn:hover{
+    color: #409EFF;
+    border-color: #c6e2ff;
+    background-color: #ecf5ff;
+  }
+  .update-btn:active{
+    color: #3a8ee6;
+    border-color: #3a8ee6;
+    outline: 0;
   }
   button, .el-button, .el-dialog__headerbtn{
     width: auto;
