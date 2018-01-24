@@ -79,8 +79,7 @@ exports.del = (req, res) => {
   let query = req.query
   let id = mongoose.Types.ObjectId(query._id)
   query._id = id
-  db.del('library', query, (data) => {
-    console.log(data)
+  db.del('library', query, true, (data) => {
     res.json(result)
   })
 }

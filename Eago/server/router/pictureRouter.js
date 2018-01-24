@@ -9,6 +9,6 @@ const pictureControllers = require(path.join(__dirname, '../controllers/pictureC
 pictureRouter.post('/upload', multipartMiddleware, pictureControllers.upload)
 pictureRouter.get('/detailed', multipartMiddleware, pictureControllers.detailed)
 pictureRouter.put('/update', multipartMiddleware, pictureControllers.update)
-pictureRouter.get('/delete', multipartMiddleware, pictureControllers.del)
+pictureRouter.get('/del', multipartMiddleware, pictureControllers.del)
 
 module.exports = pictureRouter

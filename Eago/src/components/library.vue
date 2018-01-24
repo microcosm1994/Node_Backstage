@@ -159,14 +159,12 @@
         }
       },
       del: function (id) {
-        let delId = {}
-        delId._id = id
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get('/api/picture/delete', delId).then((response) => {
+          this.$http.get('/api/picture/del?_id=' + id).then((response) => {
             if (response.data.status === 0) {
               this.$message({
                 message: '已删除!'
