@@ -48,6 +48,7 @@
         </div>
         <div slot="footer" class="dialog-footer">
           <button class="update-btn" @click="update">{{updatebtn}}</button>
+          <button class="update-btn" @click="del(sourceModal._id)">删 除</button>
         </div>
       </el-dialog>
     </div>
@@ -130,7 +131,6 @@
         console.log(this.sourceModal)
       },
       close: function (done) {
-        console.log(this.isUpdate)
         if (this.updateChange) {
           this.$confirm('修改内容还未保存, 是否关闭?', '提示', {
             confirmButtonText: '确定',
@@ -157,6 +157,23 @@
           this.updateChange = false
           done()
         }
+      },
+      del: function (id) {
+        let delId = {}
+        delId._id = id
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get('/api/picture/delete', delId).then((response) => {
+            if (response.data.status === 0) {
+              this.$message({
+                message: '已删除!'
+              })
+            }
+          })
+        }).catch(() => {})
       }
     }
   }

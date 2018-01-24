@@ -67,9 +67,9 @@ exports.update = (collection, query, querydata, callback) => {
 /**
  * 删除
  * */
-exports.delete = (collection, query, callback) => {
+exports.del = (collection, query, callback) => {
   opencollections(collection, (col) => {
-    col.delete(query, (err, data) => {
+    col.deleteOne(query, (err, data) => {
       if (!err) {
         callback(data)
       } else {
@@ -101,5 +101,3 @@ exports.delete = (collection, query, callback) => {
 //     })
 //   })
 // }
-
-

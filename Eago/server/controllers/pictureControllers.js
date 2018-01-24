@@ -64,7 +64,6 @@ exports.update = (req, res) => {
   let result = {status: 0, message: '素材内容已更新'}
   query._id = id
   db.update('library', query, body, (data) => {
-    console.log(data.result)
     if (data.result.ok === 1) {
       res.json(result)
     } else {
@@ -72,6 +71,17 @@ exports.update = (req, res) => {
       result.message = '服务器错误'
       res.json(result)
     }
+  })
+}
+
+exports.del = (req, res) => {
+  let result = {status: 0, message: '已删除'}
+  let query = req.query
+  let id = mongoose.Types.ObjectId(query._id)
+  query._id = id
+  db.del('library', query, (data) => {
+    console.log(data)
+    res.json(result)
   })
 }
 // co(function* () {
