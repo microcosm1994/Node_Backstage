@@ -23,10 +23,9 @@
     methods: {
       login () {
         let self = this
-        let user = {
-          username: this.account,
-          password: this.pwd
-        }
+        let user = {}
+        user.username = this.account
+        user.password = this.pwd - 0
         console.log(user)
         this.$http.post('/api/account/login', user).then((response) => {
           console.log(response.data)

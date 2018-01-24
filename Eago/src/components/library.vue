@@ -16,6 +16,8 @@
     <div class="source-modal">
       <el-dialog
         :title="sourceModal.sourceName"
+        :before-close="close"
+        :close-on-click-modal="true"
         :visible.sync="outerVisible">
         <el-dialog
           width="50%"
@@ -127,8 +129,34 @@
         this.updateChange = true
         console.log(this.sourceModal)
       },
-      save: function () {
-        console.log(1)
+      close: function (done) {
+        console.log(this.isUpdate)
+        if (this.updateChange) {
+          this.$confirm('修改内容还未保存, 是否关闭?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            done()
+            this.isUpdate = true
+            this.updatebtn = '修改'
+            this.updateChange = false
+            this.$message({
+              type: 'success',
+              message: '已取消修改!'
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '修改完成之后请点击保存'
+            })
+          })
+        } else {
+          this.isUpdate = true
+          this.updatebtn = '修改'
+          this.updateChange = false
+          done()
+        }
       }
     }
   }
@@ -197,9 +225,10 @@
     border-color: #3a8ee6;
     outline: 0;
   }
-  button, .el-button, .el-dialog__headerbtn{
+  button, .el-button, .el-dialog__headerbtn,.el-message-box__headerbtn{
     width: auto;
     height: auto;
+    margin: 0;
   }
   .el-dialog__headerbtn, .el-dialog__headerbtn:hover{
     margin: 0;
