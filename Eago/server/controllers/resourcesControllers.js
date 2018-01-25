@@ -30,3 +30,18 @@ exports.save = (req, res) => {
     }
   })
 }
+
+exports.find = (req, res) => {
+  let result = {status: 0, message: '查找成功'}
+  let query = req.query
+  db.find('library', query, (data) => {
+    if (data.length) {
+      result.data = data
+      res.json(result)
+    } else {
+      result.status = 1
+      result.message = '服务器错误'
+      res.json(result)
+    }
+  })
+}

@@ -170,7 +170,6 @@
               for (let i = 0; i < this.source.length; i++) {
                 if (id === this.source[i]._id) {
                   this.source.splice(i, 1)
-                  console.log(this.source)
                 }
               }
               this.$message({

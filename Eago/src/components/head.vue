@@ -9,37 +9,67 @@
       <a href="javascript:;">视频素材</a>
     </div>
     <div class="search">
-      <div class="search-select">
-        <div class="search-select-text">
-
-        </div>
-        <div class="search-select-op">
-          <a href="javascript:;">图片</a>
-          <a href="javascript:;">视频</a>
-        </div>
-      </div>
-      <div class="search-input">
-          <input type="text">
-          <div class="search-btn">搜索</div>
-        </div>
+      <el-input placeholder="请输入查找内容" v-model="searchText" class="input-with-select">
+        <el-select v-model="value" slot="prepend" placeholder="名称">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-button slot="append" icon="el-icon-search" @click="getsearch"></el-button>
+      </el-input>
     </div>
     <div class="person">
       <div class="person-photo">
         <img src="" alt="">
       </div>
       <div class="person-container">
-        <div class="person-name">杜波</div>
-        <div class="person-nav">
-          <a href="javascript:;">个人信息</a>
-          <a href="javascript:;">退出</a>
-        </div>
+        <el-dropdown trigger="click">
+          <span class="el-dropdown-link">
+            下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>个人信息</el-dropdown-item>
+            <el-dropdown-item>退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </div>
   </div>
 </template>
 <script>
   export default {
-    name: 'headers'
+    name: 'headers',
+    data () {
+      return {
+        searchText: '',
+        options: [{
+          value: '选项1',
+          label: '名称'
+        }, {
+          value: '选项2',
+          label: '国家'
+        }],
+        value: '名称'
+      }
+    },
+    mounted () {},
+    methods: {
+      getsearch: function () {
+        this.$store.commit('search_text', this.searchText)
+        if (this.value === '名称') {
+          this.$http.get('/api/resources/find?sourceName=' + this.searchText).then((response) => {
+            console.log(response.data)
+            if (response.data.status === 0) {
+              this.$store.commit('search_result', response.data.data)
+              this.$router.push({path: './search_result'})
+            }
+          })
+        }
+      }
+    }
   }
 </script>
 <style>
@@ -95,69 +125,19 @@
     display: inline-block;
     vertical-align: middle;
     margin-left: 100px;
-    width: 350px;
-    height: 30px;
   }
-  .search-select{
-    display: inline-block;
-    vertical-align: top;
-    width: 50px;
-    height: 100%;
-    position: relative;
-    cursor: pointer;
+
+  .search .el-input__inner{
+    width: 90px;
   }
-  .search-select .search-select-text{
-    width: 100%;
-    height: 100%;
+  .input-with-select>.el-input__inner{
+    width: 200px !important;
+  }
+  .el-scrollbar{
     text-align: center;
-    line-height: 30px;
   }
-  .search-select .search-select-op{
-    position: absolute;
-    top: 70px;
-    border:1px solid #999999;
-    width: 100%;
-  }
-  .search-select .search-select-op a{
-    display: block;
-    width: 100%;
-    text-align: center;
-    line-height: 30px;
-    font-size: 14px;
-    color:#000000;
-  }
-  .search-input{
-    display: inline-block;
-    vertical-align: middle;
-    width: 290px;
-    height: 30px;
-    position: relative;
-  }
-  .search-input input{
-    width: 240px;
-    height: 100%;
-    border:none;
-    outline: none;
-    padding-left: 10px;
-    border-radius:5px;
-  }
-  .search-input .search-btn{
-    width: 40px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
-    display: inline-block;
-    vertical-align: top;
-    background: #0f88eb;
-    color:#fff;
-    border-radius:5px;
-    cursor: pointer;
-  }
-  .search-input .search-btn:hover{
-    background: #00a0df;
-  }
-  .search-input .search-btn:active{
-    background: #0f88eb;
+  .el-select-dropdown .popper__arrow{
+    left: 90px !important;
   }
   .person{
     width: 200px;
@@ -186,20 +166,17 @@
     vertical-align: top;
     position: relative;
   }
-  .person .person-container .person-name{
+  .person .person-container .el-dropdown-link{
     width: 100%;
     height: 100%;
     text-align: center;
     line-height: 70px;
-    font-size: 18px;
+    font-size: 16px;
     color:#fff;
     cursor: pointer;
   }
-  .person .person-container .person-nav{
-    width: 100%;
-    position: absolute;
-    top:70px;
-    border:1px solid #000;
+  .el-dropdown-menu .popper__arrow{
+   left: 34px !important;
   }
   .person .person-container .person-nav a{
     display: block;

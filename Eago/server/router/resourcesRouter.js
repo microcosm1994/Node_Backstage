@@ -8,5 +8,6 @@ const resourcesControllers = require(path.join(__dirname, '../controllers/resour
 
 resourcesRouter.get('/all', multipartMiddleware, resourcesControllers.all)
 resourcesRouter.post('/save', multipartMiddleware, resourcesControllers.save)
+resourcesRouter.get('/find', multipartMiddleware, resourcesControllers.find)
 
 module.exports = resourcesRouter
