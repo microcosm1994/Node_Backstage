@@ -4,7 +4,7 @@
     <div class="home-container">
       <div class="home-sidebar">
         <ul>
-          <li>
+          <li @click="getAll">
             <a href="javascript:;">
               <router-link to="/library">素材库</router-link>
             </a>
@@ -31,6 +31,17 @@
     data () {
       return {
         title: 'home'
+      }
+    },
+    methods: {
+      getAll: function () {
+        this.$http.get('/api/resources/all').then((response) => {
+          let data = response.data
+          if (data.status === 0) {
+            this.$store.commit('search_result', data.data)
+            this.$store.commit('setTitle', '素材库')
+          }
+        })
       }
     }
   }

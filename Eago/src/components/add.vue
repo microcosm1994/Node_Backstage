@@ -65,7 +65,14 @@
               cancelButtonText: '继续添加素材',
               type: 'success'
             }).then(() => {
-              this.$router.push({path: './library'})
+              this.$http.get('/api/resources/all').then((response) => {
+                let data = response.data
+                if (data.status === 0) {
+                  this.$store.commit('search_result', data.data)
+                  this.$store.commit('setTitle', '素材库')
+                  this.$router.push({path: './library'})
+                }
+              })
             }).catch(() => {
               this.$router.go(0)
             })

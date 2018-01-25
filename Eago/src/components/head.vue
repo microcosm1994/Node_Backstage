@@ -61,10 +61,18 @@
         this.$store.commit('search_text', this.searchText)
         if (this.value === '名称') {
           this.$http.get('/api/resources/find?sourceName=' + this.searchText).then((response) => {
-            console.log(response.data)
             if (response.data.status === 0) {
               this.$store.commit('search_result', response.data.data)
-              this.$router.push({path: './search_result'})
+              this.$store.commit('setTitle', '搜索结果')
+              this.$router.push({path: './library'})
+            }
+          })
+        } else {
+          this.$http.get('/api/resources/find?country=' + this.searchText).then((response) => {
+            if (response.data.status === 0) {
+              this.$store.commit('search_result', response.data.data)
+              this.$store.commit('setTitle', '搜索结果')
+              this.$router.push({path: './library'})
             }
           })
         }

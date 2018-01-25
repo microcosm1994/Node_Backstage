@@ -5,13 +5,16 @@ Vue.use(vuex)
 
 export default new vuex.Store({
   state: {
-    count: 0,
+    title: '',
     search: {
       text: '',
       result: {}
     }
   },
   mutations: {
+    setTitle (state, string) {
+      state.title = string
+    },
     search_text (state, string) {
       state.search.text = string
     },

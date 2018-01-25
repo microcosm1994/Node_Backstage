@@ -4,7 +4,6 @@ import login from '@/components/login'
 import home from '@/components/home'
 import add from '@/components/add'
 import library from '@/components/library'
-import searchResult from '@/components/search_result'
 import register from '@/components/register'
 // import resource from 'vue-resource'
 
@@ -37,11 +36,6 @@ export default new Router({
           path: '/library',
           name: 'library',
           component: library
-        },
-        {
-          path: '/search_result',
-          name: 'searchResult',
-          component: searchResult
         }
       ]
     },
