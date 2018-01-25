@@ -166,6 +166,13 @@
         }).then(() => {
           this.$http.get('/api/picture/del?_id=' + id).then((response) => {
             if (response.data.status === 0) {
+              this.outerVisible = false
+              for (let i = 0; i < this.source.length; i++) {
+                if (id === this.source[i]._id) {
+                  this.source.splice(i, 1)
+                  console.log(this.source)
+                }
+              }
               this.$message({
                 message: '已删除!'
               })

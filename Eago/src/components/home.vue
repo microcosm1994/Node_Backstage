@@ -23,28 +23,10 @@
   </div>
 </template>
 <script>
-  import Router from 'vue-router'
   import headers from './head'
-  import add from './add'
-  import library from './library'
 
-  const router = new Router({
-    routes: [
-      {
-        path: '/add',
-        name: 'add',
-        component: add
-      },
-      {
-        path: '/library',
-        name: 'library',
-        component: library
-      }
-    ]
-  })
   export default {
     name: 'home',
-    router,
     components: { headers },
     data () {
       return {

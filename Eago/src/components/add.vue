@@ -28,7 +28,7 @@
       <span>素材国家</span>
       <input type="text" v-model="country" placeholder="请输入素材所属国家">
     </div>
-    <button @click="save()">保存</button>
+    <button class="save-btn" @click="save()">保存</button>
   </div>
 </template>
 <script>
@@ -59,7 +59,17 @@
         console.log(result)
         this.$http.post('/api/resources/save', result).then((response) => {
           let data = response.data
-          console.log(data)
+          if (data.status === 0) {
+            this.$confirm('保存成功，接下来你要去哪里？', '提示', {
+              confirmButtonText: '去素材库',
+              cancelButtonText: '继续添加素材',
+              type: 'success'
+            }).then(() => {
+              this.$router.push({path: './library'})
+            }).catch(() => {
+              this.$router.go(0)
+            })
+          }
         })
       },
       uploadsuccess (response, file, filelist) {
@@ -132,7 +142,7 @@
     padding-left: 10px;
     font-size: 20px;
   }
-  button{
+  .save-btn{
     width: 320px;
     border:none;
     outline: none;
