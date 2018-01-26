@@ -10,7 +10,7 @@
     </div>
     <div class="search">
       <el-input placeholder="请输入查找内容" v-model="searchText" class="input-with-select">
-        <el-select v-model="value" slot="prepend" placeholder="名称">
+        <el-select v-model="value" slot="prepend" placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -52,19 +52,36 @@
           value: '选项2',
           label: '国家'
         }],
-        value: '名称'
+        value: ''
       }
     },
     mounted () {},
     methods: {
       getsearch: function () {
         this.$store.commit('search_text', this.searchText)
-        if (this.value === '名称') {
+        if (this.value === '') {
+          this.$alert('请选择查找方式', '搜索提醒', {
+            confirmButtonText: '确定'
+          })
+          return false
+        }
+        if (this.searchText === '') {
+          this.$alert('请输入查找内容', '搜索提醒', {
+            confirmButtonText: '确定'
+          })
+          return false
+        }
+        if (this.value === '选项1') {
           this.$http.get('/api/resources/find?sourceName=' + this.searchText).then((response) => {
             if (response.data.status === 0) {
               this.$store.commit('search_result', response.data.data)
               this.$store.commit('setTitle', '搜索结果')
               this.$router.push({path: './library'})
+              this.searchText = ''
+            } else {
+              this.$alert('没有找到相关内容，换一个字段试试', '搜索结果提醒', {
+                confirmButtonText: '确定'
+              })
             }
           })
         } else {
@@ -73,6 +90,11 @@
               this.$store.commit('search_result', response.data.data)
               this.$store.commit('setTitle', '搜索结果')
               this.$router.push({path: './library'})
+              this.searchText = ''
+            } else {
+              this.$alert('没有找到相关内容，换一个字段试试', '搜索结果提醒', {
+                confirmButtonText: '确定'
+              })
             }
           })
         }

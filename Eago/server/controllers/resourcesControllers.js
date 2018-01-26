@@ -34,6 +34,14 @@ exports.save = (req, res) => {
 exports.find = (req, res) => {
   let result = {status: 0, message: '查找成功'}
   let query = req.query
+  for (let key in query) {
+    let regexp = new RegExp(query[key])
+    if (key === 'sourceName') {
+      query.sourceName = regexp
+    } else {
+      query.country = regexp
+    }
+  }
   db.find('library', query, (data) => {
     if (data.length) {
       result.data = data
