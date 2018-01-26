@@ -25,10 +25,12 @@
         let self = this
         let user = {}
         user.username = this.account
-        user.password = this.pwd - 0
-        console.log(user)
-        this.$http.post('/api/account/login', user).then((response) => {
-          console.log(response.data)
+        user.password = this.pwd
+        this.$http({
+          method: 'post',
+          url: '/api/account/login',
+          data: user
+        }).then((response) => {
           let data = response.data
           if (data.status === 0) {
             self.$router.push({path: '/home'})

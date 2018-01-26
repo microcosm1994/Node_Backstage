@@ -10,11 +10,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(elementui)
 Vue.config.productionTip = false
+axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
 Vue.prototype.$http = axios
 // Vue.http.options.emulateJSON = true
 // Vue.http.options.headers = {
 //   'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-  // 'Content-Type': 'multipart/form-data'
+//   'Content-Type': 'multipart/form-data'
 // }
 /* eslint-disable no-new */
 new Vue({

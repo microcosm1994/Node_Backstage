@@ -3,7 +3,7 @@
     <h1>{{title}}</h1>
     <div><input type="text" placeholder="账号" v-model="account"></div>
     <div><input type="password" placeholder="密码" v-model="pwd"></div>
-    <p><a href="javascript:;"><router-link to="./register">返回登陆</router-link></a></p>
+    <p><a href="javascript:;"><router-link to="./login">返回登陆</router-link></a></p>
     <div class="register-btn" v-on:click="register()">
       <button>注 册</button>
     </div>
