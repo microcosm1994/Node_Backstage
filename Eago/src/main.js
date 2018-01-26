@@ -23,5 +23,13 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: { App },
+  mounted () {
+    this.getcookie()
+  },
+  methods: {
+    getcookie: function () {
+      console.log(1)
+    }
+  }
 })

@@ -40,6 +40,11 @@
           if (data.status === 0) {
             this.$store.commit('search_result', data.data)
             this.$store.commit('setTitle', '素材库')
+          } else {
+            this.$message({
+              message: data.message,
+              type: 'error'
+            })
           }
         })
       }

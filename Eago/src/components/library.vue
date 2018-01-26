@@ -84,6 +84,11 @@
           let data = response.data
           if (data.status === 0) {
             this.sourceModal = data.data[0]
+          } else {
+            this.$message({
+              message: data.message,
+              type: 'error'
+            })
           }
         })
       },
@@ -113,7 +118,10 @@
                   })
                   this.updateChange = false
                 } else {
-                  this.$message.error(response.data.message)
+                  this.$message({
+                    message: response.data.message,
+                    type: 'error'
+                  })
                 }
               }
             })
@@ -124,7 +132,6 @@
       },
       change: function () {
         this.updateChange = true
-        console.log(this.sourceModal)
       },
       close: function (done) {
         if (this.updateChange) {
@@ -170,6 +177,11 @@
               }
               this.$message({
                 message: '已删除!'
+              })
+            } else {
+              this.$message({
+                message: response.data.message,
+                type: 'error'
               })
             }
           })

@@ -76,6 +76,11 @@
             }).catch(() => {
               this.$router.go(0)
             })
+          } else {
+            this.$message({
+              message: data.message,
+              type: 'error'
+            })
           }
         })
       },
@@ -92,12 +97,13 @@
       },
       uploaderr (err, file, filelist) {
         if (err) {
-          alert('服务器错误,' + file.name + '上传失败')
+          this.$message({
+            message: '服务器错误,' + file.name + '上传失败',
+            type: 'error'
+          })
         }
       },
       handleRemove (file, fileList) {
-        console.log(this.list)
-        console.log(file)
         let list = this.list
         let removeId = file.uid
         for (let i = 0; i < list.length; i++) {
@@ -106,7 +112,6 @@
           }
         }
         this.list = list
-        console.log(this.list)
       },
       handlePictureCardPreview (file) {
         this.dialogImageUrl = file.url

@@ -26,13 +26,13 @@
         <img src="" alt="">
       </div>
       <div class="person-container">
-        <el-dropdown trigger="click">
+        <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
             下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>个人信息</el-dropdown-item>
-            <el-dropdown-item>退出</el-dropdown-item>
+            <el-dropdown-item command="person">个人信息</el-dropdown-item>
+            <el-dropdown-item command="out">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -79,7 +79,7 @@
               this.$router.push({path: './library'})
               this.searchText = ''
             } else {
-              this.$alert('没有找到相关内容，换一个字段试试', '搜索结果提醒', {
+              this.$alert(response.data.message, '搜索结果提醒', {
                 confirmButtonText: '确定'
               })
             }
@@ -92,11 +92,19 @@
               this.$router.push({path: './library'})
               this.searchText = ''
             } else {
-              this.$alert('没有找到相关内容，换一个字段试试', '搜索结果提醒', {
+              this.$alert(response.data.message, '搜索结果提醒', {
                 confirmButtonText: '确定'
               })
             }
           })
+        }
+      },
+      handleCommand (command) {
+        if (command === 'person') {
+          console.log(1)
+        }
+        if (command === 'out') {
+          console.log(2)
         }
       }
     }

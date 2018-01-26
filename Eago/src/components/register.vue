@@ -23,16 +23,20 @@
     methods: {
       register () {
         let self = this
+        if (this.account === '' || this.pwd === '') {
+          this.$message.error('请填写用户名和密码')
+          return false
+        }
         let user = {
           username: this.account,
           password: this.pwd
         }
-        console.log(user)
         this.$http.post('/api/account/register', user).then((response) => {
-          console.log(response.data)
           let data = response.data
           if (data.status === 0) {
             self.$router.push({path: '/login'})
+          } else {
+            this.$message.error(data.message)
           }
         })
       }

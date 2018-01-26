@@ -23,6 +23,10 @@
     methods: {
       login () {
         let self = this
+        if (this.account === '' || this.pwd === '') {
+          this.$message.error('请输入用户名和密码')
+          return false
+        }
         let user = {}
         user.username = this.account
         user.password = this.pwd
@@ -34,6 +38,11 @@
           let data = response.data
           if (data.status === 0) {
             self.$router.push({path: '/home'})
+          } else {
+            this.$message({
+              message: data.message,
+              type: 'error'
+            })
           }
         })
       }
