@@ -16,12 +16,25 @@ app.use(cookieParser())
 app.use(express.static('../dist'))
 
 app.use(function (req, res, next) {
-  var url = req.originalUrl
+  let end = req.originalUrl.indexOf('?')
+  let url = req.originalUrl.slice(0, end)
+  if (end === -1) {
+    url = req.originalUrl
+  }
+  let adminId = '5a6c277c048c364ddf629dfd'
   if (url !== '/account/login' && url !== '/account/register' && !req.cookies._id) {
     let result = {}
     result.status = 1
     result.message = '用户没有登录，所有操作将不被保存，请登录后再进行操作'
     return res.json(result)
+  }
+  if (req.cookies._id === adminId) {
+    if (url === '/picture/del' || url === '/picture/update' || url === '/picture/upload' || url === '/picture/upload' || url === '/resources/save') {
+      let result = {}
+      result.status = 1
+      result.message = '管理员账号只用来管理后台账号使用，无法进行素材库的操作'
+      return res.json(result)
+    }
   }
   next()
 })

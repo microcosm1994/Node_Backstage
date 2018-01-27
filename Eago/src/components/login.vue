@@ -37,6 +37,14 @@
         }).then((response) => {
           let data = response.data
           if (data.status === 0) {
+            this.$store.commit('setusersName', data.data.username)
+            this.$store.commit('setusersUid', data.data._id)
+            this.$store.commit('setusersPortrait', data.data.portrait)
+            this.$store.commit('setloginStatus', '退出')
+            this.$message({
+              message: data.message,
+              type: 'success'
+            })
             self.$router.push({path: '/home'})
           } else {
             this.$message({

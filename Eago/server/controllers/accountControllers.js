@@ -10,20 +10,41 @@ exports.login = (req, res) => {
   let users = req.body
   const hash = crypto.createHash('md5')
   users.password = hash.update(users.password).digest('hex')
-  db.find('persons', users, (data) => {
-    if (data.length) {
-      let id = data[0]._id.toString()
-      res.cookie('_id', id, {
-        domain: 'localhost',
-        path: '/'
-      })
-      res.json(result)
-    } else {
-      result.status = 1
-      result.message = '用户名或密码错误'
-      res.json(result)
-    }
-  })
+  if (users.username === 'admin') {
+    db.find('controller', users, (data) => {
+      if (data.length) {
+        let id = data[0]._id.toString()
+        res.cookie('_id', id, {
+          domain: 'localhost',
+          path: '/'
+        })
+        result.data = data[0]
+        delete result.data.password
+        res.json(result)
+      } else {
+        result.status = 1
+        result.message = '用户名或密码错误'
+        res.json(result)
+      }
+    })
+  } else {
+    db.find('persons', users, (data) => {
+      if (data.length) {
+        let id = data[0]._id.toString()
+        res.cookie('_id', id, {
+          domain: 'localhost',
+          path: '/'
+        })
+        result.data = data[0]
+        delete result.data.password
+        res.json(result)
+      } else {
+        result.status = 1
+        result.message = '用户名或密码错误'
+        res.json(result)
+      }
+    })
+  }
 }
 
 exports.register = (req, res) => {
@@ -37,6 +58,7 @@ exports.register = (req, res) => {
       result.message = '该账号已经被注册'
       res.json(result)
     } else {
+      users.portrait = ''
       db.insert('persons', users, (data) => {
         if (data) {
           result.status = 0
@@ -59,6 +81,25 @@ exports.user = (req, res) => {
   db.find('persons', query, (data) => {
     if (data.length) {
       result.data = data[0]
+      delete result.data.password
+      res.json(result)
+    } else {
+      result.status = 1
+      result.message = '服务器错误'
+      res.json(result)
+    }
+  })
+}
+
+exports.controller = (req, res) => {
+  let result = {status: 0, message: '获取成功'}
+  let query = req.query
+  query._id = mongoose.Types.ObjectId(query._id)
+  console.log(query)
+  db.find('controller', query, (data) => {
+    if (data.length) {
+      result.data = data[0]
+      delete result.data.password
       res.json(result)
     } else {
       result.status = 1

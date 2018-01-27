@@ -6,6 +6,12 @@ Vue.use(vuex)
 export default new vuex.Store({
   state: {
     title: '',
+    loginStatus: '',
+    user: {
+      uid: '',
+      name: '请登录',
+      portrait: ''
+    },
     search: {
       text: '',
       result: {}
@@ -14,6 +20,18 @@ export default new vuex.Store({
   mutations: {
     setTitle (state, string) {
       state.title = string
+    },
+    setloginStatus (state, string) {
+      state.loginStatus = string
+    },
+    setusersName (state, string) {
+      state.user.name = string
+    },
+    setusersPortrait (state, string) {
+      state.user.portrait = string
+    },
+    setusersUid (state, string) {
+      state.user.uid = string
     },
     search_text (state, string) {
       state.search.text = string

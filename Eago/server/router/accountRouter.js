@@ -9,6 +9,7 @@ const accountControllers = require(path.join(__dirname, '../controllers/accountC
 accountRouter.post('/login', multipartMiddleware, accountControllers.login)
 accountRouter.post('/register', multipartMiddleware, accountControllers.register)
 accountRouter.get('/user', multipartMiddleware, accountControllers.user)
+accountRouter.get('/controller', multipartMiddleware, accountControllers.controller)
 // accountRouter.get('/login',multipartMiddleware,(req,res)=>{
 //   console.log(req.query);
 //   res.json({status:0, message:'请求成功'})

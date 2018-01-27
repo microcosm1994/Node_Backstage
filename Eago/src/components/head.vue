@@ -28,11 +28,12 @@
       <div class="person-container">
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+            {{this.getuserName}}
+            <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="person">个人信息</el-dropdown-item>
-            <el-dropdown-item command="out">退出</el-dropdown-item>
+            <el-dropdown-item command="out">{{this.loginStatus}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -56,6 +57,14 @@
       }
     },
     mounted () {},
+    computed: {
+      loginStatus () {
+        return this.$store.state.loginStatus
+      },
+      getuserName () {
+        return this.$store.state.user.name
+      }
+    },
     methods: {
       getsearch: function () {
         this.$store.commit('search_text', this.searchText)
@@ -104,7 +113,23 @@
           console.log(1)
         }
         if (command === 'out') {
-          console.log(2)
+          let id = this.$cookies.get('_id')
+          if (id) {
+            this.$cookies.remove('_id', {
+              domain: 'localhost',
+              path: '/'
+            })
+            this.$cookies.remove('_name', {
+              domain: 'localhost',
+              path: '/'
+            })
+            this.$store.commit('setloginStatus', '登陆')
+            this.$store.commit('setusersName', '请登录')
+            this.$store.commit('setusersUid', '')
+            this.$store.commit('setusersPortrait', '')
+          } else {
+            this.$router.push({path: '/login'})
+          }
         }
       }
     }
