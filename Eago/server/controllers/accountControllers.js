@@ -3,6 +3,7 @@ const path = require('path')
 // const qs = require('querystring')
 const db = require(path.join(__dirname, '../mongo/db.js'))
 const crypto = require('crypto')
+const mongoose = require('mongoose')
 
 exports.login = (req, res) => {
   let result = {status: 0, message: '登录成功'}
@@ -11,7 +12,8 @@ exports.login = (req, res) => {
   users.password = hash.update(users.password).digest('hex')
   db.find('persons', users, (data) => {
     if (data.length) {
-      res.cookie('sid', crypto.createHash('md5').update(users.username).digest('hex'), {
+      let id = data[0]._id.toString()
+      res.cookie('_id', id, {
         domain: 'localhost',
         path: '/'
       })
@@ -46,6 +48,22 @@ exports.register = (req, res) => {
           res.json(result)
         }
       })
+    }
+  })
+}
+
+exports.user = (req, res) => {
+  let result = {status: 0, message: '获取成功'}
+  let query = req.query
+  query._id = mongoose.Types.ObjectId(query._id)
+  db.find('persons', query, (data) => {
+    if (data.length) {
+      result.data = data[0]
+      res.json(result)
+    } else {
+      result.status = 1
+      result.message = '服务器错误'
+      res.json(result)
     }
   })
 }
