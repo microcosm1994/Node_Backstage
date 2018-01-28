@@ -4,10 +4,10 @@
       <span style="color:#fed189;">Ea</span>
       <span style="color:#00a0df;">go</span>
     </div>
-    <div class="headers-nav">
-      <a href="javascript:;">图片素材</a>
-      <a href="javascript:;">视频素材</a>
-    </div>
+    <!--<div class="headers-nav">-->
+      <!--<a href="javascript:;">图片素材</a>-->
+      <!--<a href="javascript:;">视频素材</a>-->
+    <!--</div>-->
     <div class="search">
       <el-input placeholder="请输入查找内容" v-model="searchText" class="input-with-select">
         <el-select v-model="value" slot="prepend" placeholder="请选择">
@@ -33,6 +33,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="person">个人信息</el-dropdown-item>
+            <el-dropdown-item command="accountPage" v-if="this.getuserAdmin">管理账号</el-dropdown-item>
             <el-dropdown-item command="creatAccount" v-if="this.getuserAdmin">生成账号</el-dropdown-item>
             <el-dropdown-item command="out">{{this.loginStatus}}</el-dropdown-item>
           </el-dropdown-menu>
@@ -116,6 +117,9 @@
         if (command === 'person') {
           console.log(1)
         }
+        if (command === 'accountPage') {
+          this.$router.push({path: './accountPage'})
+        }
         if (command === 'creatAccount') {
           this.$router.push({path: './register'})
         }
@@ -176,26 +180,29 @@
     font-size: 34px;
     font-weight: 700;
   }
-  .headers-nav{
-    margin-left: 30px;
-    display: inline-block;
-    vertical-align: middle;
-    height: 70px;
-  }
-  .headers-nav a{
-    display: inline-block;
-    width: 100px;
-    height: 70px;
-    line-height: 70px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 700;
-    color:#fed189;
-  }
+  /*.headers-nav{*/
+    /*margin-left: 30px;*/
+    /*display: inline-block;*/
+    /*vertical-align: middle;*/
+    /*height: 70px;*/
+  /*}*/
+  /*.headers-nav a{*/
+    /*display: inline-block;*/
+    /*width: 100px;*/
+    /*height: 70px;*/
+    /*line-height: 70px;*/
+    /*text-align: center;*/
+    /*font-size: 18px;*/
+    /*font-weight: 700;*/
+    /*color:#fed189;*/
+  /*}*/
   .search{
     display: inline-block;
-    vertical-align: middle;
-    margin-left: 100px;
+    float: left;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
   }
 
   .search .el-input__inner{
@@ -215,7 +222,7 @@
     height: 70px;
     display: inline-block;
     vertical-align: middle;
-    margin-left: 100px;
+    float: right;
   }
   .person .person-photo{
     width: 50px;

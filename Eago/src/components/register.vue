@@ -4,16 +4,19 @@
     <el-alert
       title="管理员拥有本后台管理系统所有账号的管理权限，请谨慎操作！"
       center
+      :closable="false"
       type="info">
     </el-alert>
     <el-alert
       title="因后台系统不对外开放，所以简化了一些不必要的操作流程。"
       center
+      :closable="false"
       type="info">
     </el-alert>
     <el-alert
       title="用户名应尽量使用公司职员英文名为账号"
       center
+      :closable="false"
       type="info">
     </el-alert>
     <div><input type="text" placeholder="账号" v-model="account"></div>
@@ -91,6 +94,15 @@
                   message: data.message,
                   type: 'success'
                 })
+                this.$confirm('账号已经成功加入数据库', '提示', {
+                  confirmButtonText: '返回账号管理界面',
+                  cancelButtonText: '继续生成账号',
+                  type: 'success'
+                }).then(() => {
+                  this.$router.push({path: './home'})
+                }).catch(() => {
+                  this.$router.go(0)
+                })
               } else {
                 this.$message.error(data.message)
               }
@@ -110,7 +122,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .register {
-    padding-top: 200px;
+    padding-top: 50px;
   }
 
   h1 {

@@ -4,7 +4,7 @@
     <div class="home-container">
       <div class="home-sidebar">
         <ul>
-          <li @click="getAll">
+          <li @click="">
             <a href="javascript:;">
               <router-link to="/library">素材库</router-link>
             </a>
@@ -33,20 +33,61 @@
         title: 'home'
       }
     },
+    mounted () {
+      this.loginkeep()
+    },
     methods: {
-      getAll: function () {
-        this.$http.get('/api/resources/all').then((response) => {
-          let data = response.data
-          if (data.status === 0) {
-            this.$store.commit('search_result', data.data)
-            this.$store.commit('setTitle', '素材库')
-          } else {
-            this.$message({
-              message: data.message,
-              type: 'error'
+      loginkeep: function () {
+        let id = this.$cookies.get('_id')
+        let adminId = '5a6c277c048c364ddf629dfd'
+        if (id) {
+          if (id === adminId) {
+            this.$http.get('/api/account/adminId?_id=' + id).then((response) => {
+              let data = response.data
+              if (data.status === 0) {
+                this.$cookies.set('_name', data.data.username, {
+                  domain: 'localhost',
+                  path: '/'
+                })
+                this.$store.commit('setusersName', data.data.username)
+                this.$store.commit('setusersUid', data.data._id)
+                this.$store.commit('setusersPortrait', data.data.portrait)
+                this.$store.commit('setusersAdmin', true)
+              } else {
+                this.$message({
+                  message: '获取用户信息失败，请退出后重新登录',
+                  type: 'error'
+                })
+              }
             })
+            this.$store.commit('setloginStatus', '退出')
+//            this.$router.push({path: '/home'})
+          } else {
+            this.$http.get('/api/account/user?_id=' + id).then((response) => {
+              let data = response.data
+              if (data.status === 0) {
+                this.$store.commit('setusersAdmin', false)
+                this.$store.commit('setusersName', data.data.username)
+                this.$store.commit('setusersUid', data.data._id)
+                this.$store.commit('setusersPortrait', data.data.portrait)
+              } else {
+                this.$message({
+                  message: '获取用户信息失败，请退出后重新登录',
+                  type: 'error'
+                })
+              }
+            })
+            this.$store.commit('setloginStatus', '退出')
+//            this.$router.push({path: '/home'})
           }
-        })
+        } else {
+          this.$message({
+            message: '检测到您没有登陆',
+            type: 'info'
+          })
+          this.$store.commit('setloginStatus', '登陆')
+          this.$router.push({path: '/login'})
+        }
       }
     }
   }

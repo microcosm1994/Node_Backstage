@@ -5,6 +5,7 @@ import home from '@/components/home'
 import add from '@/components/add'
 import library from '@/components/library'
 import register from '@/components/register'
+import accountPage from '@/components/accountPage'
 // import resource from 'vue-resource'
 
 Vue.use(Router)
@@ -36,13 +37,18 @@ export default new Router({
           path: '/library',
           name: 'library',
           component: library
+        },
+        {
+          path: '/register',
+          name: 'register',
+          component: register
+        },
+        {
+          path: '/accountPage',
+          name: 'accountPage',
+          component: accountPage
         }
       ]
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: register
     }
   ]
 })

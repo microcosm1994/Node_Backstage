@@ -116,3 +116,20 @@ exports.adminId = (req, res) => {
     }
   })
 }
+
+exports.getaccount = (req, res) => {
+  let result = {status: 0, message: '获取成功'}
+  db.find('persons', {}, (data) => {
+    if (data.length) {
+      for (let i = 0; i < data.length; i++) {
+        delete data[i].password
+      }
+      result.data = data
+      res.json(result)
+    } else {
+      result.status = 1
+      result.message = '服务器错误'
+      res.json(result)
+    }
+  })
+}

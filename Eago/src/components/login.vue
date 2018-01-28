@@ -45,9 +45,11 @@
               this.$store.commit('setusersUid', data.data._id)
               this.$store.commit('setusersPortrait', data.data.portrait)
               this.$store.commit('setloginStatus', '退出')
-              if (data.data.username === 'admin') {
-                this.$store.commit('setusersAdmin', true)
-              }
+              this.$store.commit('setusersAdmin', true)
+              this.$cookies.set('_name', data.data.username, {
+                domain: 'localhost',
+                path: '/'
+              })
               this.$message({
                 message: data.message,
                 type: 'success'
@@ -72,9 +74,11 @@
               this.$store.commit('setusersUid', data.data._id)
               this.$store.commit('setusersPortrait', data.data.portrait)
               this.$store.commit('setloginStatus', '退出')
-              if (data.data.username === 'admin') {
-                this.$store.commit('setusersAdmin', true)
-              }
+              this.$store.commit('setusersAdmin', false)
+              this.$cookies.set('_name', data.data.username, {
+                domain: 'localhost',
+                path: '/'
+              })
               this.$message({
                 message: data.message,
                 type: 'success'
@@ -96,6 +100,7 @@
             message: '检测到您已登陆',
             type: 'success'
           })
+          this.$router.push({path: './home'})
         }
       }
     }

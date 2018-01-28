@@ -2,7 +2,7 @@
   <div calss="library">
     <h1>{{this.mytitle}}</h1>
     <div class="library-container">
-        <div class="source" v-for="item in this.myValue" :data-id="item._id">
+        <div class="source" v-for="item in this.mysource" :data-id="item._id">
           <el-button type="text" @click="outerVisible = true">
           <div class="source-photo" @click="getdetailed(item._id,$event)">
             <img v-bind:src="item.titlepage.url" alt="">
@@ -69,16 +69,32 @@
         innerVisible: false
       }
     },
-    mounted () {},
+    mounted () {
+      this.getAll()
+    },
     computed: {
       mytitle () {
         return this.$store.state.title
       },
-      myValue () {
+      mysource () {
         return this.$store.state.search.result
       }
     },
     methods: {
+      getAll: function () {
+        this.$http.get('/api/resources/all').then((response) => {
+          let data = response.data
+          if (data.status === 0) {
+            this.$store.commit('search_result', data.data)
+            this.$store.commit('setTitle', '素材库')
+          } else {
+            this.$message({
+              message: data.message,
+              type: 'error'
+            })
+          }
+        })
+      },
       getdetailed: function (id, e) {
         this.$http.get('/api/picture/detailed?_id=' + id).then((response) => {
           let data = response.data

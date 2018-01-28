@@ -22,7 +22,7 @@ app.use(function (req, res, next) {
     url = req.originalUrl
   }
   let adminId = '5a6c277c048c364ddf629dfd'
-  if (url !== '/account/login' && url !== '/account/register' && !req.cookies._id) {
+  if (url !== '/account/login' && url !== '/account/adminLogin' && url !== '/account/register' && !req.cookies._id) {
     let result = {}
     result.status = 1
     result.message = '用户没有登录，所有操作将不被保存，请登录后再进行操作'
