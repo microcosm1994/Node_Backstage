@@ -10,7 +10,8 @@ export default new vuex.Store({
     user: {
       uid: '',
       name: '请登录',
-      portrait: ''
+      portrait: '',
+      isAdmin: false
     },
     search: {
       text: '',
@@ -29,6 +30,9 @@ export default new vuex.Store({
     },
     setusersPortrait (state, string) {
       state.user.portrait = string
+    },
+    setusersAdmin (state, string) {
+      state.user.isAdmin = string
     },
     setusersUid (state, string) {
       state.user.uid = string

@@ -30,15 +30,15 @@ new Vue({
   template: '<App/>',
   components: { App },
   mounted () {
-    this.getcookie()
+    this.loginkeep()
   },
   methods: {
-    getcookie: function () {
+    loginkeep: function () {
       let id = this.$cookies.get('_id')
       let adminId = '5a6c277c048c364ddf629dfd'
       if (id) {
         if (id === adminId) {
-          this.$http.get('/api/account/controller?_id=' + id).then((response) => {
+          this.$http.get('/api/account/adminId?_id=' + id).then((response) => {
             let data = response.data
             if (data.status === 0) {
               this.$cookies.set('_name', data.data.username, {
@@ -48,16 +48,13 @@ new Vue({
               this.$store.commit('setusersName', data.data.username)
               this.$store.commit('setusersUid', data.data._id)
               this.$store.commit('setusersPortrait', data.data.portrait)
+              this.$store.commit('setusersAdmin', true)
             } else {
               this.$message({
                 message: '获取用户信息失败，请退出后重新登录',
                 type: 'error'
               })
             }
-          })
-          this.$message({
-            message: '检测到您已登陆',
-            type: 'success'
           })
           this.$store.commit('setloginStatus', '退出')
           this.$router.push({path: '/home'})
@@ -69,6 +66,8 @@ new Vue({
                 domain: 'localhost',
                 path: '/'
               })
+              this.$store.commit('setusersAdmin', false)
+              console.log('set')
               this.$store.commit('setusersName', data.data.username)
               this.$store.commit('setusersUid', data.data._id)
               this.$store.commit('setusersPortrait', data.data.portrait)
@@ -79,15 +78,16 @@ new Vue({
               })
             }
           })
-          this.$message({
-            message: '检测到您已登陆',
-            type: 'success'
-          })
           this.$store.commit('setloginStatus', '退出')
           this.$router.push({path: '/home'})
         }
       } else {
+        this.$message({
+          message: '检测到您没有登陆',
+          type: 'info'
+        })
         this.$store.commit('setloginStatus', '登陆')
+        this.$router.push({path: '/login'})
       }
     }
   }

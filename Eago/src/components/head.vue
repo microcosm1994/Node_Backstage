@@ -33,6 +33,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="person">个人信息</el-dropdown-item>
+            <el-dropdown-item command="creatAccount" v-if="this.getuserAdmin">生成账号</el-dropdown-item>
             <el-dropdown-item command="out">{{this.loginStatus}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -63,6 +64,9 @@
       },
       getuserName () {
         return this.$store.state.user.name
+      },
+      getuserAdmin () {
+        return this.$store.state.user.isAdmin
       }
     },
     methods: {
@@ -112,6 +116,9 @@
         if (command === 'person') {
           console.log(1)
         }
+        if (command === 'creatAccount') {
+          this.$router.push({path: './register'})
+        }
         if (command === 'out') {
           let id = this.$cookies.get('_id')
           if (id) {
@@ -127,6 +134,7 @@
             this.$store.commit('setusersName', '请登录')
             this.$store.commit('setusersUid', '')
             this.$store.commit('setusersPortrait', '')
+            this.$store.commit('setusersAdmin', false)
           } else {
             this.$router.push({path: '/login'})
           }

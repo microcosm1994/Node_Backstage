@@ -20,6 +20,9 @@
         pwd: ''
       }
     },
+    mounted () {
+      this.remind()
+    },
     methods: {
       login () {
         let self = this
@@ -30,29 +33,70 @@
         let user = {}
         user.username = this.account
         user.password = this.pwd
-        this.$http({
-          method: 'post',
-          url: '/api/account/login',
-          data: user
-        }).then((response) => {
-          let data = response.data
-          if (data.status === 0) {
-            this.$store.commit('setusersName', data.data.username)
-            this.$store.commit('setusersUid', data.data._id)
-            this.$store.commit('setusersPortrait', data.data.portrait)
-            this.$store.commit('setloginStatus', '退出')
-            this.$message({
-              message: data.message,
-              type: 'success'
-            })
-            self.$router.push({path: '/home'})
-          } else {
-            this.$message({
-              message: data.message,
-              type: 'error'
-            })
-          }
-        })
+        if (user.username === 'admin') {
+          this.$http({
+            method: 'post',
+            url: '/api/account/adminLogin',
+            data: user
+          }).then((response) => {
+            let data = response.data
+            if (data.status === 0) {
+              this.$store.commit('setusersName', data.data.username)
+              this.$store.commit('setusersUid', data.data._id)
+              this.$store.commit('setusersPortrait', data.data.portrait)
+              this.$store.commit('setloginStatus', '退出')
+              if (data.data.username === 'admin') {
+                this.$store.commit('setusersAdmin', true)
+              }
+              this.$message({
+                message: data.message,
+                type: 'success'
+              })
+              self.$router.push({path: '/home'})
+            } else {
+              this.$message({
+                message: data.message,
+                type: 'error'
+              })
+            }
+          })
+        } else {
+          this.$http({
+            method: 'post',
+            url: '/api/account/login',
+            data: user
+          }).then((response) => {
+            let data = response.data
+            if (data.status === 0) {
+              this.$store.commit('setusersName', data.data.username)
+              this.$store.commit('setusersUid', data.data._id)
+              this.$store.commit('setusersPortrait', data.data.portrait)
+              this.$store.commit('setloginStatus', '退出')
+              if (data.data.username === 'admin') {
+                this.$store.commit('setusersAdmin', true)
+              }
+              this.$message({
+                message: data.message,
+                type: 'success'
+              })
+              self.$router.push({path: '/home'})
+            } else {
+              this.$message({
+                message: data.message,
+                type: 'error'
+              })
+            }
+          })
+        }
+      },
+      remind: function () {
+        let id = this.$cookies.get('_id')
+        if (id) {
+          this.$message({
+            message: '检测到您已登陆',
+            type: 'success'
+          })
+        }
       }
     }
   }
