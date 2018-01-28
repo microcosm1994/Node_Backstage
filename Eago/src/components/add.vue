@@ -18,15 +18,15 @@
     </div>
     <div class="add-name add-input">
       <span>素材名称</span>
-      <input type="text" v-model="sourceName" placeholder="请输入素材名称">
+      <input type="text" v-model="source.sourceName" placeholder="请输入素材名称">
     </div>
     <div class="add-des add-input">
       <span>素材描述</span>
-      <input type="text" v-model="des" placeholder="请输入素材描述信息">
+      <input type="text" v-model="source.des" placeholder="请输入素材描述信息">
     </div>
     <div class="add-country add-input">
       <span>素材国家</span>
-      <input type="text" v-model="country" placeholder="请输入素材所属国家">
+      <input type="text" v-model="source.country" placeholder="请输入素材所属国家">
     </div>
     <button class="save-btn" @click="save()">保存</button>
   </div>
@@ -38,9 +38,11 @@
       return {
         title: '添加素材',
         list: [],
-        sourceName: '',
-        des: '',
-        country: '',
+        source: {
+          sourceName: '',
+          des: '',
+          country: ''
+        },
         dialogImageUrl: '',
         dialogVisible: false,
         headers: {
@@ -50,13 +52,24 @@
     },
     methods: {
       save: function () {
+        if (this.source.sourceName === '' || this.source.des === '' || this.source.country === '') {
+          this.$alert('请把所有要求必填的内容填写完成再点击保存', '有必填内容没有输入', {
+            confirmButtonText: '确定',
+            callback: action => {
+              this.$message({
+                type: 'info',
+                message: '请继续填写素材'
+              })
+            }
+          })
+          return false
+        }
         let result = {}
-        result.sourceName = this.sourceName
-        result.des = this.des
-        result.country = this.country
+        result.sourceName = this.source.sourceName
+        result.des = this.source.des
+        result.country = this.source.country
         result.list = this.list
         result.titlepage = this.list[0]
-        console.log(result)
         this.$http.post('/api/resources/save', result).then((response) => {
           let data = response.data
           if (data.status === 0) {
