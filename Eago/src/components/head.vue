@@ -9,7 +9,7 @@
       <!--<a href="javascript:;">视频素材</a>-->
     <!--</div>-->
     <div class="search">
-      <el-input placeholder="请输入查找内容" v-model="searchText" class="input-with-select">
+      <el-input placeholder="请输入查找内容" v-model="searchText"  @keyup.enter.native="getsearch" class="input-with-select">
         <el-select v-model="value" slot="prepend" placeholder="请选择">
           <el-option
             v-for="item in options"
@@ -158,7 +158,7 @@
     width: 100%;
     min-width: 1200px;
     height: 70px;
-    background: #1a2732;
+    background: #27282a;
     padding-left: 100px;
     padding-right: 100px;
     position: absolute;
@@ -250,7 +250,7 @@
     text-align: center;
     line-height: 70px;
     font-size: 16px;
-    color:#fff;
+    color:#f5f5f5;
     cursor: pointer;
   }
   .el-dropdown-menu .popper__arrow{

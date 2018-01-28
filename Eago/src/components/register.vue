@@ -123,6 +123,7 @@
 <style scoped>
   .register {
     padding-top: 50px;
+    opacity: 0.7;
   }
 
   h1 {

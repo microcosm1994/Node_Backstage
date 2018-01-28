@@ -4,13 +4,17 @@
     <div class="home-container">
       <div class="home-sidebar">
         <ul>
-          <li @click="">
-            <a href="javascript:;">
+          <li @click="setActive">
+            <a href="javascript:;"
+               v-bind:class="{active:activeClass.library}"
+            >
               <router-link to="/library">素材库</router-link>
             </a>
           </li>
-          <li>
-            <a href="javascript:;">
+          <li @click="setActive">
+            <a href="javascript:;"
+              v-bind:class="{active:activeClass.add}"
+            >
               <router-link to="/add">添加素材</router-link>
             </a>
           </li>
@@ -30,13 +34,29 @@
     components: { headers },
     data () {
       return {
-        title: 'home'
+        title: 'home',
+        activeClass: {
+          home: false,
+          library: false,
+          add: false
+        }
       }
     },
     mounted () {
+      this.setActive()
       this.loginkeep()
     },
     methods: {
+      setActive: function () {
+        let address = this.$router.currentRoute.name
+        for (let key in this.activeClass) {
+          if (key === address) {
+            this.activeClass[key] = true
+          } else {
+            this.activeClass[key] = false
+          }
+        }
+      },
       loginkeep: function () {
         let id = this.$cookies.get('_id')
         let adminId = '5a6c277c048c364ddf629dfd'
@@ -100,7 +120,7 @@
   }
   html,body{
     height: 100%;
-    background: #F5F5F5;
+    background: #f5f5f5;
   }
   .home{
     width: 100%;
@@ -120,12 +140,13 @@
     position: absolute;
     left: 0;
     top:0px;
-    background: #394a59;
+    background: #36373b;
     padding-top: 70px;
   }
   .home-sidebar ul{
     width: 100%;
     height: 100%;
+    margin-top: 40px;
   }
   .home-sidebar ul li{
     width: 100%;
@@ -141,7 +162,10 @@
     font-size: 18px;
   }
   .home-sidebar ul li a:hover{
-    background: #2e3b46;
+    background: #27282a;
+  }
+  .active{
+    background: #27282a;
   }
   .home-route{
     width: 100%;
