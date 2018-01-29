@@ -4,10 +4,6 @@ const Schema = mongoose.Schema
 // 声明一个数据集 对象
 const sourceSchema = new Schema({
   source: {
-    date: {// 时间
-      type: Date,
-      default: Date.now
-    },
     angle: {// 名称
       type: String
     },
@@ -55,10 +51,6 @@ const sourceSchema = new Schema({
     }
   },
   titlePage: {
-    date: {
-      type: Date,
-      default: Date.now
-    },
     id: {
       type: String
     },
@@ -69,7 +61,19 @@ const sourceSchema = new Schema({
       type: String
     }
   },
-  list: []
+  list: [],
+  user: {
+    uname: {
+      type: String
+    },
+    id: {
+      type: String
+    }
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  }
 })
 // 将数据模型暴露出去
 module.exports = mongoose.model('source', sourceSchema)

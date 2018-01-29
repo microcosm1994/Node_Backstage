@@ -199,10 +199,9 @@
       uploadsuccess (response, file, filelist) {
         if (response.status === 200) {
           let data = {
+            id: file.uid,
             name: response.data.name,
-            url: response.data.url,
-            creatTime: response.data.creatTime,
-            id: file.uid
+            url: response.data.url
           }
           this.list.push(data)
         }
@@ -230,14 +229,16 @@
         this.dialogVisible = true
       },
       submitForm (ruleform) {
-        console.log(ruleform)
         this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
             let result = {}
             result.source = ruleform
             result.list = this.list
-            result.titlepage = this.list[0]
-            console.log(result)
+            result.titlePage = this.list[0]
+            result.user = {
+              uname: this.$cookies.get('_name'),
+              id: this.$cookies.get('_id')
+            }
             this.$http.post('/api/resources/save', result).then((response) => {
               let data = response.data
               if (data.status === 0) {

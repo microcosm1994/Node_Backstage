@@ -13,9 +13,9 @@ export default new vuex.Store({
       portrait: '',
       isAdmin: false
     },
+    source: [],
     search: {
-      text: '',
-      result: {}
+      text: ''
     }
   },
   mutations: {
@@ -40,8 +40,8 @@ export default new vuex.Store({
     search_text (state, string) {
       state.search.text = string
     },
-    search_result (state, data) {
-      state.search.result = data
+    source (state, data) {
+      state.source = data
     }
   }
 })

@@ -2,56 +2,219 @@
   <div calss="library">
     <h1>{{this.mytitle}}</h1>
     <div class="library-container">
-        <div class="source" v-for="item in this.mysource" :data-id="item._id">
-          <el-button type="text" @click="outerVisible = true">
-          <div class="source-photo" @click="getdetailed(item._id,$event)">
-            <img v-bind:src="item.titlepage.url" alt="">
-          </div>
-          <h3>{{item.sourceName}}</h3>
-          <p>{{item.des}}</p>
-          <p>{{item.country}}</p>
-          </el-button>
-        </div>
+      <el-table
+        :data="this.mysource"
+        :row-class-name="tableRowClassName"
+        style="width: 100%;">
+        <!--展开行-->
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="备注">
+                <span>{{ props.row.source.remarks }}</span>
+              </el-form-item>
+              <!--<el-form-item label="上传账号">-->
+                <!--<span>{{ props.row.user.uname }}</span>-->
+              <!--</el-form-item>-->
+            </el-form>
+          </template>
+        </el-table-column>
+        <!--日期-->
+        <el-table-column
+          label="日期"
+          width="120">
+          <template slot-scope="scope">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+          </template>
+        </el-table-column>
+        <!--缩略图-->
+        <el-table-column
+          label="缩略图"
+          width="120">
+          <template slot-scope="scope">
+            <el-popover trigger="hover" placement="top">
+              <p>图片名字: {{ scope.row.titlePage.name }}</p>
+                <div slot="reference" class="name-wrapper">
+                  <el-button type="text" @click="outerVisible = true">
+                    <div class="source-photo" @click="getdetailed(scope.row.titlePage.id,$event)">
+                      <img :src="scope.row.titlePage.url" alt="">
+                    </div>
+                  </el-button>
+                </div>
+            </el-popover>
+          </template>
+        </el-table-column>
+        <!--angle-->
+        <el-table-column
+          label="angle">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.angle }}</span>
+          </template>
+        </el-table-column>
+        <!--平台-->
+        <el-table-column
+          label="平台">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.terrace }}</span>
+          </template>
+        </el-table-column>
+        <!--opeavtor-->
+        <el-table-column
+          label="opeavtor"
+          width="120">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.opeavtor }}</span>
+          </template>
+        </el-table-column>
+        <!--展示-->
+        <el-table-column
+          label="展示"
+          width="80">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.reveal }}</span>
+          </template>
+        </el-table-column>
+        <!--点击数-->
+        <el-table-column
+          label="点击数"
+          width="80">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.click }}</span>
+          </template>
+        </el-table-column>
+        <!--CTR-->
+        <el-table-column
+          label="CTR"
+          width="60">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.CTR }}</span>
+          </template>
+        </el-table-column>
+        <!--CPC-->
+        <el-table-column
+          label="CPC"
+          width="60">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.CPC }}</span>
+          </template>
+        </el-table-column>
+        <!--CPM-->
+        <el-table-column
+          label="CPM"
+          width="60">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.CPM }}</span>
+          </template>
+        </el-table-column>
+        <!--conversion-->
+        <el-table-column
+          label="conversion"
+          width="100">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.conversion }}</span>
+          </template>
+        </el-table-column>
+        <!--CR-->
+        <el-table-column
+          label="CR"
+          width="60">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.CR }}</span>
+          </template>
+        </el-table-column>
+        <!--消耗-->
+        <el-table-column
+          label="消耗"
+          width="80">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.consume }}</span>
+          </template>
+        </el-table-column>
+        <!--回收-->
+        <el-table-column
+          label="回收"
+          width="80">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.consume }}</span>
+          </template>
+        </el-table-column>
+        <!--RI-->
+        <el-table-column
+          label="RI"
+          width="60">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.RI }}</span>
+          </template>
+        </el-table-column>
+        <!--国家-->
+        <el-table-column
+          label="国家"
+          width="100">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.country }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作"
+        width="160">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+        <!--<div class="source" v-for="item in this.mysource" :data-id="item._id">-->
+          <!--<el-button type="text" @click="outerVisible = true">-->
+          <!--<div class="source-photo" @click="getdetailed(item._id,$event)">-->
+            <!--<img v-bind:src="item.titlepage.url" alt="">-->
+          <!--</div>-->
+          <!--</el-button>-->
+        <!--</div>-->
     </div>
-    <div class="source-modal">
-      <el-dialog
-        :title="sourceModal.sourceName"
-        :before-close="close"
-        :close-on-click-modal="true"
-        :visible.sync="outerVisible">
-        <el-dialog
-          width="50%"
-          :title="picdetailed.name"
-          :visible.sync="innerVisible"
-          append-to-body>
-          <span>{{picdetailed.creatTime}}</span>
-          <img :src="picdetailed.url" alt="">
-        </el-dialog>
-        <div class="source-modal-picture" v-for="item in sourceModal.list">
-          <el-button type="primary" @click="innerVisible = true, getpic(item.url, item.name, item.creatTime, item.id)">
-            <img :src="item.url" alt="">
-          </el-button>
-        </div>
-        <div class="source-modal-detailed">
-          <el-input
-            placeholder="请输入内容"
-            v-model="sourceModal.des"
-            v-on:change="change()"
-            :disabled="isUpdate">
-            ></el-input>
-          <el-input
-            placeholder="请输入内容"
-            v-model="sourceModal.country"
-            v-on:change="change()"
-            :disabled="isUpdate">
-            ></el-input>
-        </div>
-        <div slot="footer" class="dialog-footer">
-          <button class="update-btn" @click="update">{{updatebtn}}</button>
-          <button class="update-btn" @click="del(sourceModal._id)">删 除</button>
-        </div>
-      </el-dialog>
-    </div>
+    <!--<div class="source-modal">-->
+      <!--<el-dialog-->
+        <!--:title="sourceModal.sourceName"-->
+        <!--:before-close="close"-->
+        <!--:close-on-click-modal="true"-->
+        <!--:visible.sync="outerVisible">-->
+        <!--<el-dialog-->
+          <!--width="50%"-->
+          <!--:title="picdetailed.name"-->
+          <!--:visible.sync="innerVisible"-->
+          <!--append-to-body>-->
+          <!--<span>{{picdetailed.creatTime}}</span>-->
+          <!--<img :src="picdetailed.url" alt="">-->
+        <!--</el-dialog>-->
+        <!--<div class="source-modal-picture" v-for="item in sourceModal.list">-->
+          <!--<el-button type="primary" @click="innerVisible = true, getpic(item.url, item.name, item.creatTime, item.id)">-->
+            <!--<img :src="item.url" alt="">-->
+          <!--</el-button>-->
+        <!--</div>-->
+        <!--<div class="source-modal-detailed">-->
+          <!--<el-input-->
+            <!--placeholder="请输入内容"-->
+            <!--v-model="sourceModal.des"-->
+            <!--v-on:change="change()"-->
+            <!--:disabled="isUpdate">-->
+            <!--&gt;</el-input>-->
+          <!--<el-input-->
+            <!--placeholder="请输入内容"-->
+            <!--v-model="sourceModal.country"-->
+            <!--v-on:change="change()"-->
+            <!--:disabled="isUpdate">-->
+            <!--&gt;</el-input>-->
+        <!--</div>-->
+        <!--<div slot="footer" class="dialog-footer">-->
+          <!--<button class="update-btn" @click="update">{{updatebtn}}</button>-->
+          <!--<button class="update-btn" @click="del(sourceModal._id)">删 除</button>-->
+        <!--</div>-->
+      <!--</el-dialog>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -77,15 +240,24 @@
         return this.$store.state.title
       },
       mysource () {
-        return this.$store.state.search.result
+        return this.$store.state.source
       }
     },
     methods: {
+//      隔行变色
+      tableRowClassName: function ({row, rowIndex}) {
+        if (rowIndex === 1) {
+          return 'warning-row'
+        } else if (rowIndex === 3) {
+          return 'success-row'
+        }
+        return ''
+      },
       getAll: function () {
         this.$http.get('/api/resources/all').then((response) => {
           let data = response.data
           if (data.status === 0) {
-            this.$store.commit('search_result', data.data)
+            this.$store.commit('source', data.data)
             this.$store.commit('setTitle', '素材库')
           } else {
             this.$message({
@@ -215,6 +387,25 @@
     min-width: 1000px;
     padding: 20px;
   }
+  .library-container .cell{
+    text-align: center;
+  }
+  .el-table .warning-row {
+    background: oldlace;
+  }
+
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
   .source{
     width: 200px;
     border-radius:5px;
@@ -223,14 +414,10 @@
     margin-left: 20px;
   }
   .source-photo{
-    width: 200px;
-    height: 200px;
-    border-radius:50%;
-    overflow: hidden;
+    height: 50px;
     cursor: pointer;
   }
   .source-photo img{
-    width: 100%;
     height: 100%;
   }
   .source-modal-picture{
