@@ -1,9 +1,9 @@
 // const fs = require('fs')
 const path = require('path')
-const db = require(path.join(__dirname, '../mongo/db.js'))
 const oss = require('ali-oss')
 const co = require('co')
 const mongoose = require('mongoose')
+const source = require(path.join(__dirname, '../models/source.js'))
 
 const client = new oss.Wrapper({
   region: 'oss-cn-beijing',
@@ -12,7 +12,7 @@ const client = new oss.Wrapper({
   bucket: 'eago-picture'
 })
 co(function* () {
-  var result = yield client.putBucketACL('eago-picture', 'oss-cn-beijing', 'public-read')
+  yield client.putBucketACL('eago-picture', 'oss-cn-beijing', 'public-read')
   // console.log(result)
 }).catch(function (err) {
   console.log(err)
@@ -43,10 +43,9 @@ exports.upload = (req, res) => {
 exports.detailed = (req, res) => {
   let result = {status: 0, message: '获取成功'}
   let query = req.query
-  let id = mongoose.Types.ObjectId(query._id)
-  query._id = id
-  db.find('library', query, (data) => {
-    if (data.length) {
+  source.find(query._id, (err, data) => {
+    if (err) throw err
+    if (data) {
       result.data = data
       res.json(result)
     } else {
@@ -59,11 +58,10 @@ exports.detailed = (req, res) => {
 
 exports.update = (req, res) => {
   let body = req.body.query
-  let id = mongoose.Types.ObjectId(req.body._id)
-  let query = {}
   let result = {status: 0, message: '素材内容已更新'}
-  query._id = id
-  db.update('library', query, body, (data) => {
+  source.findByIdAndUpdate(req.body._id, body, true, (err, data) => {
+    if (err) throw err
+    console.log(data)
     if (data.result.ok === 1) {
       res.json(result)
     } else {
@@ -79,7 +77,9 @@ exports.del = (req, res) => {
   let query = req.query
   let id = mongoose.Types.ObjectId(query._id)
   query._id = id
-  db.del('library', query, true, (data) => {
+  source.deleteOne(query, (err, data) => {
+    if (err) throw err
+    console.log(data)
     res.json(result)
   })
 }

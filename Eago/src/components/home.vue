@@ -59,9 +59,9 @@
       },
       loginkeep: function () {
         let id = this.$cookies.get('_id')
-        let adminId = '5a6c277c048c364ddf629dfd'
+        let adminUser = this.$cookies.get('_name')
         if (id) {
-          if (id === adminId) {
+          if (adminUser === 'admin') {
             this.$http.get('/api/account/adminId?_id=' + id).then((response) => {
               let data = response.data
               if (data.status === 0) {

@@ -1,11 +1,12 @@
 // const fs = require('fs')
 const path = require('path')
-const db = require(path.join(__dirname, '../mongo/db.js'))
+const source = require(path.join(__dirname, '../models/source.js'))
 
 exports.all = (req, res) => {
   let result = {status: 0, message: '成功'}
-  db.find('library', {}, (data) => {
-    if (data.length) {
+  source.find({}, (err, data) => {
+    if (err) throw err
+    if (data) {
       result.data = data
       res.json(result)
     } else {
@@ -19,9 +20,11 @@ exports.all = (req, res) => {
 exports.save = (req, res) => {
   let result = {status: 0, message: '保存成功'}
   let reqData = req.body
-  db.insert('library', reqData, (data) => {
-    let status = data.result.ok
-    if (status === 1) {
+  console.log(reqData)
+  source.create(reqData, (err, data) => {
+    if (err) throw err
+    console.log(data)
+    if (data) {
       res.json(result)
     } else {
       result.status = 1
@@ -36,14 +39,14 @@ exports.find = (req, res) => {
   let query = req.query
   for (let key in query) {
     let regexp = new RegExp(query[key])
-    if (key === 'sourceName') {
-      query.sourceName = regexp
-    } else {
-      query.country = regexp
-    }
+    if (key === 'angle') query.angle = regexp
+    if (key === 'country') query.country = regexp
+    if (key === 'terrace') query.terrace = regexp
   }
-  db.find('library', query, (data) => {
-    if (data.length) {
+  source.find(query, (err, data) => {
+    if (err) throw err
+    console.log(data)
+    if (data) {
       result.data = data
       res.json(result)
     } else {

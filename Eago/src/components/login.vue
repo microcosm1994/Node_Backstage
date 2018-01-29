@@ -3,7 +3,6 @@
     <h1>{{title}}</h1>
     <div><input type="text" placeholder="账号" v-model="account" @keyup.enter="login"></div>
     <div><input type="password" placeholder="密码" v-model="pwd" @keyup.enter="login"></div>
-    <p><a href="javascript:;"><router-link to="./register">注册帐号</router-link></a></p>
     <div class="login-btn" @click="login">
       <button>登 陆</button>
     </div>

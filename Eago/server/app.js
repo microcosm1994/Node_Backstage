@@ -1,4 +1,5 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const path = require('path')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -8,6 +9,17 @@ const pictureRouter = require(path.join(__dirname, './router/pictureRouter.js'))
 // const db = require(path.join(__dirname, './mongo/db.js'))
 
 const app = express()
+mongoose.connect('mongodb://127.0.0.1:27017/eago')
+const db = mongoose.connection
+
+// 连接成功
+db.on('open', function () {
+  console.log('MongoDB Connection Successed')
+})
+// 连接失败
+db.on('error', function () {
+  console.log('MongoDB Connection Error')
+})
 
 app.use(bodyParser())
 app.use(bodyParser.json())
@@ -21,14 +33,13 @@ app.use(function (req, res, next) {
   if (end === -1) {
     url = req.originalUrl
   }
-  let adminId = '5a6c277c048c364ddf629dfd'
   if (url !== '/account/login' && url !== '/account/adminLogin' && url !== '/account/register' && !req.cookies._id) {
     let result = {}
     result.status = 1
     result.message = '用户没有登录，所有操作将不被保存，请登录后再进行操作'
     return res.json(result)
   }
-  if (req.cookies._id === adminId) {
+  if (req.cookies._name === 'admin') {
     if (url === '/picture/del' || url === '/picture/update' || url === '/picture/upload' || url === '/picture/upload' || url === '/resources/save') {
       let result = {}
       result.status = 1

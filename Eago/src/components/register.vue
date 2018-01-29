@@ -56,13 +56,12 @@
     },
     methods: {
       register () {
-        let id = this.$cookies.get('_id')
-        let adminId = '5a6c277c048c364ddf629dfd'
+        let adminUser = this.$cookies.get('_name')
         if (this.account === '' || this.pwd === '') {
           this.$message.error('请填写用户名和密码')
           return false
         }
-        if (id === adminId) {
+        if (adminUser === 'admin') {
           this.dialogFormVisible = true
         } else {
           this.$message.error('你不是管理员，无法生成账号，请联系管理员为你生成账号')
