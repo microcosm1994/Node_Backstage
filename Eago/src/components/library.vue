@@ -173,7 +173,7 @@
         @current-change="handleCurrentChange"
         :current-page="currentPage"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="20"
+        :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="sourceCount">
       </el-pagination>
@@ -377,12 +377,13 @@
         updateChange: false,
         outerVisible: false,
         centerDialogVisible: false,
-        currentPage: 4,
-        sourceCount: 0
+        currentPage: 1,
+        sourceCount: 0,
+        pageSize: 10
       }
     },
     mounted () {
-      this.getAll()
+      this.getAll(this.currentPage, this.pageSize)
     },
     computed: {
       mytitle () {
@@ -402,8 +403,8 @@
         }
         return ''
       },
-      getAll: function () {
-        this.$http.get('/api/resources/all?page=' + this.currentPage + '&size=' + 20).then((response) => {
+      getAll: function (page, size) {
+        this.$http.get('/api/resources/all?page=' + page + '&size=' + size).then((response) => {
           let data = response.data
           if (data.status === 0) {
             this.sourceCount = data.count
@@ -501,11 +502,13 @@
           })
         }).catch(() => {})
       },
-      handleSizeChange (val) {
-        console.log(`每页 ${val} 条`)
+      handleSizeChange (size) {
+        this.pageSize = size
+        this.getAll(this.currentPage, this.pageSize)
       },
-      handleCurrentChange (val) {
-        console.log(`当前页: ${val}`)
+      handleCurrentChange (page) {
+        this.currentPage = page
+        this.getAll(this.currentPage, this.pageSize)
       }
     }
   }

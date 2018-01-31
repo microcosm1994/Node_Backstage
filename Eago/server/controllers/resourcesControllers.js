@@ -4,10 +4,19 @@ const source = require(path.join(__dirname, '../models/source.js'))
 
 exports.all = (req, res) => {
   let result = {status: 0, message: '成功'}
+  let page = req.query.page - 0
+  let size = req.query.size - 0
   source.count({}, (err, data) => {
     if (err) throw err
     if (data) {
       let count = data
+      page = page > Math.ceil(count / size) ? Math.ceil(count / size) : page
+      if (page === Math.ceil(count / size)) {
+        size = size > count % size ? count % size : size
+      } else {
+        size = size > count ? count : size
+      }
+      console.log(count % size)
       source.find({}, (err, data) => {
         if (err) throw err
         if (data) {
@@ -19,7 +28,7 @@ exports.all = (req, res) => {
           result.message = '没有数据'
           res.json(result)
         }
-      }).skip(2).limit(5)
+      }).skip(page).limit(size)
     }
   })
 }
