@@ -9,7 +9,10 @@ export default new vuex.Store({
     loginStatus: '',
     user: {},
     source: [],
+    page: {},
+    sourceCount: 0,
     search: {
+      label: '',
       text: ''
     }
   },
@@ -23,11 +26,17 @@ export default new vuex.Store({
     setuser (state, obj) {
       state.user = obj
     },
-    search_text (state, string) {
-      state.search.text = string
+    search (state, obj) {
+      state.search.text = obj
     },
     source (state, data) {
       state.source = data
+    },
+    page (state, obj) {
+      state.page = obj
+    },
+    sourceCount (state, number) {
+      state.sourceCount = number
     }
   }
 })

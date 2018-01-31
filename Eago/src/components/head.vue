@@ -77,11 +77,14 @@
       },
       getuser () {
         return this.$store.state.user
+      },
+      getpage () {
+        return this.$store.state.page
       }
     },
     methods: {
       getsearch: function () {
-        this.$store.commit('search_text', this.searchText)
+        this.$store.commit('search', {label: this.value, text: this.searchText})
         if (this.value === '') {
           this.$alert('请选择查找方式', '搜索提醒', {
             confirmButtonText: '确定'
@@ -94,8 +97,9 @@
           })
           return false
         }
-        this.$http.get('/api/resources/find?' + this.value + '=' + this.searchText).then((response) => {
+        this.$http.get('/api/resources/find?' + this.value + '=' + this.searchText + '&page=' + this.currentPage + '&size=' + this.getpage.size).then((response) => {
           if (response.data.status === 0) {
+            this.$store.commit('sourceCount', response.data.count)
             this.$store.commit('source', response.data.data)
             this.$store.commit('setTitle', '搜索结果')
             this.$router.push({path: './library'})

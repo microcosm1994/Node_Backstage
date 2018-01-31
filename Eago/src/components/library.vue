@@ -175,7 +175,7 @@
         :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="sourceCount">
+        :total="this.mysourceCount">
       </el-pagination>
       <div class="picture-modal">
         <el-dialog
@@ -378,7 +378,6 @@
         outerVisible: false,
         centerDialogVisible: false,
         currentPage: 1,
-        sourceCount: 0,
         pageSize: 10
       }
     },
@@ -391,6 +390,9 @@
       },
       mysource () {
         return this.$store.state.source
+      },
+      mysourceCount () {
+        return this.$store.state.sourceCount
       }
     },
     methods: {
@@ -407,7 +409,7 @@
         this.$http.get('/api/resources/all?page=' + page + '&size=' + size).then((response) => {
           let data = response.data
           if (data.status === 0) {
-            this.sourceCount = data.count
+            this.$store.commit('sourceCount', data.count)
             this.$store.commit('source', data.data)
             this.$store.commit('setTitle', '素材库')
           } else {
@@ -503,12 +505,46 @@
         }).catch(() => {})
       },
       handleSizeChange (size) {
-        this.pageSize = size
-        this.getAll(this.currentPage, this.pageSize)
+        if (this.mytitle === '素材库') {
+          this.pageSize = size
+          this.$store.commit('page', {page: this.currentPage, size: this.pageSize})
+          this.getAll(this.currentPage, this.pageSize)
+        } else {
+          this.$http.get('/api/resources/find?' + this.value + '=' + this.searchText + '&page=' + this.currentPage + '&size=' + this.getpage.size).then((response) => {
+            if (response.data.status === 0) {
+              this.$store.commit('sourceCount', response.data.count)
+              this.$store.commit('source', response.data.data)
+              this.$store.commit('setTitle', '搜索结果')
+//              this.$router.push({path: './library'})
+              this.searchText = ''
+            } else {
+              this.$alert(response.data.message, '搜索结果提醒', {
+                confirmButtonText: '确定'
+              })
+            }
+          })
+        }
       },
       handleCurrentChange (page) {
-        this.currentPage = page
-        this.getAll(this.currentPage, this.pageSize)
+        if (this.mytitle === '素材库') {
+          this.currentPage = page
+          this.$store.commit('page', {page: this.currentPage, size: this.pageSize})
+          this.getAll(this.currentPage, this.pageSize)
+        } else {
+          this.$http.get('/api/resources/find?' + this.value + '=' + this.searchText + '&page=' + this.currentPage + '&size=' + this.getpage.size).then((response) => {
+            if (response.data.status === 0) {
+              this.$store.commit('sourceCount', response.data.count)
+              this.$store.commit('source', response.data.data)
+              this.$store.commit('setTitle', '搜索结果')
+//              this.$router.push({path: './library'})
+              this.searchText = ''
+            } else {
+              this.$alert(response.data.message, '搜索结果提醒', {
+                confirmButtonText: '确定'
+              })
+            }
+          })
+        }
       }
     }
   }
