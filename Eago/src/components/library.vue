@@ -25,7 +25,7 @@
           width="120">
           <template slot-scope="scope">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+            <span style="margin-left: 10px">{{ scope.row.date | datetostring}}</span>
           </template>
         </el-table-column>
         <!--缩略图-->
