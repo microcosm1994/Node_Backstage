@@ -3,6 +3,16 @@ const Schema = mongoose.Schema
 
 // 声明一个数据集 对象
 const sourceSchema = new Schema({
+  sourceName: {
+    type: String
+  },
+  terrace: {
+    type: String
+  },
+  country: {
+    type: String
+  },
+  // Mixed: mongoose.Schema.Types.Mixed,
   source: {
     angle: {// 名称
       type: String

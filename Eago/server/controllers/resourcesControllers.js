@@ -39,7 +39,7 @@ exports.find = (req, res) => {
   let query = req.query
   for (let key in query) {
     let regexp = new RegExp(query[key])
-    if (key === 'angle') query.angle = regexp
+    if (key === 'sourceName') query.sourceName = regexp
     if (key === 'country') query.country = regexp
     if (key === 'terrace') query.terrace = regexp
   }

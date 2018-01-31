@@ -37,15 +37,71 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="account-modal">
+      <el-dialog
+        title="编辑账号"
+        :visible.sync="accountModal"
+        width="30%"
+        center>
+        <el-form :model="accountForm" :rules="accountRules" ref="accountForm" label-width="80px" class="demo-ruleForm">
+          <el-form-item label="账号" prop="username">
+            <el-input v-model="accountForm.username"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="accountForm.password" type="password"></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码" prop="checkPass">
+            <el-input type="password" v-model="accountForm.checkPass" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="">修 改</el-button>
+    <el-button type="primary" @click="accountModal = false">关 闭</el-button>
+  </span>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
   export default {
     name: 'accountPage',
     data () {
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
+        } else if (value !== this.accountForm.password) {
+          callback(new Error('两次输入密码不一致!'))
+        } else {
+          callback()
+        }
+      }
       return {
         title: '账号管理',
-        accountList: []
+        accountModal: false,
+        accountList: [],
+        accountForm: {
+          username: '',
+          password: '',
+          isAdmin: '',
+          checkPass: ''
+        },
+        accountRules: {
+          username: [
+            { required: true, message: '请输入用户名', trigger: 'blur' },
+            { min: 4, max: 30, message: '长度在 4 到 30 个字符', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+            { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+          ],
+          isAdmin: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+            { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+          ],
+          checkPass: [
+            { validator: validatePass2, trigger: 'blur' }
+          ]
+        }
       }
     },
     mounted () {
@@ -61,6 +117,9 @@
         })
       },
       handleEdit (index, row) {
+        this.accountForm.isAdmin = row.isAdmin
+        this.accountForm.username = row.username
+        this.accountModal = true
         console.log(index, row)
       },
       handleDelete (index, row) {

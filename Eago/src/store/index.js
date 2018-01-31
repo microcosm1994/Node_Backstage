@@ -9,7 +9,7 @@ export default new vuex.Store({
     loginStatus: '',
     user: {
       uid: '',
-      name: '请登录',
+      name: '',
       portrait: '',
       isAdmin: false
     },

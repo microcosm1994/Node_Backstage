@@ -9,8 +9,6 @@ const accountControllers = require(path.join(__dirname, '../controllers/accountC
 accountRouter.post('/login', multipartMiddleware, accountControllers.login)
 accountRouter.post('/register', multipartMiddleware, accountControllers.register)
 accountRouter.get('/user', multipartMiddleware, accountControllers.user)
-accountRouter.post('/adminLogin', multipartMiddleware, accountControllers.adminLogin)
-accountRouter.get('/adminId', multipartMiddleware, accountControllers.adminId)
 accountRouter.get('/getaccount', multipartMiddleware, accountControllers.getaccount)
 // accountRouter.get('/login',multipartMiddleware,(req,res)=>{
 //   console.log(req.query);

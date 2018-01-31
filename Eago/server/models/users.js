@@ -9,6 +9,12 @@ const userSchema = new Schema({
   },
   password: {
     type: String
+  },
+  portrait: {
+    type: String
+  },
+  idAdmin: {
+    type: Boolean
   }
 })
 // 将数据模型暴露出去

@@ -17,7 +17,7 @@
       </el-dialog>
     </div>
     <div class="add-form">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="ruleForm" :rules="rules" ref="rules" label-width="100px" class="demo-ruleForm">
         <div class="three">
           <el-form-item label="angle" prop="angle">
             <el-input v-model="ruleForm.angle"></el-input>
@@ -232,6 +232,9 @@
         this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
             let result = {}
+            result.sourceName = ruleform.angle
+            result.terrace = ruleform.terrace
+            result.country = ruleform.country
             result.source = ruleform
             result.list = this.list
             result.titlePage = this.list[0]
@@ -247,14 +250,8 @@
                   cancelButtonText: '继续添加素材',
                   type: 'success'
                 }).then(() => {
-                  this.$http.get('/api/resources/all').then((response) => {
-                    let data = response.data
-                    if (data.status === 0) {
-                      this.$store.commit('search_result', data.data)
-                      this.$store.commit('setTitle', '素材库')
-                      this.$router.push({path: './library'})
-                    }
-                  })
+                  this.$router.push({path: './library'})
+                  this.$store.commit('setTitle', '素材库')
                 }).catch(() => {
                   this.$router.go(0)
                 })

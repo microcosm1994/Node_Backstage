@@ -2,7 +2,6 @@
 const path = require('path')
 const oss = require('ali-oss')
 const co = require('co')
-const mongoose = require('mongoose')
 const source = require(path.join(__dirname, '../models/source.js'))
 
 const client = new oss.Wrapper({
@@ -43,7 +42,7 @@ exports.upload = (req, res) => {
 exports.detailed = (req, res) => {
   let result = {status: 0, message: '获取成功'}
   let query = req.query
-  source.find(query._id, (err, data) => {
+  source.findById(query._id, (err, data) => {
     if (err) throw err
     if (data) {
       result.data = data
@@ -57,12 +56,17 @@ exports.detailed = (req, res) => {
 }
 
 exports.update = (req, res) => {
-  let body = req.body.query
+  let query = {}
+  query.source = req.body.source
+  query.sourceName = req.body.source.angle
+  query.terrace = req.body.source.terrace
+  query.country = req.body.source.country
   let result = {status: 0, message: '素材内容已更新'}
-  source.findByIdAndUpdate(req.body._id, body, true, (err, data) => {
+  source.findByIdAndUpdate(req.body._id, query, {new: true}, (err, data) => {
     if (err) throw err
     console.log(data)
-    if (data.result.ok === 1) {
+    if (data) {
+      result.data = data
       res.json(result)
     } else {
       result.status = 1
@@ -74,13 +78,15 @@ exports.update = (req, res) => {
 
 exports.del = (req, res) => {
   let result = {status: 0, message: '已删除'}
-  let query = req.query
-  let id = mongoose.Types.ObjectId(query._id)
-  query._id = id
-  source.deleteOne(query, (err, data) => {
+  source.findByIdAndRemove(req.query._id, (err, data) => {
     if (err) throw err
-    console.log(data)
-    res.json(result)
+    if (data) {
+      res.json(result)
+    } else {
+      result.status = 1
+      result.message = '服务器错误'
+      res.json(result)
+    }
   })
 }
 // co(function* () {

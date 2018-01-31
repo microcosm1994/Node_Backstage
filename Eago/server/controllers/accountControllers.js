@@ -4,7 +4,6 @@ const path = require('path')
 // const db = require(path.join(__dirname, '../mongo/db.js'))
 const crypto = require('crypto')
 const User = require(path.join(__dirname, '../models/users.js'))
-const Admin = require(path.join(__dirname, '../models/admin.js'))
 
 exports.login = (req, res) => {
   let result = {status: 0, message: '登录成功'}
@@ -41,6 +40,7 @@ exports.register = (req, res) => {
   }
   const hash = crypto.createHash('md5')
   users.password = hash.update(users.password).digest('hex')
+  users.isAdmin = false
   User.findOne({username: users.username}, (err, data) => {
     if (err) throw err
     if (data) {
@@ -68,49 +68,10 @@ exports.register = (req, res) => {
 exports.user = (req, res) => {
   let result = {status: 0, message: '获取成功'}
   let query = req.query
+  console.log(query)
   User.findById(query._id, (err, data) => {
     if (err) throw err
-    if (data) {
-      result.data = data
-      delete result.data.password
-      res.json(result)
-    } else {
-      result.status = 1
-      result.message = '服务器错误'
-      res.json(result)
-    }
-  })
-}
-
-exports.adminLogin = (req, res) => {
-  let result = {status: 0, message: '已验证你的身份为管理员'}
-  let users = req.body
-  const hash = crypto.createHash('md5')
-  users.password = hash.update(users.password).digest('hex')
-  Admin.findOne(users, (err, data) => {
-    if (err) throw err
-    if (data) {
-      let id = data._id.toString()
-      res.cookie('_id', id, {
-        domain: 'localhost',
-        path: '/'
-      })
-      result.data = data
-      delete result.data.password
-      res.json(result)
-    } else {
-      result.status = 1
-      result.message = '管理员密码错误'
-      res.json(result)
-    }
-  })
-}
-
-exports.adminId = (req, res) => {
-  let result = {status: 0, message: '获取成功'}
-  let query = req.query
-  Admin.findById(query._id, (err, data) => {
-    if (err) throw err
+    console.log(data)
     if (data) {
       result.data = data
       delete result.data.password

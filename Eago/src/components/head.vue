@@ -49,11 +49,14 @@
       return {
         searchText: '',
         options: [{
-          value: '选项1',
+          value: 'sourceName',
           label: '名称'
         }, {
-          value: '选项2',
+          value: 'country',
           label: '国家'
+        }, {
+          value: 'terrace',
+          label: '平台'
         }],
         value: ''
       }
@@ -85,33 +88,18 @@
           })
           return false
         }
-        if (this.value === '选项1') {
-          this.$http.get('/api/resources/find?sourceName=' + this.searchText).then((response) => {
-            if (response.data.status === 0) {
-              this.$store.commit('search_result', response.data.data)
-              this.$store.commit('setTitle', '搜索结果')
-              this.$router.push({path: './library'})
-              this.searchText = ''
-            } else {
-              this.$alert(response.data.message, '搜索结果提醒', {
-                confirmButtonText: '确定'
-              })
-            }
-          })
-        } else {
-          this.$http.get('/api/resources/find?country=' + this.searchText).then((response) => {
-            if (response.data.status === 0) {
-              this.$store.commit('search_result', response.data.data)
-              this.$store.commit('setTitle', '搜索结果')
-              this.$router.push({path: './library'})
-              this.searchText = ''
-            } else {
-              this.$alert(response.data.message, '搜索结果提醒', {
-                confirmButtonText: '确定'
-              })
-            }
-          })
-        }
+        this.$http.get('/api/resources/find?' + this.value + '=' + this.searchText).then((response) => {
+          if (response.data.status === 0) {
+            this.$store.commit('source', response.data.data)
+            this.$store.commit('setTitle', '搜索结果')
+            this.$router.push({path: './library'})
+            this.searchText = ''
+          } else {
+            this.$alert(response.data.message, '搜索结果提醒', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
       },
       handleCommand (command) {
         if (command === 'person') {
@@ -161,7 +149,7 @@
     background: #27282a;
     padding-left: 100px;
     padding-right: 100px;
-    position: absolute;
+    position: fixed;
     top:0;
     left: 0;
     z-index: 999;

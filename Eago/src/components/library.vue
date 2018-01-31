@@ -36,8 +36,8 @@
             <el-popover trigger="hover" placement="top">
               <p>图片名字: {{ scope.row.titlePage.name }}</p>
                 <div slot="reference" class="name-wrapper">
-                  <el-button type="text" @click="outerVisible = true">
-                    <div class="source-photo" @click="getdetailed(scope.row.titlePage.id,$event)">
+                  <el-button type="text" @click="centerDialogVisible = true">
+                    <div class="source-photo" @click="getpic(scope.row.titlePage.url, scope.row.titlePage.name, scope.row.titlePage.id, $event)">
                       <img :src="scope.row.titlePage.url" alt="">
                     </div>
                   </el-button>
@@ -160,61 +160,121 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              @click="getdetailed(scope.$index, scope.row), outerVisible = true">编辑</el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              @click="del(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-        <!--<div class="source" v-for="item in this.mysource" :data-id="item._id">-->
-          <!--<el-button type="text" @click="outerVisible = true">-->
-          <!--<div class="source-photo" @click="getdetailed(item._id,$event)">-->
-            <!--<img v-bind:src="item.titlepage.url" alt="">-->
-          <!--</div>-->
-          <!--</el-button>-->
-        <!--</div>-->
+      <div class="picture-modal">
+        <el-dialog
+          :title="this.picdetailed.name"
+          :visible.sync="centerDialogVisible"
+          width="40%"
+          center>
+          <img :src="this.picdetailed.url" alt="">
+          <!--<span slot="footer" class="dialog-footer">-->
+    <!--<el-button @click="centerDialogVisible = false">取 消</el-button>-->
+    <!--<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>-->
+  <!--</span>-->
+        </el-dialog>
+      </div>
     </div>
-    <!--<div class="source-modal">-->
-      <!--<el-dialog-->
-        <!--:title="sourceModal.sourceName"-->
-        <!--:before-close="close"-->
-        <!--:close-on-click-modal="true"-->
-        <!--:visible.sync="outerVisible">-->
-        <!--<el-dialog-->
-          <!--width="50%"-->
-          <!--:title="picdetailed.name"-->
-          <!--:visible.sync="innerVisible"-->
-          <!--append-to-body>-->
-          <!--<span>{{picdetailed.creatTime}}</span>-->
-          <!--<img :src="picdetailed.url" alt="">-->
-        <!--</el-dialog>-->
-        <!--<div class="source-modal-picture" v-for="item in sourceModal.list">-->
-          <!--<el-button type="primary" @click="innerVisible = true, getpic(item.url, item.name, item.creatTime, item.id)">-->
-            <!--<img :src="item.url" alt="">-->
-          <!--</el-button>-->
-        <!--</div>-->
-        <!--<div class="source-modal-detailed">-->
-          <!--<el-input-->
-            <!--placeholder="请输入内容"-->
-            <!--v-model="sourceModal.des"-->
-            <!--v-on:change="change()"-->
-            <!--:disabled="isUpdate">-->
-            <!--&gt;</el-input>-->
-          <!--<el-input-->
-            <!--placeholder="请输入内容"-->
-            <!--v-model="sourceModal.country"-->
-            <!--v-on:change="change()"-->
-            <!--:disabled="isUpdate">-->
-            <!--&gt;</el-input>-->
-        <!--</div>-->
-        <!--<div slot="footer" class="dialog-footer">-->
-          <!--<button class="update-btn" @click="update">{{updatebtn}}</button>-->
-          <!--<button class="update-btn" @click="del(sourceModal._id)">删 除</button>-->
-        <!--</div>-->
-      <!--</el-dialog>-->
-    <!--</div>-->
+    <div class="source-modal">
+      <el-dialog
+        title="修改素材"
+        :visible.sync="outerVisible"
+        width="50%"
+        center>
+        <div class="update-form">
+          <el-form :model="sourceModal" :rules="sourceModalRule" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <div class="three">
+              <el-form-item label="angle" prop="angle">
+                <el-input v-model="sourceModal.angle"></el-input>
+              </el-form-item>
+            </div>
+            <div class="three">
+              <el-form-item label="平台" prop="terrace">
+                <el-input v-model="sourceModal.terrace"></el-input>
+              </el-form-item>
+            </div>
+            <div class="three">
+              <el-form-item label="opeavtor" prop="opeavtor">
+                <el-input v-model="sourceModal.opeavtor"></el-input>
+              </el-form-item>
+            </div>
+            <div></div>
+            <div class="two">
+              <el-form-item label="展示" prop="reveal">
+                <el-input v-model="sourceModal.reveal"></el-input>
+              </el-form-item>
+            </div>
+            <div class="two">
+              <el-form-item label="点击数" prop="click">
+                <el-input v-model="sourceModal.click"></el-input>
+              </el-form-item>
+            </div>
+            <div></div>
+            <div class="four">
+              <el-form-item label="CTR" prop="CTR">
+                <el-input v-model="sourceModal.CTR"></el-input>
+              </el-form-item>
+            </div>
+            <div class="four">
+              <el-form-item label="CPC" prop="CPC">
+                <el-input v-model="sourceModal.CPC"></el-input>
+              </el-form-item>
+            </div>
+            <div class="four">
+              <el-form-item label="CPM" prop="CPM">
+                <el-input v-model="sourceModal.CPM"></el-input>
+              </el-form-item>
+            </div>
+            <div class="four">
+              <el-form-item label="CR" prop="CR">
+                <el-input v-model="sourceModal.CR"></el-input>
+              </el-form-item>
+            </div>
+            <div></div>
+            <div class="three">
+              <el-form-item label="conversion" prop="conversion">
+                <el-input v-model="sourceModal.conversion"></el-input>
+              </el-form-item>
+            </div>
+            <div class="three">
+              <el-form-item label="消耗" prop="consume">
+                <el-input v-model="sourceModal.consume"></el-input>
+              </el-form-item>
+            </div>
+            <div class="three">
+              <el-form-item label="回收" prop="retrieve">
+                <el-input v-model="sourceModal.retrieve"></el-input>
+              </el-form-item>
+            </div>
+            <div></div>
+            <div class="two">
+              <el-form-item label="RI" prop="RI">
+                <el-input v-model="sourceModal.RI"></el-input>
+              </el-form-item>
+            </div>
+            <div class="two">
+              <el-form-item label="国家" prop="country">
+                <el-input v-model="sourceModal.country"></el-input>
+              </el-form-item>
+            </div>
+            <el-form-item label="备注" prop="remarks">
+              <el-input type="textarea" v-model="sourceModal.remarks" :autosize="{ minRows: 2, maxRows: 10}"></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="update">保 存</el-button>
+          <el-button type="primary" @click="outerVisible = false">关 闭</el-button>
+        </span>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -223,13 +283,91 @@
     name: 'library',
     data () {
       return {
-        sourceModal: '',
+        sourceIndex: '',
+        sourceModalId: '',
+        sourceModalName: '',
+        sourceModal: {
+          angle: '',
+          terrace: '',
+          opeavtor: '',
+          reveal: '',
+          click: '',
+          CTR: '',
+          CPC: '',
+          CPM: '',
+          conversion: '',
+          CR: '',
+          consume: '',
+          retrieve: '',
+          RI: '',
+          country: '',
+          remarks: ''
+        },
+        sourceModalRule: {
+          angle: [
+            { required: true, message: '请输入angle', trigger: 'blur' },
+            { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+          ],
+          terrace: [
+            { required: true, message: '请输入terrace', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          opeavtor: [
+            { required: true, message: '请输入opeavtor', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          reveal: [
+            { required: true, message: '请输入展示', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          click: [
+            { required: true, message: '请输入点击数', trigger: 'blur' },
+            { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+          ],
+          CTR: [
+            { required: true, message: '请输入CTR', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          CPC: [
+            { required: true, message: '请输入CPC', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          CPM: [
+            { required: true, message: '请输入CPM', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          conversion: [
+            { required: true, message: '请输入conversion', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          CR: [
+            { required: true, message: '请输入CR', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          consume: [
+            { required: true, message: '请输入消耗', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          retrieve: [
+            { required: true, message: '请输入回收', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          RI: [
+            { required: true, message: '请输入RI', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          country: [
+            { required: true, message: '请输入国家', trigger: 'blur' },
+            { min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur' }
+          ],
+          remarks: [
+            { required: true, message: '请填写备注', trigger: 'blur' }
+          ]
+        },
         picdetailed: {},
-        isUpdate: true,
-        updatebtn: '修改',
         updateChange: false,
         outerVisible: false,
-        innerVisible: false
+        centerDialogVisible: false
       }
     },
     mounted () {
@@ -267,100 +405,77 @@
           }
         })
       },
-      getdetailed: function (id, e) {
-        this.$http.get('/api/picture/detailed?_id=' + id).then((response) => {
-          let data = response.data
-          if (data.status === 0) {
-            this.sourceModal = data.data[0]
+      getdetailed: function (index, row) {
+        this.sourceIndex = index
+        this.sourceModalId = row._id
+        this.sourceModalName = row.user.uname
+        this.sourceModal.angle = row.source.angle
+        this.sourceModal.terrace = row.source.terrace
+        this.sourceModal.opeavtor = row.source.opeavtor
+        this.sourceModal.reveal = row.source.reveal
+        this.sourceModal.click = row.source.click
+        this.sourceModal.CTR = row.source.CTR
+        this.sourceModal.CPC = row.source.CPC
+        this.sourceModal.CPM = row.source.CPM
+        this.sourceModal.conversion = row.source.conversion
+        this.sourceModal.CR = row.source.CR
+        this.sourceModal.consume = row.source.consume
+        this.sourceModal.retrieve = row.source.retrieve
+        this.sourceModal.RI = row.source.RI
+        this.sourceModal.remarks = row.source.remarks
+        this.sourceModal.country = row.source.country
+        console.log(this.sourceModalName)
+      },
+      getpic: function (url, name, id) {
+        let list = {}
+        list.url = url
+        list.name = name
+        list.id = id
+        this.picdetailed = list
+      },
+      update: function () {
+        let uname = this.$cookies.get('_name')
+        if (uname !== this.sourceModalName) {
+          this.$message({
+            message: '没有修改权限，请联系上传者修改',
+            type: 'error'
+          })
+          return false
+        }
+        let data = {}
+        data._id = this.sourceModalId
+        data.source = this.sourceModal
+        this.$http.put('/api/picture/update', data).then((response) => {
+          if (response.data.status === 0) {
+            let source = this.mysource
+            source[this.sourceIndex].source = response.data.data.source
+            this.$store.commit('source', source)
+            this.$message({
+              message: response.data.message,
+              type: 'success'
+            })
           } else {
             this.$message({
-              message: data.message,
+              message: response.data.message,
               type: 'error'
             })
           }
         })
       },
-      getpic: function (url, name, creatTime, id) {
-        let list = {}
-        list.url = url
-        list.name = name
-        list.creatTime = creatTime
-        list.id = id
-        this.picdetailed = list
-      },
-      update: function () {
-        this.isUpdate = !this.isUpdate
-        if (this.isUpdate) {
-          this.updatebtn = '修 改'
-          if (this.updateChange) {
-            let data = {}
-            data._id = this.sourceModal._id
-            data.query = this.sourceModal
-            delete data.query._id
-            this.$http.put('/api/picture/update', data).then((response) => {
-              if (response.status === 200) {
-                if (response.data.status === 0) {
-                  this.$message({
-                    message: response.data.message,
-                    type: 'success'
-                  })
-                  this.updateChange = false
-                } else {
-                  this.$message({
-                    message: response.data.message,
-                    type: 'error'
-                  })
-                }
-              }
-            })
-          }
-        } else {
-          this.updatebtn = '保 存'
-        }
-      },
-      change: function () {
-        this.updateChange = true
-      },
-      close: function (done) {
-        if (this.updateChange) {
-          this.$confirm('修改内容还未保存, 是否关闭?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            done()
-            this.isUpdate = true
-            this.updatebtn = '修改'
-            this.updateChange = false
-            this.$message({
-              type: 'success',
-              message: '已取消修改!'
-            })
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '修改完成之后请点击保存'
-            })
-          })
-        } else {
-          this.isUpdate = true
-          this.updatebtn = '修改'
-          this.updateChange = false
-          done()
-        }
-      },
-      del: function (id) {
+      del: function (index, row) {
+//        let source = this.mysource
+//        console.log(source)
+//        return false
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get('/api/picture/del?_id=' + id).then((response) => {
+          this.$http.get('/api/picture/del?_id=' + row._id).then((response) => {
             if (response.data.status === 0) {
-              this.outerVisible = false
               for (let i = 0; i < this.myValue.length; i++) {
-                if (id === this.myValue[i]._id) {
-                  this.myValue.splice(i, 1)
+                if (row._id === this.myValue[i]._id) {
+                  this.mysource.splice(i, 1)
                 }
               }
               this.$message({
@@ -414,11 +529,11 @@
     margin-left: 20px;
   }
   .source-photo{
-    height: 50px;
+    width: 120px;
     cursor: pointer;
   }
   .source-photo img{
-    height: 100%;
+    width: 100%;
   }
   .source-modal-picture{
     width: 200px;
@@ -478,5 +593,26 @@
   /*}*/
   .el-dialog__body img{
     width: 100%;
+  }
+  .update-form{
+    width: 100%;
+    max-width: 750px;
+    margin: 0px auto;
+    margin-top: 50px;
+  }
+  .two{
+    width: 370px;
+    display: inline-block;
+    vertical-align: top;
+  }
+  .three{
+    width: 245px;
+    display: inline-block;
+    vertical-align: top;
+  }
+  .four{
+    width: 182px;
+    display: inline-block;
+    vertical-align: top;
   }
 </style>

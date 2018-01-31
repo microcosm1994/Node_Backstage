@@ -21,20 +21,24 @@
     </el-alert>
     <div><input type="text" placeholder="账号" v-model="account"></div>
     <div><input type="password" placeholder="密码" v-model="pwd"></div>
-    <el-dialog title="请输入管理员密码" :visible.sync="dialogFormVisible">
-      <el-form :model="Administrators">
-        <el-form-item label="管理员密码" :label-width="formLabelWidth">
-          <el-input v-model="Administrators.password"  type="password" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="this.testAdmin">生成账号</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">关闭</el-button>
-      </div>
-    </el-dialog>
     <div class="register-btn" v-on:click="register()">
       <button>生成账号</button>
     </div>
+    <el-dialog
+      title="请输入管理员密码"
+      :visible.sync="adminModal"
+      width="20%"
+      center>
+      <el-form :model="Administrators">
+        <el-form-item label="" :label-width="formLabelWidth">
+          <el-input v-model="Administrators.password"  type="password" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+       <el-button type="primary" @click="this.testAdmin">生成账号</el-button>
+        <el-button type="primary" @click="adminModal = false">关 闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,12 +50,12 @@
         title: '生成账号',
         account: '',
         pwd: '',
-        dialogFormVisible: false,
+        adminModal: false,
         Administrators: {
           username: 'admin',
           password: ''
         },
-        formLabelWidth: '120px'
+        formLabelWidth: '0px'
       }
     },
     methods: {
@@ -62,7 +66,7 @@
           return false
         }
         if (adminUser === 'admin') {
-          this.dialogFormVisible = true
+          this.adminModal = true
         } else {
           this.$message.error('你不是管理员，无法生成账号，请联系管理员为你生成账号')
         }
@@ -77,7 +81,7 @@
         }
         this.$http({
           method: 'post',
-          url: '/api/account/adminLogin',
+          url: '/api/account/login',
           data: userAdmin
         }).then((response) => {
           let data = response.data
@@ -98,7 +102,7 @@
                   cancelButtonText: '继续生成账号',
                   type: 'success'
                 }).then(() => {
-                  this.$router.push({path: './home'})
+                  this.$router.push({path: './accountPage'})
                 }).catch(() => {
                   this.$router.go(0)
                 })

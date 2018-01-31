@@ -4,14 +4,14 @@
     <div class="home-container">
       <div class="home-sidebar">
         <ul>
-          <li @click="setActive">
+          <li @click="setActive(), getAll()">
             <a href="javascript:;"
                v-bind:class="{active:activeClass.library}"
             >
               <router-link to="/library">素材库</router-link>
             </a>
           </li>
-          <li @click="setActive">
+          <li @click="setActive()">
             <a href="javascript:;"
               v-bind:class="{active:activeClass.add}"
             >
@@ -47,6 +47,20 @@
       this.loginkeep()
     },
     methods: {
+      getAll: function () {
+        this.$http.get('/api/resources/all').then((response) => {
+          let data = response.data
+          if (data.status === 0) {
+            this.$store.commit('source', data.data)
+            this.$store.commit('setTitle', '素材库')
+          } else {
+            this.$message({
+              message: data.message,
+              type: 'error'
+            })
+          }
+        })
+      },
       setActive: function () {
         let address = this.$router.currentRoute.name
         for (let key in this.activeClass) {
@@ -59,47 +73,30 @@
       },
       loginkeep: function () {
         let id = this.$cookies.get('_id')
-        let adminUser = this.$cookies.get('_name')
         if (id) {
-          if (adminUser === 'admin') {
-            this.$http.get('/api/account/adminId?_id=' + id).then((response) => {
-              let data = response.data
-              if (data.status === 0) {
-                this.$cookies.set('_name', data.data.username, {
-                  domain: 'localhost',
-                  path: '/'
-                })
-                this.$store.commit('setusersName', data.data.username)
-                this.$store.commit('setusersUid', data.data._id)
-                this.$store.commit('setusersPortrait', data.data.portrait)
+          this.$http.get('/api/account/user?_id=' + id).then((response) => {
+            let data = response.data
+            if (data.status === 0) {
+              this.$cookies.set('_name', data.data.username, {
+                domain: 'localhost',
+                path: '/'
+              })
+              this.$store.commit('setusersName', data.data.username)
+              this.$store.commit('setusersUid', data.data._id)
+              this.$store.commit('setusersPortrait', data.data.portrait)
+              if (data.data.isAdmin) {
                 this.$store.commit('setusersAdmin', true)
               } else {
-                this.$message({
-                  message: '获取用户信息失败，请退出后重新登录',
-                  type: 'error'
-                })
-              }
-            })
-            this.$store.commit('setloginStatus', '退出')
-//            this.$router.push({path: '/home'})
-          } else {
-            this.$http.get('/api/account/user?_id=' + id).then((response) => {
-              let data = response.data
-              if (data.status === 0) {
                 this.$store.commit('setusersAdmin', false)
-                this.$store.commit('setusersName', data.data.username)
-                this.$store.commit('setusersUid', data.data._id)
-                this.$store.commit('setusersPortrait', data.data.portrait)
-              } else {
-                this.$message({
-                  message: '获取用户信息失败，请退出后重新登录',
-                  type: 'error'
-                })
               }
-            })
-            this.$store.commit('setloginStatus', '退出')
-//            this.$router.push({path: '/home'})
-          }
+            } else {
+              this.$message({
+                message: '获取用户信息失败，请退出后重新登录',
+                type: 'error'
+              })
+            }
+          })
+          this.$store.commit('setloginStatus', '退出')
         } else {
           this.$message({
             message: '检测到您没有登陆',
@@ -137,7 +134,7 @@
   .home-sidebar{
     width: 180px;
     height: 100%;
-    position: absolute;
+    position: fixed;
     left: 0;
     top:0px;
     background: #36373b;
