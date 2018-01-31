@@ -28,13 +28,13 @@
       <div class="person-container">
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            {{this.getuserName}}
+            {{this.getuser.nickname | capitalize}}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="person">个人信息</el-dropdown-item>
-            <el-dropdown-item command="accountPage" v-if="this.getuserAdmin">管理账号</el-dropdown-item>
-            <el-dropdown-item command="creatAccount" v-if="this.getuserAdmin">生成账号</el-dropdown-item>
+            <el-dropdown-item command="accountPage" v-if="this.getuser.isAdmin">管理账号</el-dropdown-item>
+            <el-dropdown-item command="creatAccount" v-if="this.getuser.isAdmin">生成账号</el-dropdown-item>
             <el-dropdown-item command="out">{{this.loginStatus}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -61,16 +61,22 @@
         value: ''
       }
     },
+    filters: {
+      capitalize: function (value) {
+        if (value) {
+          return value
+        } else {
+          return '请登录'
+        }
+      }
+    },
     mounted () {},
     computed: {
       loginStatus () {
         return this.$store.state.loginStatus
       },
-      getuserName () {
-        return this.$store.state.user.name
-      },
-      getuserAdmin () {
-        return this.$store.state.user.isAdmin
+      getuser () {
+        return this.$store.state.user
       }
     },
     methods: {
@@ -123,10 +129,7 @@
               path: '/'
             })
             this.$store.commit('setloginStatus', '登陆')
-            this.$store.commit('setusersName', '请登录')
-            this.$store.commit('setusersUid', '')
-            this.$store.commit('setusersPortrait', '')
-            this.$store.commit('setusersAdmin', false)
+            this.$store.commit('setuser', {})
           } else {
             this.$router.push({path: '/login'})
           }

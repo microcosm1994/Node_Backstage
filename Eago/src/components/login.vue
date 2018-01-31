@@ -47,7 +47,6 @@
       submitForm (form) {
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
-            let self = this
             let user = {}
             user.username = form.account
             user.password = form.password
@@ -58,15 +57,13 @@
             }).then((response) => {
               let data = response.data
               if (data.status === 0) {
-                this.$store.commit('setusersName', data.data.username)
-                this.$store.commit('setusersUid', data.data._id)
-                this.$store.commit('setusersPortrait', data.data.portrait)
+                let user = {}
+                user.nickname = data.data.nickname
+                user.username = data.data.username
+                user.portrait = data.data.portrait
+                user.isAdmin = data.data.isAdmin
+                this.$store.commit('setuser', user)
                 this.$store.commit('setloginStatus', '退出')
-                if (data.data.isAdmin) {
-                  this.$store.commit('setusersAdmin', true)
-                } else {
-                  this.$store.commit('setusersAdmin', false)
-                }
                 this.$cookies.set('_name', data.data.username, {
                   domain: 'localhost',
                   path: '/'
@@ -75,7 +72,7 @@
                   message: data.message,
                   type: 'success'
                 })
-                self.$router.push({path: '/home'})
+                this.$router.push({path: '/home'})
               } else {
                 this.$message({
                   message: data.message,

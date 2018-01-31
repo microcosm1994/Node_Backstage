@@ -1,28 +1,43 @@
 <template>
   <div class="register">
     <h1>{{title}}</h1>
-    <el-alert
-      title="管理员拥有本后台管理系统所有账号的管理权限，请谨慎操作！"
-      center
-      :closable="false"
-      type="info">
-    </el-alert>
-    <el-alert
-      title="因后台系统不对外开放，所以简化了一些不必要的操作流程。"
-      center
-      :closable="false"
-      type="info">
-    </el-alert>
-    <el-alert
-      title="用户名应尽量使用公司职员英文名为账号"
-      center
-      :closable="false"
-      type="info">
-    </el-alert>
-    <div><input type="text" placeholder="账号" v-model="account"></div>
-    <div><input type="password" placeholder="密码" v-model="pwd"></div>
-    <div class="register-btn" v-on:click="register()">
-      <button>生成账号</button>
+    <div class="register-form">
+      <el-alert
+        title="管理员拥有本后台管理系统所有账号的管理权限，请谨慎操作！"
+        center
+        :closable="false"
+        type="info">
+      </el-alert>
+      <el-alert
+        title="因后台系统不对外开放，所以简化了一些不必要的操作流程。"
+        center
+        :closable="false"
+        type="info">
+      </el-alert>
+      <el-alert
+        title="用户名应尽量使用公司职员英文名为账号"
+        center
+        :closable="false"
+        type="info">
+      </el-alert>
+      <el-form :model="accountForm" :rules="accountRules" ref="accountForm" label-width="80px" class="demo-ruleForm">
+        <el-form-item label="昵称" prop="nickname">
+          <el-input v-model="accountForm.nickname"></el-input>
+        </el-form-item>
+        <el-form-item label="账号" prop="username">
+          <el-input v-model="accountForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="accountForm.password" type="password"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input type="password" v-model="accountForm.checkPass" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="register()">保存</el-button>
+          <el-button @click="resetForm('accountForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <el-dialog
       title="请输入管理员密码"
@@ -35,7 +50,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-       <el-button type="primary" @click="this.testAdmin">生成账号</el-button>
+       <el-button type="primary" @click="testAdmin(accountForm)">生成账号</el-button>
         <el-button type="primary" @click="adminModal = false">关 闭</el-button>
       </span>
     </el-dialog>
@@ -46,39 +61,79 @@
   export default {
     name: 'register',
     data () {
+      let validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
+        } else if (value !== this.accountForm.password) {
+          callback(new Error('两次输入密码不一致!'))
+        } else {
+          callback()
+        }
+      }
       return {
         title: '生成账号',
-        account: '',
-        pwd: '',
         adminModal: false,
         Administrators: {
           username: 'admin',
           password: ''
+        },
+        accountForm: {
+          nickname: '',
+          username: '',
+          password: '',
+          portrait: '',
+          isAdmin: false,
+          checkPass: ''
+        },
+        accountRules: {
+          nickname: [
+            { required: true, message: '请输入昵称', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          username: [
+            { required: true, message: '请输入用户名', trigger: 'blur' },
+            { min: 4, max: 30, message: '长度在 4 到 30 个字符', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+            { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+          ],
+          isAdmin: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+            { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+          ],
+          checkPass: [
+            { validator: validatePass2, trigger: 'blur' }
+          ]
         },
         formLabelWidth: '0px'
       }
     },
     methods: {
       register () {
-        let adminUser = this.$cookies.get('_name')
-        if (this.account === '' || this.pwd === '') {
-          this.$message.error('请填写用户名和密码')
-          return false
-        }
-        if (adminUser === 'admin') {
-          this.adminModal = true
-        } else {
-          this.$message.error('你不是管理员，无法生成账号，请联系管理员为你生成账号')
-        }
+        this.$refs['accountForm'].validate((valid) => {
+          if (valid) {
+            if (this.$cookies.get('_name') === 'admin') {
+              this.adminModal = true
+            } else {
+              this.$message.error('你不是管理员，无法生成账号，请联系管理员为你生成账号')
+            }
+          } else {
+            this.$message.error('请填写表单后再点击保存')
+          }
+        })
       },
-      testAdmin: function () {
+      testAdmin: function (form) {
+        console.log(form)
         let userAdmin = {}
         userAdmin.username = this.Administrators.username
         userAdmin.password = this.Administrators.password
-        let user = {
-          username: this.account,
-          password: this.pwd
-        }
+        let user = {}
+        user.nickname = form.nickname
+        user.username = form.username
+        user.password = form.password
+        user.portrait = form.portrait
+        user.isAdmin = form.isAdmin
         this.$http({
           method: 'post',
           url: '/api/account/login',
@@ -87,7 +142,7 @@
           let data = response.data
           if (data.status === 0) {
             this.$message({
-              message: data.message,
+              message: '已验证你的身份为管理员',
               type: 'success'
             })
             this.$http.post('/api/account/register', user).then((response) => {
@@ -112,11 +167,14 @@
             })
           } else {
             this.$message({
-              message: data.message,
+              message: '管理员身份验证失败，不能进行账号注册',
               type: 'error'
             })
           }
         })
+      },
+      resetForm (formName) {
+        this.$refs[formName].resetFields()
       }
     }
   }
@@ -134,42 +192,8 @@
     color: #0f88eb;
     font-size: 58px;
   }
-
-  input {
-    width: 360px;
-    height: 50px;
-    margin-top: 30px;
-    line-height: 50px;
-    padding-left: 20px;
-    font-size: 20px;
-    box-sizing: border-box;
-  }
-
-  .register-btn {
-    width: 360px;
-    height: 50px;
+  .register-form{
+    width: 380px;
     margin: 0 auto;
-    margin-top: 50px;
-  }
-
-  .register-btn button {
-    outline: none;
-    border: none;
-    width: 100%;
-    height: 100%;
-    background: #0f88eb;
-    color: #fff;
-    cursor: pointer;
-    font-size: 24px;
-    border-radius: 5px;
-    margin: 0;
-  }
-
-  .register-btn button:hover {
-    background: #0d79d1;
-  }
-
-  .register-btn button:active {
-    background: #0f88eb;
   }
 </style>

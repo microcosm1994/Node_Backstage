@@ -81,14 +81,7 @@
                 domain: 'localhost',
                 path: '/'
               })
-              this.$store.commit('setusersName', data.data.username)
-              this.$store.commit('setusersUid', data.data._id)
-              this.$store.commit('setusersPortrait', data.data.portrait)
-              if (data.data.isAdmin) {
-                this.$store.commit('setusersAdmin', true)
-              } else {
-                this.$store.commit('setusersAdmin', false)
-              }
+              this.$store.commit('setuser', data.data)
             } else {
               this.$message({
                 message: '获取用户信息失败，请退出后重新登录',

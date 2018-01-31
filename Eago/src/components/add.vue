@@ -17,7 +17,7 @@
       </el-dialog>
     </div>
     <div class="add-form">
-      <el-form :model="ruleForm" :rules="rules" ref="rules" label-width="100px" class="demo-ruleForm">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <div class="three">
           <el-form-item label="angle" prop="angle">
             <el-input v-model="ruleForm.angle"></el-input>
@@ -195,6 +195,11 @@
         }
       }
     },
+    computed: {
+      getuser () {
+        return this.$store.state.user
+      }
+    },
     methods: {
       uploadsuccess (response, file, filelist) {
         if (response.status === 200) {
@@ -207,6 +212,7 @@
         }
       },
       uploaderr (err, file, filelist) {
+        console.log(err)
         if (err) {
           this.$message({
             message: '服务器错误,' + file.name + '上传失败',
@@ -239,8 +245,12 @@
             result.list = this.list
             result.titlePage = this.list[0]
             result.user = {
-              uname: this.$cookies.get('_name'),
-              id: this.$cookies.get('_id')
+              username: this.getuser.username,
+              nickname: this.getuser.nickname,
+              id: this.getuser._id,
+              portrait: this.getuser.portrait,
+              isAdmin: this.getuser.isAdmin,
+              date: this.getuser.date
             }
             this.$http.post('/api/resources/save', result).then((response) => {
               let data = response.data

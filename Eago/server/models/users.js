@@ -3,6 +3,9 @@ const Schema = mongoose.Schema
 
 // 声明一个数据集 对象
 const userSchema = new Schema({
+  nickname: {
+    type: String
+  },
   username: {
     type: String,
     unique: true
@@ -13,8 +16,12 @@ const userSchema = new Schema({
   portrait: {
     type: String
   },
-  idAdmin: {
+  isAdmin: {
     type: Boolean
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
 })
 // 将数据模型暴露出去

@@ -168,6 +168,15 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="20"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="sourceCount">
+      </el-pagination>
       <div class="picture-modal">
         <el-dialog
           :title="this.picdetailed.name"
@@ -367,7 +376,9 @@
         picdetailed: {},
         updateChange: false,
         outerVisible: false,
-        centerDialogVisible: false
+        centerDialogVisible: false,
+        currentPage: 4,
+        sourceCount: 0
       }
     },
     mounted () {
@@ -392,9 +403,10 @@
         return ''
       },
       getAll: function () {
-        this.$http.get('/api/resources/all').then((response) => {
+        this.$http.get('/api/resources/all?page=' + this.currentPage + '&size=' + 20).then((response) => {
           let data = response.data
           if (data.status === 0) {
+            this.sourceCount = data.count
             this.$store.commit('source', data.data)
             this.$store.commit('setTitle', '素材库')
           } else {
@@ -408,7 +420,7 @@
       getdetailed: function (index, row) {
         this.sourceIndex = index
         this.sourceModalId = row._id
-        this.sourceModalName = row.user.uname
+        this.sourceModalName = row.user.username
         this.sourceModal.angle = row.source.angle
         this.sourceModal.terrace = row.source.terrace
         this.sourceModal.opeavtor = row.source.opeavtor
@@ -424,7 +436,6 @@
         this.sourceModal.RI = row.source.RI
         this.sourceModal.remarks = row.source.remarks
         this.sourceModal.country = row.source.country
-        console.log(this.sourceModalName)
       },
       getpic: function (url, name, id) {
         let list = {}
@@ -434,8 +445,8 @@
         this.picdetailed = list
       },
       update: function () {
-        let uname = this.$cookies.get('_name')
-        if (uname !== this.sourceModalName) {
+        let username = this.$cookies.get('_name')
+        if (username !== this.sourceModalName) {
           this.$message({
             message: '没有修改权限，请联系上传者修改',
             type: 'error'
@@ -473,8 +484,8 @@
         }).then(() => {
           this.$http.get('/api/picture/del?_id=' + row._id).then((response) => {
             if (response.data.status === 0) {
-              for (let i = 0; i < this.myValue.length; i++) {
-                if (row._id === this.myValue[i]._id) {
+              for (let i = 0; i < this.mysource.length; i++) {
+                if (row._id === this.mysource[i]._id) {
                   this.mysource.splice(i, 1)
                 }
               }
@@ -489,6 +500,12 @@
             }
           })
         }).catch(() => {})
+      },
+      handleSizeChange (val) {
+        console.log(`每页 ${val} 条`)
+      },
+      handleCurrentChange (val) {
+        console.log(`当前页: ${val}`)
       }
     }
   }

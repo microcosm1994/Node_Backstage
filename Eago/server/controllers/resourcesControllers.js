@@ -4,15 +4,22 @@ const source = require(path.join(__dirname, '../models/source.js'))
 
 exports.all = (req, res) => {
   let result = {status: 0, message: '成功'}
-  source.find({}, (err, data) => {
+  source.count({}, (err, data) => {
     if (err) throw err
     if (data) {
-      result.data = data
-      res.json(result)
-    } else {
-      result.status = 0
-      result.message = '没有数据'
-      res.json(result)
+      let count = data
+      source.find({}, (err, data) => {
+        if (err) throw err
+        if (data) {
+          result.data = data
+          result.count = count
+          res.json(result)
+        } else {
+          result.status = 0
+          result.message = '没有数据'
+          res.json(result)
+        }
+      }).skip(2).limit(5)
     }
   })
 }

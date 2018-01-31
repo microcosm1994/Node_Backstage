@@ -20,7 +20,7 @@ exports.login = (req, res) => {
       })
       result.data = data
       delete result.data.password
-      console.log(data)
+      console.log(result)
       res.json(result)
     } else {
       result.status = 1
@@ -32,15 +32,17 @@ exports.login = (req, res) => {
 
 exports.register = (req, res) => {
   let result = {status: 0, message: '注册成功'}
-  let users = req.body
+  let users = {}
   if (users.username === 'admin') {
     result.status = 1
     result.message = '不能以“admin"为账号进行注册'
     res.json(result)
   }
-  const hash = crypto.createHash('md5')
-  users.password = hash.update(users.password).digest('hex')
-  users.isAdmin = false
+  users.nickname = req.body.nickname
+  users.username = req.body.username
+  users.password = crypto.createHash('md5').update(req.body.password).digest('hex')
+  users.portrait = req.body.portrait ? req.body.portrait : ''
+  users.isAdmin = req.body.isAdmin
   User.findOne({username: users.username}, (err, data) => {
     if (err) throw err
     if (data) {
@@ -48,7 +50,6 @@ exports.register = (req, res) => {
       result.message = '该账号已经被注册'
       res.json(result)
     } else {
-      users.portrait = ''
       User.create(users, (err, data) => {
         if (err) throw err
         if (data) {
@@ -68,13 +69,16 @@ exports.register = (req, res) => {
 exports.user = (req, res) => {
   let result = {status: 0, message: '获取成功'}
   let query = req.query
-  console.log(query)
   User.findById(query._id, (err, data) => {
     if (err) throw err
-    console.log(data)
     if (data) {
+      let list = ['password']
+      list.forEach(
+        function (key) {
+          delete data[key]
+        }
+      )
       result.data = data
-      delete result.data.password
       res.json(result)
     } else {
       result.status = 1
@@ -98,6 +102,55 @@ exports.getaccount = (req, res) => {
       result.status = 1
       result.message = '服务器错误'
       res.json(result)
+    }
+  })
+}
+
+exports.updateAccount = (req, res) => {
+  let result = {status: 0, message: '密码已修改成功'}
+  let id = req.body._id
+  let query = {}
+  query.nickname = req.body.nickname
+  query.password = crypto.createHash('md5').update(req.body.password).digest('hex')
+  query.portrait = req.body.portrait ? req.body.portrait : ''
+  query.isAdmin = req.body.isAdmin ? req.body.isAdmin : false
+  console.log(query)
+  User.findByIdAndUpdate(id, query, {new: true}, (err, data) => {
+    if (err) throw err
+    console.log(data)
+    if (data) {
+      result.data = data
+      res.json(result)
+    } else {
+      result.status = 1
+      result.message = '服务器错误'
+      res.json(result)
+    }
+  })
+}
+
+exports.delAccount = (req, res) => {
+  let result = {status: 0, message: '账号已删除'}
+  User.findById(req.body._id, (err, data) => {
+    if (err) throw err
+    if (data) {
+      if (data.username === 'admin') {
+        result.status = 1
+        result.message = '不能删除管理员账号'
+        res.json(result)
+      } else {
+        User.findByIdAndRemove(req.body._id, (err, data) => {
+          if (err) throw err
+          if (data) {
+            result.status = 0
+            result.message = '账号已删除'
+            res.json(result)
+          } else {
+            result.status = 1
+            result.message = '服务器错误'
+          }
+        })
+      }
     }
   })
 }

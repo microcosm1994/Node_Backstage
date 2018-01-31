@@ -7,12 +7,7 @@ export default new vuex.Store({
   state: {
     title: '',
     loginStatus: '',
-    user: {
-      uid: '',
-      name: '',
-      portrait: '',
-      isAdmin: false
-    },
+    user: {},
     source: [],
     search: {
       text: ''
@@ -25,17 +20,8 @@ export default new vuex.Store({
     setloginStatus (state, string) {
       state.loginStatus = string
     },
-    setusersName (state, string) {
-      state.user.name = string
-    },
-    setusersPortrait (state, string) {
-      state.user.portrait = string
-    },
-    setusersAdmin (state, string) {
-      state.user.isAdmin = string
-    },
-    setusersUid (state, string) {
-      state.user.uid = string
+    setuser (state, obj) {
+      state.user = obj
     },
     search_text (state, string) {
       state.search.text = string

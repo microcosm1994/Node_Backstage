@@ -73,8 +73,20 @@ const sourceSchema = new Schema({
   },
   list: [],
   user: {
-    uname: {
+    date: {
+      type: Date
+    },
+    nickname: {
       type: String
+    },
+    username: {
+      type: String
+    },
+    portrait: {
+      type: String
+    },
+    isAdmin: {
+      type: Boolean
     },
     id: {
       type: String
