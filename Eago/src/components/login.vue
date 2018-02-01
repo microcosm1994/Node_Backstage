@@ -15,6 +15,19 @@
         </el-form-item>
       </el-form>
     </div>
+    <div :style="fixStyle" class="filter"></div>
+    <video autoplay="autoplay"
+    loop="loop"
+    :style="this.fixStyle"
+    >
+      <source src="../../static/img/night.mp4" type="video/mp4"/>
+      浏览器不支持 video 标签，建议升级浏览器。
+      <source src="PATH_TO_WEBM" type="video/webm"/>
+      浏览器不支持 video 标签，建议升级浏览器。
+    </video>
+    <div class="poster hidden" v-if="!vedioCanPlay">
+      <img :style="fixStyle" src="../../static/img/video_cover.jpeg" alt="">
+    </div>
   </div>
 </template>
 
@@ -37,13 +50,45 @@
             { required: true, message: '请输入密码', trigger: 'blur' },
             { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
           ]
-        }
+        },
+        vedioCanPlay: false,
+        fixStyle: ''
       }
     },
     mounted () {
       this.remind()
+      window.onresize = () => {
+        const windowWidth = document.body.clientWidth
+        const windowHeight = document.body.clientHeight
+        const windowAspectRatio = windowHeight / windowWidth
+        let videoWidth
+        let videoHeight
+        if (windowAspectRatio < 0.5625) {
+          videoWidth = windowWidth
+          videoHeight = videoWidth * 0.5625
+          this.fixStyle = {
+            height: windowWidth * 0.5625 + 'px',
+            width: windowWidth + 'px',
+            'margin-bottom': (windowHeight - videoHeight) / 2 + 'px',
+            'margin-left': 'initial'
+          }
+        } else {
+          videoHeight = windowHeight
+          videoWidth = videoHeight / 0.5625
+          this.fixStyle = {
+            height: windowHeight + 'px',
+            width: windowHeight / 0.5625 + 'px',
+            'margin-left': (windowWidth - videoWidth) / 2 + 'px',
+            'margin-bottom': 'initial'
+          }
+        }
+      }
+      window.onresize()
     },
     methods: {
+      canplay () {
+        this.vedioCanPlay = true
+      },
       submitForm (form) {
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
@@ -107,18 +152,56 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .login {
-    padding-top: 200px;
+  html,body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
   }
-
+  /**{*/
+    /*margin: 0;*/
+    /*padding: 0;*/
+  /*}*/
+  .login {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  video{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+  }
   h1 {
     font-weight: 700;
-    color: #0f88eb;
+    color: #FFFFFF;
     font-size: 58px;
+    position: fixed;
+    top:20%;
+    left:50%;
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 999;
   }
   .login-form{
     width: 340px;
-    margin: 0 auto;
-    margin-top: 50px;
+    padding: 50px 34px 10px 14px;
+    background: rgba(0,0,0,0.4);
+    border-radius:5px;
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 999;
+  }
+  .filter {
+    z-index: 1;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.2);
   }
 </style>

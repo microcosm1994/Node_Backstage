@@ -1,5 +1,8 @@
 <template>
   <div class="headers">
+    <div id='stars'></div>
+    <div id='stars2'></div>
+    <div id='stars3'></div>
     <div class="logo">
       <span style="color:#fed189;">Ea</span>
       <span style="color:#00a0df;">go</span>
@@ -143,6 +146,7 @@
   }
 </script>
 <style>
+  /*@import "../../static/css/stars.css";*/
   *{
     padding: 0;
     margin: 0;
@@ -160,6 +164,7 @@
     top:0;
     left: 0;
     z-index: 999;
+    overflow: hidden;
   }
   .logo{
     display: inline-block;

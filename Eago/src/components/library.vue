@@ -22,7 +22,7 @@
         <!--日期-->
         <el-table-column
           label="日期"
-          width="120">
+          width="115">
           <template slot-scope="scope">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ scope.row.date | datetostring}}</span>
@@ -50,6 +50,12 @@
           label="angle">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.source.angle }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="昵称">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.user.nickname }}</span>
           </template>
         </el-table-column>
         <!--平台-->
@@ -480,6 +486,14 @@
 //        let source = this.mysource
 //        console.log(source)
 //        return false
+        let username = this.$cookies.get('_name')
+        if (username !== this.sourceModalName) {
+          this.$message({
+            message: '没有修改权限，请联系上传者修改',
+            type: 'error'
+          })
+          return false
+        }
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

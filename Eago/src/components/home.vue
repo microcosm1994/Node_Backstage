@@ -19,6 +19,9 @@
             </a>
           </li>
         </ul>
+        <div id='stars'></div>
+        <div id='stars2'></div>
+        <div id='stars3'></div>
       </div>
       <div class="home-route">
         <router-view></router-view>
@@ -103,6 +106,7 @@
   }
 </script>
 <style>
+  /*@import "../../static/css/stars.css";*/
   *{
     margin: 0;
     padding: 0;
@@ -132,6 +136,7 @@
     top:0px;
     background: #36373b;
     padding-top: 70px;
+    overflow: hidden;
   }
   .home-sidebar ul{
     width: 100%;
