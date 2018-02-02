@@ -483,6 +483,7 @@
         })
       },
       del: function (index, row) {
+        this.sourceModalName = row.user.username
 //        let source = this.mysource
 //        console.log(source)
 //        return false

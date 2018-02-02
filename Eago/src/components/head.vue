@@ -127,16 +127,16 @@
         if (command === 'out') {
           let id = this.$cookies.get('_id')
           if (id) {
-            this.$cookies.remove('_id', {
-              domain: 'localhost',
-              path: '/'
+            this.$http.get('/api/account/logout').then((response) => {
+              if (response.data.status === 0) {
+                this.$cookies.remove('_name', {
+                  domain: 'www.frzik.com',
+                  path: '/'
+                })
+                this.$store.commit('setloginStatus', '登陆')
+                this.$store.commit('setuser', {})
+              }
             })
-            this.$cookies.remove('_name', {
-              domain: 'localhost',
-              path: '/'
-            })
-            this.$store.commit('setloginStatus', '登陆')
-            this.$store.commit('setuser', {})
           } else {
             this.$router.push({path: '/login'})
           }

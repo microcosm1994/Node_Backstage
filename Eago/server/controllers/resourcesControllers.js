@@ -33,10 +33,8 @@ exports.all = (req, res) => {
 exports.save = (req, res) => {
   let result = {status: 0, message: '保存成功'}
   let reqData = req.body
-  console.log(reqData)
   source.create(reqData, (err, data) => {
     if (err) throw err
-    console.log(data)
     if (data) {
       res.json(result)
     } else {

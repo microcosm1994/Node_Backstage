@@ -6,6 +6,7 @@ const accountRouter = express.Router()
 const accountControllers = require(path.join(__dirname, '../controllers/accountControllers.js'))
 
 accountRouter.post('/login', multipartMiddleware, accountControllers.login)
+accountRouter.get('/logout', multipartMiddleware, accountControllers.logout)
 accountRouter.post('/register', multipartMiddleware, accountControllers.register)
 accountRouter.get('/user', multipartMiddleware, accountControllers.user)
 accountRouter.get('/getaccount', multipartMiddleware, accountControllers.getaccount)

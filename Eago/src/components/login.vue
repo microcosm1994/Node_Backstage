@@ -110,7 +110,7 @@
                 this.$store.commit('setuser', user)
                 this.$store.commit('setloginStatus', '退出')
                 this.$cookies.set('_name', data.data.username, {
-                  domain: 'localhost',
+                  domain: 'www.frzik.com',
                   path: '/'
                 })
                 this.$message({

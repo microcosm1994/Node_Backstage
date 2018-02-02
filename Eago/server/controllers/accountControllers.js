@@ -14,8 +14,10 @@ exports.login = (req, res) => {
     if (err) throw err
     if (data) {
       let id = data._id.toString()
+      let expires = 10 * 24 * 60 * 60 * 1000
       res.cookie('_id', id, {
-        domain: 'localhost',
+        domain: 'www.frzik.com',
+        maxAge: expires,
         path: '/'
       })
       result.data = data
@@ -27,6 +29,17 @@ exports.login = (req, res) => {
       result.message = '用户名或密码错误'
       res.json(result)
     }
+  })
+}
+
+exports.logout = (req, res) => {
+  res.clearCookie('_id', {
+    domain: '.www.frzik.com',
+    path: '/'
+  })
+  res.json({
+    status: 0,
+    message: '已清除你的登录信息'
   })
 }
 

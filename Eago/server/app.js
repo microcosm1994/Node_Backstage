@@ -25,7 +25,7 @@ app.use(bodyParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
-app.use(express.static('../dist'))
+app.use(express.static('/home/www.frzik.com'))
 
 app.use(function (req, res, next) {
   let end = req.originalUrl.indexOf('?')
@@ -33,6 +33,7 @@ app.use(function (req, res, next) {
   if (end === -1) {
     url = req.originalUrl
   }
+  console.log(url)
   if (url !== '/account/login' && url !== '/account/adminLogin' && url !== '/account/register' && !req.cookies._id) {
     let result = {}
     result.status = 1

@@ -5,13 +5,13 @@ const co = require('co')
 const source = require(path.join(__dirname, '../models/source.js'))
 
 const client = new oss.Wrapper({
-  region: 'oss-cn-beijing',
-  accessKeyId: 'LTAIXx905tkhWOmO',
-  accessKeySecret: '3UgvOW1islp4IVrvXiVk6JfL9eQp4n',
-  bucket: 'eago-picture'
+  region: 'oss-cn-hongkong',
+  accessKeyId: 'LTAIp9nawQ9RrKoh',
+  accessKeySecret: 'KbbO2NtCBYaDVu09vzXv3JkFFHHtYK',
+  bucket: 'eago'
 })
 co(function* () {
-  yield client.putBucketACL('eago-picture', 'oss-cn-beijing', 'public-read')
+  yield client.putBucketACL('eago', 'oss-cn-hongkong', 'public-read')
   // console.log(result)
 }).catch(function (err) {
   console.log(err)
