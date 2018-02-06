@@ -6,6 +6,7 @@ import add from '@/components/add'
 import library from '@/components/library'
 import register from '@/components/register'
 import accountPage from '@/components/accountPage'
+import setings from '@/components/setings'
 // import resource from 'vue-resource'
 
 Vue.use(Router)
@@ -47,6 +48,11 @@ export default new Router({
           path: '/accountPage',
           name: 'accountPage',
           component: accountPage
+        },
+        {
+          path: '/setings',
+          name: 'setings',
+          component: setings
         }
       ]
     }

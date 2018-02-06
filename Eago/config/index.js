@@ -12,11 +12,11 @@ module.exports = {
     assetsPublicPath: '/',
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: 'www.xxxxx.com', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     proxyTable: {
       '/api/**': {
-        target: 'http://localhost:3000',
+        target: 'http://www.xxxxxx.com:3000',
         changeOrigin: true,
         emulateJSON: true,
         pathRewrite: {

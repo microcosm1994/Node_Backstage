@@ -18,9 +18,13 @@ Vue.config.productionTip = false
 axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
 Vue.prototype.$http = axios
 Vue.filter('datetostring', function (value) {
-  let timeStamp = new Date(value)
-  let week = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
-  return '【 ' + week[timeStamp.getDay()] + ' 】' + timeStamp.getFullYear() + ' - ' + timeStamp.getMonth() + 1 + ' - ' + timeStamp.getDate()
+  if (value !== '') {
+    return '最后保存时间为 ' + value.slice(0, value.indexOf('T'))
+  }
+  // let timeStamp = new Date(value)
+  // console.log(timeStamp)
+  // let week = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+  // return '【 ' + week[timeStamp.getDay()] + ' 】' + timeStamp.getFullYear() + ' - ' + timeStamp.getMonth() + 1 + ' - ' + timeStamp.getDate()
 })
 // Vue.http.options.emulateJSON = true
 // Vue.http.options.headers = {

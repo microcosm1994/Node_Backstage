@@ -142,7 +142,7 @@
           label="回收"
           width="80">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.consume }}</span>
+            <span style="margin-left: 10px">{{ scope.row.source.retrieve }}</span>
           </template>
         </el-table-column>
         <!--RI-->
@@ -150,7 +150,7 @@
           label="RI"
           width="60">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.RI }}</span>
+            <span style="margin-left: 10px">{{ scope.row.source.ROI }}</span>
           </template>
         </el-table-column>
         <!--国家-->
@@ -271,7 +271,7 @@
             <div></div>
             <div class="two">
               <el-form-item label="RI" prop="RI">
-                <el-input v-model="sourceModal.RI"></el-input>
+                <el-input v-model="sourceModal.ROI"></el-input>
               </el-form-item>
             </div>
             <div class="two">
@@ -314,7 +314,7 @@
           CR: '',
           consume: '',
           retrieve: '',
-          RI: '',
+          ROI: '',
           country: '',
           remarks: ''
         },
@@ -367,8 +367,8 @@
             { required: true, message: '请输入回收', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
-          RI: [
-            { required: true, message: '请输入RI', trigger: 'blur' },
+          ROI: [
+            { required: true, message: '请输入ROI', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
           country: [
@@ -442,7 +442,7 @@
         this.sourceModal.CR = row.source.CR
         this.sourceModal.consume = row.source.consume
         this.sourceModal.retrieve = row.source.retrieve
-        this.sourceModal.RI = row.source.RI
+        this.sourceModal.ROI = row.source.ROI
         this.sourceModal.remarks = row.source.remarks
         this.sourceModal.country = row.source.country
       },

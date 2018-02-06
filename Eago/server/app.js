@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 const accountRouter = require(path.join(__dirname, './router/accountRouter.js'))
 const resourcesRouter = require(path.join(__dirname, './router/resourcesRouter.js'))
 const pictureRouter = require(path.join(__dirname, './router/pictureRouter.js'))
+const setingRouter = require(path.join(__dirname, './router/setingRouter.js'))
 // const db = require(path.join(__dirname, './mongo/db.js'))
 
 const app = express()
@@ -25,7 +26,10 @@ app.use(bodyParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
-app.use(express.static('/home/www.frzik.com'))
+// 测试环境静态目录
+app.use(express.static('../dist'))
+// 部署服务器静态目录
+// app.use(express.static('/home/www.frzik.com'))
 
 app.use(function (req, res, next) {
   let end = req.originalUrl.indexOf('?')
@@ -33,7 +37,6 @@ app.use(function (req, res, next) {
   if (end === -1) {
     url = req.originalUrl
   }
-  console.log(url)
   if (url !== '/account/login' && url !== '/account/adminLogin' && url !== '/account/register' && !req.cookies._id) {
     let result = {}
     result.status = 1
@@ -57,6 +60,7 @@ app.use(function (req, res, next) {
 app.use('/account', accountRouter)
 app.use('/resources', resourcesRouter)
 app.use('/picture', pictureRouter)
+app.use('/seting', setingRouter)
 app.listen(3000, function () {
   console.log('3000')
 })
