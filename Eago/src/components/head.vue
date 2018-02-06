@@ -36,7 +36,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="person">个人信息</el-dropdown-item>
-            <el-dropdown-item command="setings">表单配置</el-dropdown-item>
+            <el-dropdown-item command="setings" v-if="this.getuser.isAdmin">表单配置</el-dropdown-item>
             <el-dropdown-item command="accountPage" v-if="this.getuser.isAdmin">管理账号</el-dropdown-item>
             <el-dropdown-item command="creatAccount" v-if="this.getuser.isAdmin">生成账号</el-dropdown-item>
             <el-dropdown-item command="out">{{this.loginStatus}}</el-dropdown-item>

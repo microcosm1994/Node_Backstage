@@ -2,7 +2,8 @@
   <div class="seting">
     <h1>{{title}}</h1>
     <el-alert
-      :title="time | datetostring"
+      v-if="time !== ''"
+      :title="time | dateslice"
       type="info">
     </el-alert>
     <div class="tag-box">
@@ -57,7 +58,7 @@
         closable
         :disable-transitions="false"
         @close="handleClose(tag,'countryTags')">
-        {{tag}}
+        {{tag | country_filters}}
       </el-tag>
       <el-input
         class="input-new-tag"
@@ -89,6 +90,16 @@
         inputVisible_terrace: false,
         inputVisible_country: false,
         inputValue: ''
+      }
+    },
+    filters: {
+      country_filters: function (value) {
+        return value.slice(value.indexOf('-') + 1, value.indexOf('('))
+      },
+      dateslice: function (value) {
+        if (value !== '') {
+          return '最后保存时间为 ' + value.slice(0, value.indexOf('T'))
+        }
       }
     },
     mounted () {
@@ -186,6 +197,7 @@
   }
   .button-new-tag {
     margin-left: 10px;
+    margin-top: 10px;
     height: 32px;
     line-height: 30px;
     padding-top: 0;

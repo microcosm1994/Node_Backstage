@@ -19,7 +19,7 @@ axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
 Vue.prototype.$http = axios
 Vue.filter('datetostring', function (value) {
   if (value !== '') {
-    return '最后保存时间为 ' + value.slice(0, value.indexOf('T'))
+    return value.slice(0, value.indexOf('T'))
   }
   // let timeStamp = new Date(value)
   // console.log(timeStamp)
