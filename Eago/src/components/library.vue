@@ -19,12 +19,19 @@
             </el-form>
           </template>
         </el-table-column>
+        <el-table-column
+          label="类型"
+          width="50">
+          <template slot-scope="scope">
+            <i class="el-icon-picture-outline" v-if="scope.row.type === 'image'"></i>
+            <i class="video-icon" v-if="scope.row.type === 'video'"></i>
+          </template>
+        </el-table-column>
         <!--日期-->
         <el-table-column
           label="日期"
           width="115">
           <template slot-scope="scope">
-            <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ scope.row.date | datetostring}}</span>
           </template>
         </el-table-column>
@@ -33,12 +40,22 @@
           label="缩略图"
           width="120">
           <template slot-scope="scope">
-            <el-popover trigger="hover" placement="top">
+            <el-popover trigger="hover" placement="top" v-if="scope.row.type === 'image'">
               <p>图片名字: {{ scope.row.titlePage.name }}</p>
                 <div slot="reference" class="name-wrapper">
                   <el-button type="text" @click="centerDialogVisible = true">
-                    <div class="source-photo" @click="getpic(scope.row.titlePage.url, scope.row.titlePage.name, scope.row.titlePage.id, $event)">
+                    <div class="source-photo" @click="getpic(scope.row.titlePage.url, scope.row.titlePage.name, scope.row.titlePage.id, scope.row.type, $event)">
                       <img :src="scope.row.titlePage.url" alt="">
+                    </div>
+                  </el-button>
+                </div>
+            </el-popover>
+            <el-popover trigger="hover" placement="top" v-if="scope.row.type === 'video'">
+              <p>视频名称: {{ scope.row.titlePage.name }}</p>
+                <div slot="reference" class="name-wrapper">
+                  <el-button type="text" @click="centerDialogVisible = true">
+                    <div class="source-photo" @click="getpic(scope.row.titlePage.url, scope.row.titlePage.name, scope.row.titlePage.id,scope.row.type, $event)">
+                      <video width="100%" class="video-titlePage" :src="scope.row.titlePage.url" alt=""></video>
                     </div>
                   </el-button>
                 </div>
@@ -145,9 +162,9 @@
             <span style="margin-left: 10px">{{ scope.row.source.retrieve }}</span>
           </template>
         </el-table-column>
-        <!--RI-->
+        <!--ROI-->
         <el-table-column
-          label="RI"
+          label="ROI"
           width="60">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.source.ROI }}</span>
@@ -189,7 +206,8 @@
           :visible.sync="centerDialogVisible"
           width="40%"
           center>
-          <img :src="this.picdetailed.url" alt="">
+          <img :src="this.picdetailed.url" alt="" v-if="this.picdetailed.type === 'image'">
+          <video width="100%" :src="this.picdetailed.url" controls v-if="this.picdetailed.type === 'video'"></video>
           <!--<span slot="footer" class="dialog-footer">-->
     <!--<el-button @click="centerDialogVisible = false">取 消</el-button>-->
     <!--<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>-->
@@ -270,7 +288,7 @@
             </div>
             <div></div>
             <div class="two">
-              <el-form-item label="RI" prop="RI">
+              <el-form-item label="ROI" prop="ROI">
                 <el-input v-model="sourceModal.ROI"></el-input>
               </el-form-item>
             </div>
@@ -446,12 +464,14 @@
         this.sourceModal.remarks = row.source.remarks
         this.sourceModal.country = row.source.country
       },
-      getpic: function (url, name, id) {
+      getpic: function (url, name, id, type) {
         let list = {}
         list.url = url
         list.name = name
         list.id = id
+        list.type = type
         this.picdetailed = list
+        console.log(this.picdetailed)
       },
       update: function () {
         let username = this.$cookies.get('_name')
@@ -685,5 +705,12 @@
     width: 182px;
     display: inline-block;
     vertical-align: top;
+  }
+  .video-icon{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url(../../static/img/video.svg) no-repeat;
+    background-size:100% 100%;
   }
 </style>

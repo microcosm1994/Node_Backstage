@@ -13,19 +13,37 @@
         <i class="el-icon-plus"></i>
       </el-upload>
       <el-dialog :visible.sync="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
+        <img width="100%" :src="dialogImageUrl" alt="" v-if="this.type === 'image'">
+        <video width="100%" :src="dialogImageUrl" alt="" v-if="this.type === 'video'" controls></video>
       </el-dialog>
     </div>
     <div class="add-form">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="素材名称" prop="sourceName">
+          <el-input v-model="ruleForm.sourceName"></el-input>
+        </el-form-item>
         <div class="three">
-          <el-form-item label="angle" prop="angle">
-            <el-input v-model="ruleForm.angle"></el-input>
+          <el-form-item label="素材分类" prop="angle">
+            <el-select v-model="ruleForm.angle" placeholder="分类">
+              <el-option
+                v-for="item in angleList"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
           </el-form-item>
         </div>
         <div class="three">
           <el-form-item label="平台" prop="terrace">
-            <el-input v-model="ruleForm.terrace"></el-input>
+            <el-select v-model="ruleForm.terrace" placeholder="平台">
+              <el-option
+                v-for="item in terraceList"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
           </el-form-item>
         </div>
         <div class="three">
@@ -83,13 +101,20 @@
         </div>
         <div></div>
         <div class="two">
-          <el-form-item label="RI" prop="RI">
-            <el-input v-model="ruleForm.RI"></el-input>
+          <el-form-item label="ROI" prop="ROI">
+            <el-input v-model="ruleForm.ROI"></el-input>
           </el-form-item>
         </div>
         <div class="two">
           <el-form-item label="国家" prop="country">
-            <el-input v-model="ruleForm.country"></el-input>
+            <el-select v-model="ruleForm.country" placeholder="国家">
+              <el-option
+                v-for="item in countryList"
+                :key="item | country_filters"
+                :label="item | country_filters"
+                :value="item | country_filters">
+              </el-option>
+            </el-select>
           </el-form-item>
         </div>
         <el-form-item label="备注" prop="remarks">
@@ -110,7 +135,9 @@
       return {
         title: '添加素材',
         list: [],
+        type: '',
         ruleForm: {
+          sourceName: '',
           angle: '',
           terrace: '',
           opeavtor: '',
@@ -123,18 +150,22 @@
           CR: '',
           consume: '',
           retrieve: '',
-          RI: '',
+          ROI: '',
           country: '',
           remarks: ''
         },
         rules: {
+          sourceName: [
+            { required: true, message: '请输入作品名称', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
           angle: [
-            { required: true, message: '请输入angle', trigger: 'blur' },
-            { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请选择angle', trigger: 'blur' },
+            { message: '不 能 为 空', trigger: 'blur' }
           ],
           terrace: [
-            { required: true, message: '请输入terrace', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请选择terrace', trigger: 'blur' },
+            { message: '不 能 为 空', trigger: 'blur' }
           ],
           opeavtor: [
             { required: true, message: '请输入opeavtor', trigger: 'blur' },
@@ -176,13 +207,13 @@
             { required: true, message: '请输入回收', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
-          RI: [
-            { required: true, message: '请输入RI', trigger: 'blur' },
+          ROI: [
+            { required: true, message: '请输入ROI', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
           country: [
-            { required: true, message: '请输入国家', trigger: 'blur' },
-            { min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请选择国家', trigger: 'blur' },
+            { message: '不 能 为 空', trigger: 'blur' }
           ],
           remarks: [
             { required: true, message: '请填写备注', trigger: 'blur' }
@@ -192,6 +223,19 @@
         dialogVisible: false,
         headers: {
           'Access-Control-Allow-Origin': '*'
+        },
+        angleList: [],
+        terraceList: [],
+        countryList: []
+      }
+    },
+    filters: {
+      country_filters: function (value) {
+        return value.slice(value.indexOf('-') + 1, value.indexOf('('))
+      },
+      dateslice: function (value) {
+        if (value !== '') {
+          return '最后保存时间为 ' + value.slice(0, value.indexOf('T'))
         }
       }
     },
@@ -200,9 +244,22 @@
         return this.$store.state.user
       }
     },
+    mounted () {
+      this.getconfig()
+    },
     methods: {
+      getconfig: function () {
+        this.$http.get('/api/seting/getconfig').then((response) => {
+          if (response.data.status === 0) {
+            this.angleList = response.data.data[0].angleList
+            this.terraceList = response.data.data[0].terraceList
+            this.countryList = response.data.data[0].countryList
+          }
+        })
+      },
       uploadsuccess (response, file, filelist) {
         if (response.status === 200) {
+          this.type = file.raw.type.slice(0, file.raw.type.indexOf('/'))
           let data = {
             id: file.uid,
             name: response.data.name,
@@ -212,7 +269,6 @@
         }
       },
       uploaderr (err, file, filelist) {
-        console.log(err)
         if (err) {
           this.$message({
             message: '服务器错误,' + file.name + '上传失败',
@@ -238,9 +294,10 @@
         this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
             let result = {}
-            result.sourceName = ruleform.angle
+            result.sourceName = ruleform.sourceName
             result.terrace = ruleform.terrace
             result.country = ruleform.country
+            result.type = this.type
             result.source = ruleform
             result.list = this.list
             result.titlePage = this.list[0]

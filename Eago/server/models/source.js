@@ -12,9 +12,15 @@ const sourceSchema = new Schema({
   country: {
     type: String
   },
+  type: {
+    type: String
+  },
   // Mixed: mongoose.Schema.Types.Mixed,
   source: {
-    angle: {// 名称
+    sourceName: {// 名称
+      type: String
+    },
+    angle: {// 分类
       type: String
     },
     terrace: {// 平台
