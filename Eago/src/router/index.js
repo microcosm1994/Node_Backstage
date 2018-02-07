@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/components/login'
 import home from '@/components/home'
+import eago from '@/components/eago'
 import add from '@/components/add'
 import library from '@/components/library'
 import register from '@/components/register'
@@ -29,6 +30,11 @@ export default new Router({
       name: 'home',
       component: home,
       children: [
+        {
+          path: '/eago',
+          name: 'eago',
+          component: eago
+        },
         {
           path: '/add',
           name: 'add',

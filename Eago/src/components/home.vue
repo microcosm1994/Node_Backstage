@@ -4,6 +4,13 @@
     <div class="home-container">
       <div class="home-sidebar">
         <ul>
+          <li @click="setActive()">
+            <a href="javascript:;"
+               v-bind:class="{active:activeClass.eago}"
+            >
+              <router-link to="/eago">Home</router-link>
+            </a>
+          </li>
           <li @click="setActive(), getAll()">
             <a href="javascript:;"
                v-bind:class="{active:activeClass.library}"
@@ -39,7 +46,7 @@
       return {
         title: 'home',
         activeClass: {
-          home: false,
+          eago: false,
           library: false,
           add: false
         }
