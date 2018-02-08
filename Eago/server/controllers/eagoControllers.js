@@ -27,41 +27,50 @@ exports.monthcount = (req, res) => {
       }
     }, (err, data) => {
       if (err) throw err
-      console.log(data)
       array[(item - 1)] = data
-      calback(null)
+      calback()
     })
   }, function (err) {
-    console.log(err)
+    if (err) throw err
     result.data = array
     res.json(result)
   })
 }
 
 exports.terraceCount = (req, res) => {
-  let result = {status: 0, message: '登录成功'}
+  let result = {status: 0, message: '数据获取成功'}
   Seting.find({}, (err, data) => {
     if (err) throw err
     if (data) {
       let angleList = data[0].angleList
       let terraceList = data[0].terraceList
       let terraceCount = []
-      console.log(terraceList)
+      let angleCount = []
       async.each(terraceList, function (item, callback) {
         Source.count({terrace: item}, (err, data) => {
           if (err) throw err
-          terraceCount.push(data)
-          callback(null)
+          let obj = {}
+          obj[item] = data
+          terraceCount.push(obj)
+          callback()
         })
       }, function (err) {
-        console.log(err)
-        result.data = terraceCount
-        res.json(result)
+        if (err) throw err
+        async.each(angleList, function (item, callback) {
+          Source.count({'source.angle': item}, (err, data) => {
+            if (err) throw err
+            let obj = {}
+            obj[item] = data
+            angleCount.push(obj)
+            callback()
+          })
+        }, function (err) {
+          if (err) throw err
+          result.angledata = angleCount
+          result.terracedata = terraceCount
+          res.json(result)
+        })
       })
-    } else {
-      result.status = 1
-      result.message = '获取配置信息失败'
-      res.json(result)
     }
   })
 }
