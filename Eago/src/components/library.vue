@@ -10,7 +10,7 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="备注">
+              <el-form-item label="文案">
                 <span>{{ props.row.source.remarks }}</span>
               </el-form-item>
               <!--<el-form-item label="上传账号">-->
@@ -223,14 +223,31 @@
         center>
         <div class="update-form">
           <el-form :model="sourceModal" :rules="sourceModalRule" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="素材名称" prop="sourceName">
+              <el-input v-model="sourceModal.sourceName"></el-input>
+            </el-form-item>
             <div class="three">
-              <el-form-item label="angle" prop="angle">
-                <el-input v-model="sourceModal.angle"></el-input>
+              <el-form-item label="素材分类" prop="angle">
+                <el-select v-model="sourceModal.angle" placeholder="分类">
+                  <el-option
+                    v-for="item in getangleList"
+                    :key="item"
+                    :label="item"
+                    :value="item">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </div>
             <div class="three">
               <el-form-item label="平台" prop="terrace">
-                <el-input v-model="sourceModal.terrace"></el-input>
+                <el-select v-model="sourceModal.terrace" placeholder="平台">
+                  <el-option
+                    v-for="item in getterraceList"
+                    :key="item"
+                    :label="item"
+                    :value="item">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </div>
             <div class="three">
@@ -294,10 +311,17 @@
             </div>
             <div class="two">
               <el-form-item label="国家" prop="country">
-                <el-input v-model="sourceModal.country"></el-input>
+                <el-select v-model="sourceModal.country" placeholder="国家">
+                  <el-option
+                    v-for="item in getcountryList"
+                    :key="item | country_filters"
+                    :label="item | country_filters"
+                    :value="item | country_filters">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </div>
-            <el-form-item label="备注" prop="remarks">
+            <el-form-item label="文案" prop="remarks">
               <el-input type="textarea" v-model="sourceModal.remarks" :autosize="{ minRows: 2, maxRows: 10}"></el-input>
             </el-form-item>
           </el-form>
@@ -320,6 +344,7 @@
         sourceModalId: '',
         sourceModalName: '',
         sourceModal: {
+          sourceName: '',
           angle: '',
           terrace: '',
           opeavtor: '',
@@ -337,6 +362,10 @@
           remarks: ''
         },
         sourceModalRule: {
+          sourceName: [
+            { required: true, message: '请输入作品名称', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
           angle: [
             { required: true, message: '请输入angle', trigger: 'blur' },
             { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
@@ -394,7 +423,7 @@
             { min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur' }
           ],
           remarks: [
-            { required: true, message: '请填写备注', trigger: 'blur' }
+            { required: true, message: '请填写文案', trigger: 'blur' }
           ]
         },
         picdetailed: {},
@@ -408,6 +437,16 @@
     mounted () {
       this.getAll(this.currentPage, this.pageSize)
     },
+    filters: {
+      country_filters: function (value) {
+        return value.slice(value.indexOf('-') + 1, value.indexOf('('))
+      },
+      dateslice: function (value) {
+        if (value !== '') {
+          return '最后保存时间为 ' + value.slice(0, value.indexOf('T'))
+        }
+      }
+    },
     computed: {
       mytitle () {
         return this.$store.state.title
@@ -417,6 +456,15 @@
       },
       mysourceCount () {
         return this.$store.state.sourceCount
+      },
+      getangleList () {
+        return this.$store.state.angleList
+      },
+      getterraceList () {
+        return this.$store.state.terraceList
+      },
+      getcountryList () {
+        return this.$store.state.countryList
       }
     },
     methods: {
@@ -445,9 +493,11 @@
         })
       },
       getdetailed: function (index, row) {
+        this.getconfig()
         this.sourceIndex = index
         this.sourceModalId = row._id
         this.sourceModalName = row.user.username
+        this.sourceModal.sourceName = row.source.sourceName
         this.sourceModal.angle = row.source.angle
         this.sourceModal.terrace = row.source.terrace
         this.sourceModal.opeavtor = row.source.opeavtor

@@ -26,7 +26,7 @@
           <el-form-item label="素材分类" prop="angle">
             <el-select v-model="ruleForm.angle" placeholder="分类">
               <el-option
-                v-for="item in angleList"
+                v-for="item in getangleList"
                 :key="item"
                 :label="item"
                 :value="item">
@@ -38,7 +38,7 @@
           <el-form-item label="平台" prop="terrace">
             <el-select v-model="ruleForm.terrace" placeholder="平台">
               <el-option
-                v-for="item in terraceList"
+                v-for="item in getterraceList"
                 :key="item"
                 :label="item"
                 :value="item">
@@ -109,7 +109,7 @@
           <el-form-item label="国家" prop="country">
             <el-select v-model="ruleForm.country" placeholder="国家">
               <el-option
-                v-for="item in countryList"
+                v-for="item in getcountryList"
                 :key="item | country_filters"
                 :label="item | country_filters"
                 :value="item | country_filters">
@@ -117,7 +117,7 @@
             </el-select>
           </el-form-item>
         </div>
-        <el-form-item label="备注" prop="remarks">
+        <el-form-item label="文案" prop="remarks">
           <el-input type="textarea" v-model="ruleForm.remarks" :autosize="{ minRows: 2, maxRows: 10}"></el-input>
         </el-form-item>
         <el-form-item>
@@ -223,10 +223,7 @@
         dialogVisible: false,
         headers: {
           'Access-Control-Allow-Origin': '*'
-        },
-        angleList: [],
-        terraceList: [],
-        countryList: []
+        }
       }
     },
     filters: {
@@ -242,21 +239,21 @@
     computed: {
       getuser () {
         return this.$store.state.user
+      },
+      getangleList () {
+        return this.$store.state.angleList
+      },
+      getterraceList () {
+        return this.$store.state.terraceList
+      },
+      getcountryList () {
+        return this.$store.state.countryList
       }
     },
     mounted () {
       this.getconfig()
     },
     methods: {
-      getconfig: function () {
-        this.$http.get('/api/seting/getconfig').then((response) => {
-          if (response.data.status === 0) {
-            this.angleList = response.data.data[0].angleList
-            this.terraceList = response.data.data[0].terraceList
-            this.countryList = response.data.data[0].countryList
-          }
-        })
-      },
       uploadsuccess (response, file, filelist) {
         if (response.status === 200) {
           this.type = file.raw.type.slice(0, file.raw.type.indexOf('/'))
