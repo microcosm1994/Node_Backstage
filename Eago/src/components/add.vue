@@ -250,9 +250,7 @@
         return this.$store.state.countryList
       }
     },
-    mounted () {
-      this.getconfig()
-    },
+    mounted () {},
     methods: {
       uploadsuccess (response, file, filelist) {
         if (response.status === 200) {

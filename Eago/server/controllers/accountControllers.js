@@ -22,7 +22,6 @@ exports.login = (req, res) => {
       })
       result.data = data
       delete result.data.password
-      console.log(result)
       res.json(result)
     } else {
       result.status = 1
