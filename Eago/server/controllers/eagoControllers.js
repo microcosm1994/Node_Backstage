@@ -14,6 +14,7 @@ exports.monthcount = (req, res) => {
   let date = new Date()
   let year = date.getFullYear()
   let array = []
+  let array1 = {}
   for (let i = 0; i < monthArray.length; i++) {
     date.setMonth(monthArray[i])
     date.setDate(0)
@@ -27,12 +28,39 @@ exports.monthcount = (req, res) => {
       }
     }, (err, data) => {
       if (err) throw err
-      array[(item - 1)] = data
-      calback()
+      let month = item
+      Seting.find({}, (err, data) => {
+        if (err) throw err
+        if (data) {
+          let terraceList = data[0].terraceList
+          let terraceCount = []
+          async.each(terraceList, function (item, callback) {
+            Source.count({
+              terrace: item,
+              date: {
+                $gte: new Date(year + '-' + month + '-' + 1),
+                $lte: new Date(year + '-' + month + '-' + dayArray[(month - 1)])
+              }
+            }, (err, data) => {
+              if (err) throw err
+              let obj = {}
+              obj[item] = data
+              terraceCount.push(obj)
+              callback()
+            })
+          }, function (err) {
+            array1['month' + month] = terraceCount
+            array[(item - 1)] = data
+            calback()
+            if (err) throw err
+          })
+        }
+      })
     })
   }, function (err) {
     if (err) throw err
     result.data = array
+    result.data1 = array1
     res.json(result)
   })
 }
