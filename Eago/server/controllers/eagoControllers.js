@@ -11,26 +11,30 @@ exports.monthcount = (req, res) => {
   let result = {status: 0, message: '登录成功'}
   let monthArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   let dayArray = []
-  let query = req.body
   let date = new Date()
   let year = date.getFullYear()
+  let array = []
   for (let i = 0; i < monthArray.length; i++) {
     date.setMonth(monthArray[i])
     date.setDate(0)
     dayArray.push(date.getDate())
   }
-  Source.find({
-    date: {
-      $gte: new Date(year + '-' + 1 + '-' + 1),
-      $lte: new Date(year + '-' + 12 + '-' + 31)
-    }
-  }, (err, data) => {
-    if (err) throw err
-    if (data) {
+  async.each(monthArray, function (item, calback) {
+    Source.find({
+      date: {
+        $gte: new Date(year + '-' + item + '-' + 1),
+        $lte: new Date(year + '-' + item + '-' + dayArray[(item - 1)])
+      }
+    }, (err, data) => {
+      if (err) throw err
       console.log(data)
-      result.data = data
-      res.json(result)
-    }
+      array[(item - 1)] = data
+      calback(null)
+    })
+  }, function (err) {
+    console.log(err)
+    result.data = array
+    res.json(result)
   })
 }
 
@@ -39,9 +43,21 @@ exports.terraceCount = (req, res) => {
   Seting.find({}, (err, data) => {
     if (err) throw err
     if (data) {
-      let angleList = data.angleList
-      let terraceList = data.terraceList
-      Source.find()
+      let angleList = data[0].angleList
+      let terraceList = data[0].terraceList
+      let terraceCount = []
+      console.log(terraceList)
+      async.each(terraceList, function (item, callback) {
+        Source.count({terrace: item}, (err, data) => {
+          if (err) throw err
+          terraceCount.push(data)
+          callback(null)
+        })
+      }, function (err) {
+        console.log(err)
+        result.data = terraceCount
+        res.json(result)
+      })
     } else {
       result.status = 1
       result.message = '获取配置信息失败'

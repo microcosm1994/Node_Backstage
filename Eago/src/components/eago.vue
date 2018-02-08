@@ -74,6 +74,11 @@ asdasdasd
                 console.log(response.data)
               }
             })
+            this.$http.get('/api/count/monthcount').then((response) => {
+              if (response.data.status === 0) {
+                console.log(response.data)
+              }
+            })
           }
         })
       },
