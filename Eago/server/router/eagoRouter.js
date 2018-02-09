@@ -8,5 +8,7 @@ const eagoControllers = require(path.join(__dirname, '../controllers/eagoControl
 
 eagoRouter.post('/monthcount', multipartMiddleware, eagoControllers.monthcount)
 eagoRouter.get('/terraceCount', multipartMiddleware, eagoControllers.terraceCount)
+eagoRouter.get('/usersCount', multipartMiddleware, eagoControllers.usersCount)
+eagoRouter.get('/sourceCount', multipartMiddleware, eagoControllers.sourceCount)
 
 module.exports = eagoRouter

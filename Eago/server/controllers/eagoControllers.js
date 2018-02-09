@@ -6,6 +6,7 @@ const crypto = require('crypto')
 const async = require('async')
 const Source = require(path.join(__dirname, '../models/source.js'))
 const Seting = require(path.join(__dirname, '../models/setings.js'))
+const Users = require(path.join(__dirname, '../models/users.js'))
 
 exports.monthcount = (req, res) => {
   let result = {status: 0, message: '获取数据成功'}
@@ -24,8 +25,9 @@ exports.monthcount = (req, res) => {
   async.each(terraceList, function (item, callback) {
     let terrace = item
     let terraceCount = {}
+    let monthCount = []
     async.each(monthArray, function (item, calback) {
-      Source.find({
+      Source.count({
         terrace: terrace,
         date: {
           $gte: new Date(year + '-' + item + '-' + 1),
@@ -33,11 +35,13 @@ exports.monthcount = (req, res) => {
         }
       }, (err, data) => {
         if (err) throw err
-        terraceCount['month' + item] = data
+        monthCount[(item - 1)] = data
         calback(null)
       })
     }, function (err) {
       num++
+      terraceCount.name = terrace
+      terraceCount.data = monthCount
       array['terrace' + num] = terraceCount
       result.data = array
       if (err) throw err
@@ -62,7 +66,8 @@ exports.terraceCount = (req, res) => {
         Source.count({terrace: item}, (err, data) => {
           if (err) throw err
           let obj = {}
-          obj[item] = data
+          obj.name = item
+          obj.data = data
           terraceCount.push(obj)
           callback()
         })
@@ -72,7 +77,8 @@ exports.terraceCount = (req, res) => {
           Source.count({'source.angle': item}, (err, data) => {
             if (err) throw err
             let obj = {}
-            obj[item] = data
+            obj.name = item
+            obj.data = data
             angleCount.push(obj)
             callback()
           })
@@ -84,5 +90,23 @@ exports.terraceCount = (req, res) => {
         })
       })
     }
+  })
+}
+
+exports.usersCount = (req, res) => {
+  let result = {status: 0, message: '数据获取成功'}
+  Users.count({}, (err, data) => {
+    if (err) throw err
+    result.count = data
+    res.json(result)
+  })
+}
+
+exports.sourceCount = (req, res) => {
+  let result = {status: 0, message: '数据获取成功'}
+  Source.count({}, (err, data) => {
+    if (err) throw err
+    result.count = data
+    res.json(result)
   })
 }

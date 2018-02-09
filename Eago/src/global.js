@@ -11,4 +11,18 @@ exports.install = function (Vue, options) {
       }
     })
   }
+  Vue.prototype.getusersCount = function () {
+    this.$http.get('/api/count/usersCount').then((response) => {
+      if (response.data.status === 0) {
+        this.$store.commit('usersCount', response.data.count)
+      }
+    })
+  }
+  Vue.prototype.getsourceCount = function () {
+    this.$http.get('/api/count/sourceCount').then((response) => {
+      if (response.data.status === 0) {
+        this.$store.commit('sourceCount', response.data.count)
+      }
+    })
+  }
 }

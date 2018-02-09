@@ -123,6 +123,9 @@
 //        data.countryList = this.countryTags
         this.$http.post('/api/seting/saveconfig', data).then((response) => {
           if (response.data.status === 0) {
+            console.log(data)
+            this.$store.commit('setangleList', data.angleList)
+            this.$store.commit('setterraceList', data.terraceList)
             this.$message({
               message: response.data.message,
               type: 'success'

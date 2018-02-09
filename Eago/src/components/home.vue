@@ -8,7 +8,7 @@
             <a href="javascript:;"
                v-bind:class="{active:activeClass.eago}"
             >
-              <router-link to="/eago">Home</router-link>
+              <router-link to="/home">Home</router-link>
             </a>
           </li>
           <li @click="setActive(), getAll()">

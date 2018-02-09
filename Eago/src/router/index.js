@@ -21,17 +21,12 @@ export default new Router({
       component: login
     },
     {
-      path: '/login',
-      name: 'login',
-      component: login
-    },
-    {
       path: '/home',
       name: 'home',
       component: home,
       children: [
         {
-          path: '/eago',
+          path: '/',
           name: 'eago',
           component: eago
         },

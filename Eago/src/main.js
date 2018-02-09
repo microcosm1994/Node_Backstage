@@ -9,11 +9,13 @@ import store from './store/index'
 import global from './global'
 import cookie from 'vue-cookies'
 import echarts from 'echarts'
+import world from 'echarts/map/js/world'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(elementui)
 Vue.use(global)
 Vue.use(cookie)
+Vue.use(world)
 
 Vue.config.productionTip = false
 axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
@@ -42,5 +44,7 @@ new Vue({
   components: { App },
   mounted () {
     this.getconfig()
+    this.getusersCount()
+    this.getsourceCount()
   }
 })

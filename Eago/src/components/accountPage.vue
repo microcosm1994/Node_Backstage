@@ -112,7 +112,7 @@
         accountRules: {
           nickname: [
             { required: true, message: '请输入昵称', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { min: 1, max: 30, message: '长度在 1 到 20 个字符', trigger: 'blur' }
           ],
           username: [
             { required: true, message: '请输入用户名', trigger: 'blur' },

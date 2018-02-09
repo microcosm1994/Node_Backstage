@@ -8,6 +8,7 @@ export default new vuex.Store({
     title: '',
     loginStatus: '',
     user: {},
+    usersCount: 0,
     source: [],
     page: {},
     sourceCount: 0,
@@ -43,6 +44,10 @@ export default new vuex.Store({
     // 页数
     page (state, obj) {
       state.page = obj
+    },
+    // 用户数量
+    usersCount (state, number) {
+      state.usersCount = number
     },
     // 素材数量
     sourceCount (state, number) {
