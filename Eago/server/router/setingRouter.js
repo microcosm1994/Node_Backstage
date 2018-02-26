@@ -8,5 +8,6 @@ const setingControllers = require(path.join(__dirname, '../controllers/setingCon
 
 setingRouter.get('/getconfig', multipartMiddleware, setingControllers.getconfig)
 setingRouter.post('/saveconfig', multipartMiddleware, setingControllers.saveconfig)
+setingRouter.get('/defaults', multipartMiddleware, setingControllers.defaults)
 
 module.exports = setingRouter

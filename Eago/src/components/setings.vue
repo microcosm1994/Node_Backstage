@@ -72,6 +72,7 @@
       </el-input>
       <el-button v-else class="button-new-tag" size="small" @click="showInput('inputVisible_country')">+ New Tag</el-button>
     </div>
+    <el-button type="primary" @click="defaults">恢复默认配置</el-button>
     <el-button type="primary" @click="saveSeting">保存配置</el-button>
   </div>
 </template>
@@ -135,6 +136,13 @@
               message: response.data.message,
               type: 'error'
             })
+          }
+        })
+      },
+      defaults: function () {
+        this.$http.get('/api/seting/defaults').then((response) => {
+          if (response.data.status === 0) {
+            this.getSeting()
           }
         })
       },
