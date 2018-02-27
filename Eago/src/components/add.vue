@@ -70,12 +70,12 @@
         </div>
         <div class="three">
           <el-form-item label="Spent" prop="Spent">
-            <el-input v-model="ruleForm.Spent"></el-input>
+            <el-input v-model.number="ruleForm.Spent"></el-input>
           </el-form-item>
         </div>
         <div class="three">
           <el-form-item label="Revenue" prop="Revenue">
-            <el-input v-model="ruleForm.Revenue"></el-input>
+            <el-input v-model.number="ruleForm.Revenue"></el-input>
           </el-form-item>
         </div>
         <div></div>
@@ -95,13 +95,62 @@
           </el-form-item>
         </div>
         <div></div>
-        <el-form-item label="LandingPage" prop="ROI">
-          <el-input v-model="ruleForm.ROI"></el-input>
-        </el-form-item>
+        <div class="landingContainer" ref="landingContainer" v-if="this.ruleForm.landingPageList.length">
+          <div class="el-form-item" v-for="(item, index) in this.ruleForm.landingPageList">
+            <label class="el-form-item__label" style="width: 100px;">{{'LandingPage' + index}}</label>
+            <div class="el-form-item__content" style="margin-left: 100px;">
+              <div class="content">
+                <div class="el-input is-disabled" style="width: 36%;">
+                  <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" class="el-input__inner" :value="item.landingPageURL">
+                </div>
+                <div class="el-input is-disabled">
+                  <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" clearable="true" class="el-input__inner" :value="item.landingPageClick">
+                </div>
+                <div class="el-input is-disabled">
+                  <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" clearable="true" class="el-input__inner" :value="item.landingPageCR">
+                </div>
+                <div class="el-input is-disabled">
+                  <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" clearable="true" class="el-input__inner" :value="item.landingPageCVR">
+                </div>
+                <button type="button" class="el-button el-button--danger el-button--small" @click="dellandingPage(index)">
+                  <i class="el-icon-close"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="landingBox">
+          <el-form-item label="LandingPage">
+            <div class="content">
+              <el-input
+                style="width:36%;"
+                placeholder="请输入landingPage地址"
+                v-model="landingPageURL"
+                clearable>
+              </el-input>
+              <el-input
+                placeholder="请输入点击数"
+                v-model="landingPageClick"
+                clearable>
+              </el-input>
+              <el-input
+                placeholder="请输入CR"
+                v-model="landingPageCR"
+                clearable>
+              </el-input>
+              <el-input
+                placeholder="请输入CVR"
+                v-model="landingPageCVR"
+                clearable>
+              </el-input>
+              <el-button size="small" type="primary" icon="el-icon-check" @click="savelandingPage"></el-button>
+            </div>
+          </el-form-item>
+        </div>
         <div></div>
         <div class="three">
           <el-form-item label="ROI" prop="ROI">
-            <el-input v-model="ruleForm.ROI"></el-input>
+            <el-input :disabled="true" v-model="getROI"></el-input>
           </el-form-item>
         </div>
         <div class="three">
@@ -140,6 +189,10 @@
         title: '添加素材',
         list: [],
         type: '',
+        landingPageURL: '',
+        landingPageClick: '',
+        landingPageCR: '',
+        landingPageCVR: '',
         ruleForm: {
           sourceName: '',
           Angle: '',
@@ -152,11 +205,12 @@
           CPM: 0,
           conversion: '', // 转化
           Spent: 0, // 消费
-          Revenue: '', // 收益
+          Revenue: 0, // 收益
           ROI: '',
           profit: '',
           country: '', // 国家
-          remarks: '' // 文案
+          remarks: '', // 文案
+          landingPageList: []
         },
         rules: {
           sourceName: [
@@ -200,17 +254,17 @@
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
           Spent: [
-            { required: true, message: '请输入Spent', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请输入消费', trigger: 'blur' },
+            { message: '内容为数字', type: 'number' }
           ],
           Revenue: [
-            { required: true, message: '请输入回收', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请输入收益', trigger: 'blur' },
+            { message: '内容为数字', type: 'number' }
           ],
-          ROI: [
-            { required: true, message: '请输入ROI', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
+//          ROI: [
+//            { required: true, message: '请输入ROI', trigger: 'blur' },
+//            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+//          ],
           profit: [
             { required: true, message: '请输入Profit', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
@@ -265,7 +319,7 @@
       },
       getCPM () {
         this.ruleForm.CPM = (this.ruleForm.Spent / this.ruleForm.reveal) * 1000
-        return this.ruleForm.CPM ? this.ruleForm.CPM : 0
+        return this.ruleForm.CPM ? this.ruleForm.CPM.toFixed(2) : 0
       },
       getCTR () {
         this.ruleForm.CTR = this.ruleForm.click / this.ruleForm.reveal
@@ -274,6 +328,10 @@
       getCPC () { // 计算CPC值
         this.ruleForm.CPC = this.ruleForm.Spent / this.ruleForm.click
         return this.ruleForm.CPC ? this.ruleForm.CPC.toFixed(2) : 0
+      },
+      getROI () { // 计算ROI
+        this.ruleForm.ROI = this.ruleForm.Revenue / this.ruleForm.Spent
+        return this.ruleForm.ROI ? this.ruleForm.ROI.toFixed(2) + '%' : 0 + '%'
       }
     },
     mounted () {
@@ -368,6 +426,34 @@
       },
       resetForm (formName) {
         this.$refs[formName].resetFields()
+      },
+      savelandingPage () {
+        if (this.landingPageURL !== '' && this.landingPageClick !== '' && this.landingPageCR !== '' && this.landingPageCVR !== '') {
+          let data = {}
+          data.landingPageURL = this.landingPageURL
+          data.landingPageClick = this.landingPageClick
+          data.landingPageCR = this.landingPageCR
+          data.landingPageCVR = this.landingPageCVR
+          this.landingPageURL = ''
+          this.landingPageClick = ''
+          this.landingPageCR = ''
+          this.landingPageCVR = ''
+          this.ruleForm.landingPageList.push(data)
+        } else {
+          this.landingPageURL = ''
+          this.landingPageClick = ''
+          this.landingPageCR = ''
+          this.landingPageCVR = ''
+          this.$message({
+            type: 'info',
+            message: '请填写landingPage内容'
+          })
+        }
+      },
+      dellandingPage (index) {
+        let data = this.ruleForm.landingPageList
+        data.splice(index, 1)
+        this.ruleForm.landingPageList = data
       }
     }
   }
@@ -406,5 +492,14 @@
     width: 182px;
     display: inline-block;
     vertical-align: top;
+  }
+  .landingBox{
+    width: 100%;
+  }
+  .landingContainer .el-input{
+    width: 18%;
+  }
+  .landingBox .content .el-input{
+    width: 18%;
   }
 </style>
