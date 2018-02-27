@@ -29,26 +29,26 @@
       <el-button v-else class="button-new-tag" size="small" @click="showInput('inputVisible_terrace')">+ New Tag</el-button>
     </div>
     <div class="tag-box">
-      <h4>angle</h4>
+      <h4>Angle</h4>
       <el-tag
         :key="tag"
-        v-for="tag in angleTags"
+        v-for="tag in AngleTags"
         closable
         :disable-transitions="false"
-        @close="handleClose(tag,'angleTags')">
+        @close="handleClose(tag,'AngleTags')">
         {{tag}}
       </el-tag>
       <el-input
         class="input-new-tag"
-        v-if="inputVisible_angle"
+        v-if="inputVisible_Angle"
         v-model="inputValue"
         ref="saveTagInput"
         size="small"
-        @keyup.enter.native="handleInputConfirm('angle')"
-        @blur="handleInputConfirm('angle')"
+        @keyup.enter.native="handleInputConfirm('Angle')"
+        @blur="handleInputConfirm('Angle')"
       >
       </el-input>
-      <el-button v-else class="button-new-tag" size="small" @click="showInput('inputVisible_angle')">+ New Tag</el-button>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput('inputVisible_Angle')">+ New Tag</el-button>
     </div>
     <div class="tag-box">
       <h4>国家</h4>
@@ -83,11 +83,11 @@
       return {
         title: '表单配置',
         time: '',
-        angleTags: [],
+        AngleTags: [],
         terraceTags: [],
         countryTags: [],
-        inputVisible: ['inputVisible_angle', 'inputVisible_terrace', 'inputVisible_country'],
-        inputVisible_angle: false,
+        inputVisible: ['inputVisible_Angle', 'inputVisible_terrace', 'inputVisible_country'],
+        inputVisible_Angle: false,
         inputVisible_terrace: false,
         inputVisible_country: false,
         inputValue: ''
@@ -110,7 +110,7 @@
       getSeting: function () {
         this.$http.get('/api/seting/getconfig').then((response) => {
           if (response.data.status === 0) {
-            this.angleTags = response.data.data[0].angleList
+            this.AngleTags = response.data.data[0].AngleList
             this.terraceTags = response.data.data[0].terraceList
             this.countryTags = response.data.data[0].countryList
             this.time = response.data.data[0].date
@@ -120,12 +120,11 @@
       saveSeting: function () {
         let data = {}
         data.terraceList = this.terraceTags
-        data.angleList = this.angleTags
+        data.AngleList = this.AngleTags
 //        data.countryList = this.countryTags
         this.$http.post('/api/seting/saveconfig', data).then((response) => {
           if (response.data.status === 0) {
-            console.log(data)
-            this.$store.commit('setangleList', data.angleList)
+            this.$store.commit('setAngleList', data.AngleList)
             this.$store.commit('setterraceList', data.terraceList)
             this.$message({
               message: response.data.message,
@@ -169,9 +168,9 @@
             this.terraceTags.push(inputValue)
             this.inputVisible_terrace = false
           }
-          if (key === 'angle') {
-            this.angleTags.push(inputValue)
-            this.inputVisible_angle = false
+          if (key === 'Angle') {
+            this.AngleTags.push(inputValue)
+            this.inputVisible_Angle = false
           }
           if (key === 'country') {
             this.countryTags.push(inputValue)

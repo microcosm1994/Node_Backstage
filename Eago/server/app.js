@@ -38,14 +38,14 @@ app.use(function (req, res, next) {
   if (end === -1) {
     url = req.originalUrl
   }
-  if (url !== '/account/login' && url !== '/account/adminLogin' && url !== '/account/register' && !req.cookies._id) {
+  if (url !== '/account/login' && url !== '/account/register' && !req.cookies._id) {
     let result = {}
     result.status = 1
     result.message = '用户没有登录，所有操作将不被保存，请登录后再进行操作'
     return res.json(result)
   }
   if (req.cookies._name === 'admin') {
-    if (url === '/picture/del' || url === '/picture/update' || url === '/picture/upload' || url === '/picture/upload' || url === '/resources/save') {
+    if (url === '/picture/del' || url === '/picture/update' || url === '/picture/upload' || url === '/resources/save') {
       let result = {}
       result.status = 1
       result.message = '管理员账号只用来管理后台账号使用，无法进行素材库的操作'

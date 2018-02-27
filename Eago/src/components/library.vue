@@ -62,17 +62,17 @@
             </el-popover>
           </template>
         </el-table-column>
-        <!--angle-->
+        <!--Angle-->
         <el-table-column
-          label="angle">
+          label="Angle">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.angle }}</span>
+            <span style="margin-left: 10px">{{ scope.row.source.Angle }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="昵称">
+          label="名称">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.user.nickname }}</span>
+            <span style="margin-left: 10px">{{ scope.row.source.sourceName }}</span>
           </template>
         </el-table-column>
         <!--平台-->
@@ -151,7 +151,7 @@
           label="消耗"
           width="80">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.consume }}</span>
+            <span style="margin-left: 10px">{{ scope.row.source.Spent }}</span>
           </template>
         </el-table-column>
         <!--回收-->
@@ -159,7 +159,7 @@
           label="回收"
           width="80">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.retrieve }}</span>
+            <span style="margin-left: 10px">{{ scope.row.source.Revenue }}</span>
           </template>
         </el-table-column>
         <!--ROI-->
@@ -227,10 +227,10 @@
               <el-input v-model="sourceModal.sourceName"></el-input>
             </el-form-item>
             <div class="three">
-              <el-form-item label="素材分类" prop="angle">
-                <el-select v-model="sourceModal.angle" placeholder="分类">
+              <el-form-item label="素材分类" prop="Angle">
+                <el-select v-model="sourceModal.Angle" placeholder="分类">
                   <el-option
-                    v-for="item in getangleList"
+                    v-for="item in getAngleList"
                     :key="item"
                     :label="item"
                     :value="item">
@@ -294,13 +294,13 @@
               </el-form-item>
             </div>
             <div class="three">
-              <el-form-item label="消耗" prop="consume">
-                <el-input v-model="sourceModal.consume"></el-input>
+              <el-form-item label="消耗" prop="Spent">
+                <el-input v-model="sourceModal.Spent"></el-input>
               </el-form-item>
             </div>
             <div class="three">
-              <el-form-item label="回收" prop="retrieve">
-                <el-input v-model="sourceModal.retrieve"></el-input>
+              <el-form-item label="回收" prop="Revenue">
+                <el-input v-model="sourceModal.Revenue"></el-input>
               </el-form-item>
             </div>
             <div></div>
@@ -345,7 +345,7 @@
         sourceModalName: '',
         sourceModal: {
           sourceName: '',
-          angle: '',
+          Angle: '',
           terrace: '',
           opeavtor: '',
           reveal: '',
@@ -355,8 +355,8 @@
           CPM: '',
           conversion: '',
           CR: '',
-          consume: '',
-          retrieve: '',
+          Spent: '',
+          Revenue: '',
           ROI: '',
           country: '',
           remarks: ''
@@ -366,8 +366,8 @@
             { required: true, message: '请输入作品名称', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
-          angle: [
-            { required: true, message: '请输入angle', trigger: 'blur' },
+          Angle: [
+            { required: true, message: '请输入Angle', trigger: 'blur' },
             { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
           ],
           terrace: [
@@ -406,11 +406,11 @@
             { required: true, message: '请输入CR', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
-          consume: [
+          Spent: [
             { required: true, message: '请输入消耗', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
-          retrieve: [
+          Revenue: [
             { required: true, message: '请输入回收', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
@@ -457,8 +457,8 @@
       mysourceCount () {
         return this.$store.state.sourceCount
       },
-      getangleList () {
-        return this.$store.state.angleList
+      getAngleList () {
+        return this.$store.state.AngleList
       },
       getterraceList () {
         return this.$store.state.terraceList
@@ -498,7 +498,7 @@
         this.sourceModalId = row._id
         this.sourceModalName = row.user.username
         this.sourceModal.sourceName = row.source.sourceName
-        this.sourceModal.angle = row.source.angle
+        this.sourceModal.Angle = row.source.Angle
         this.sourceModal.terrace = row.source.terrace
         this.sourceModal.opeavtor = row.source.opeavtor
         this.sourceModal.reveal = row.source.reveal
@@ -508,8 +508,8 @@
         this.sourceModal.CPM = row.source.CPM
         this.sourceModal.conversion = row.source.conversion
         this.sourceModal.CR = row.source.CR
-        this.sourceModal.consume = row.source.consume
-        this.sourceModal.retrieve = row.source.retrieve
+        this.sourceModal.Spent = row.source.Spent
+        this.sourceModal.Revenue = row.source.Revenue
         this.sourceModal.ROI = row.source.ROI
         this.sourceModal.remarks = row.source.remarks
         this.sourceModal.country = row.source.country

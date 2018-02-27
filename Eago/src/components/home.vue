@@ -106,7 +106,7 @@
             type: 'info'
           })
           this.$store.commit('setloginStatus', '登陆')
-          this.$router.push({path: '/login'})
+          this.$router.push({path: '/'})
         }
       }
     }

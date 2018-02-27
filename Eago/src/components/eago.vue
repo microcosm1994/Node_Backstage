@@ -27,7 +27,7 @@
               <div id="terraceCount" class="terraceCount"></div>
             </el-main>
             <el-main width="30%">
-              <div id="angleCount" class="angleCount"></div>
+              <div id="AngleCount" class="AngleCount"></div>
             </el-main>
             <el-main width="30%">
               <div id="sumCount" class="sumCount"></div>
@@ -54,9 +54,9 @@
         usernameList: [],
         monthData: [],
         terraceData: [],
-        angleData: [],
+        AngleData: [],
         terraceList: [],
-        angleList: []
+        AngleList: []
       }
     },
     mounted () {
@@ -73,8 +73,8 @@
       getsourceCount () {
         return this.$store.state.sourceCount
       },
-      getangleList () {
-        return this.$store.state.angleList
+      getAngleList () {
+        return this.$store.state.AngleList
       },
       getterraceList () {
         return this.$store.state.terraceList
@@ -87,15 +87,17 @@
       getcount: function () {
         this.$http.get('/api/seting/getconfig').then((response) => {
           if (response.data.status === 0) {
+            this.$store.commit('setAngleList', response.data.data[0].AngleList)
+            this.$store.commit('setterraceList', response.data.data[0].terraceList)
+            this.$store.commit('setcountryList', response.data.data[0].countryList)
             this.terraceList = response.data.data[0].terraceList
-            this.angleList = response.data.data[0].angleList
+            this.AngleList = response.data.data[0].AngleList
             this.$http.get('/api/count/terraceCount').then((response) => {
               if (response.data.status === 0) {
-                console.log(response.data)
                 this.terraceData = response.data.terracedata
-                this.angleData = response.data.angledata
+                this.AngleData = response.data.Angledata
                 this.terraceCount()
-                this.angleCount()
+                this.AngleCount()
                 this.sumCount()
               }
             })
@@ -215,8 +217,8 @@
         option.series = series
         myChart.setOption(option)
       },
-      angleCount: function () {
-        let myChart = this.$echarts.init(document.getElementById('angleCount'))
+      AngleCount: function () {
+        let myChart = this.$echarts.init(document.getElementById('AngleCount'))
         let option = {
           tooltip: {
             trigger: 'item',
@@ -230,7 +232,7 @@
           series: []
         }
         let legend = {
-          data: this.angleList
+          data: this.AngleList
         }
         let series = []
         let obj = {
@@ -259,7 +261,7 @@
           data: []
         }
         let array = []
-        this.angleData.forEach(function (value, index, arr) {
+        this.AngleData.forEach(function (value, index, arr) {
           let data = {}
           data.name = value.name
           data.value = value.data
@@ -288,7 +290,7 @@
         let legend = {
           data: this.terraceList
         }
-        this.angleList.forEach(function (value, index, arr) {
+        this.AngleList.forEach(function (value, index, arr) {
           legend.data.push(value)
         })
         let series = []
@@ -318,7 +320,7 @@
           data: []
         }
         let array = []
-        this.angleData.forEach(function (value, index, arr) {
+        this.AngleData.forEach(function (value, index, arr) {
           let data = {}
           data.name = value.name
           data.value = value.data
@@ -973,16 +975,13 @@
     height: 300px;
     padding-right: 10px;
   }
-  .angleCount{
+  .AngleCount{
     width: 100%;
     height: 100%;
-    box-shadow: 0 0 15px #999999;
-
   }
   .sumCount{
     width: 100%;
     height: 100%;
-    box-shadow: 0 0 15px #999999;
   }
   .monthCount{
     width: 100%;

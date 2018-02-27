@@ -23,10 +23,10 @@
           <el-input v-model="ruleForm.sourceName"></el-input>
         </el-form-item>
         <div class="three">
-          <el-form-item label="素材分类" prop="angle">
-            <el-select v-model="ruleForm.angle" placeholder="分类">
+          <el-form-item label="素材分类" prop="Angle">
+            <el-select v-model="ruleForm.Angle" placeholder="分类">
               <el-option
-                v-for="item in getangleList"
+                v-for="item in getAngleList"
                 :key="item"
                 :label="item"
                 :value="item">
@@ -47,65 +47,69 @@
           </el-form-item>
         </div>
         <div class="three">
-          <el-form-item label="opeavtor" prop="opeavtor">
+          <el-form-item label="Opeavtor" prop="opeavtor">
             <el-input v-model="ruleForm.opeavtor"></el-input>
           </el-form-item>
         </div>
         <div></div>
         <div class="two">
           <el-form-item label="展示" prop="reveal">
-            <el-input v-model="ruleForm.reveal"></el-input>
+            <el-input v-model.number="ruleForm.reveal"></el-input>
           </el-form-item>
         </div>
         <div class="two">
           <el-form-item label="点击数" prop="click">
-            <el-input v-model="ruleForm.click"></el-input>
-          </el-form-item>
-        </div>
-        <div></div>
-        <div class="four">
-          <el-form-item label="CTR" prop="CTR">
-            <el-input v-model="ruleForm.CTR"></el-input>
-          </el-form-item>
-        </div>
-        <div class="four">
-          <el-form-item label="CPC" prop="CPC">
-            <el-input v-model="ruleForm.CPC"></el-input>
-          </el-form-item>
-        </div>
-        <div class="four">
-          <el-form-item label="CPM" prop="CPM">
-            <el-input v-model="ruleForm.CPM"></el-input>
-          </el-form-item>
-        </div>
-        <div class="four">
-          <el-form-item label="CR" prop="CR">
-            <el-input v-model="ruleForm.CR"></el-input>
+            <el-input v-model.number="ruleForm.click"></el-input>
           </el-form-item>
         </div>
         <div></div>
         <div class="three">
-          <el-form-item label="conversion" prop="conversion">
+          <el-form-item label="Conversion" prop="conversion">
             <el-input v-model="ruleForm.conversion"></el-input>
           </el-form-item>
         </div>
         <div class="three">
-          <el-form-item label="消耗" prop="consume">
-            <el-input v-model="ruleForm.consume"></el-input>
+          <el-form-item label="Spent" prop="Spent">
+            <el-input v-model="ruleForm.Spent"></el-input>
           </el-form-item>
         </div>
         <div class="three">
-          <el-form-item label="回收" prop="retrieve">
-            <el-input v-model="ruleForm.retrieve"></el-input>
+          <el-form-item label="Revenue" prop="Revenue">
+            <el-input v-model="ruleForm.Revenue"></el-input>
           </el-form-item>
         </div>
         <div></div>
-        <div class="two">
+        <div class="three">
+          <el-form-item label="CPM" prop="CPM">
+            <el-input :disabled="true" v-model="getCPM"></el-input>
+          </el-form-item>
+        </div>
+        <div class="three">
+          <el-form-item label="CTR" prop="CTR">
+            <el-input :disabled="true" v-model="getCTR"></el-input>
+          </el-form-item>
+        </div>
+        <div class="three">
+          <el-form-item label="CPC" prop="CPC">
+            <el-input :disabled="true" v-model="getCPC"></el-input>
+          </el-form-item>
+        </div>
+        <div></div>
+        <el-form-item label="LandingPage" prop="ROI">
+          <el-input v-model="ruleForm.ROI"></el-input>
+        </el-form-item>
+        <div></div>
+        <div class="three">
           <el-form-item label="ROI" prop="ROI">
             <el-input v-model="ruleForm.ROI"></el-input>
           </el-form-item>
         </div>
-        <div class="two">
+        <div class="three">
+          <el-form-item label="Profit" prop="profit">
+            <el-input v-model="ruleForm.profit"></el-input>
+          </el-form-item>
+        </div>
+        <div class="three">
           <el-form-item label="国家" prop="country">
             <el-select v-model="ruleForm.country" placeholder="国家">
               <el-option
@@ -138,29 +142,29 @@
         type: '',
         ruleForm: {
           sourceName: '',
-          angle: '',
+          Angle: '',
           terrace: '',
           opeavtor: '',
-          reveal: '',
-          click: '',
+          reveal: 0, // 展示
+          click: 0, // 点击
           CTR: '',
           CPC: '',
-          CPM: '',
-          conversion: '',
-          CR: '',
-          consume: '',
-          retrieve: '',
+          CPM: 0,
+          conversion: '', // 转化
+          Spent: 0, // 消费
+          Revenue: '', // 收益
           ROI: '',
-          country: '',
-          remarks: ''
+          profit: '',
+          country: '', // 国家
+          remarks: '' // 文案
         },
         rules: {
           sourceName: [
             { required: true, message: '请输入作品名称', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
-          angle: [
-            { required: true, message: '请选择angle', trigger: 'blur' },
+          Angle: [
+            { required: true, message: '请选择Angle', trigger: 'blur' },
             { message: '不 能 为 空', trigger: 'blur' }
           ],
           terrace: [
@@ -168,47 +172,47 @@
             { message: '不 能 为 空', trigger: 'blur' }
           ],
           opeavtor: [
-            { required: true, message: '请输入opeavtor', trigger: 'blur' },
+            { required: true, message: '请输入Opeavtor', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
           reveal: [
             { required: true, message: '请输入展示', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { message: '内容为数字', type: 'number' }
           ],
           click: [
             { required: true, message: '请输入点击数', trigger: 'blur' },
-            { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+            { message: '内容为数字', type: 'number' }
           ],
-          CTR: [
-            { required: true, message: '请输入CTR', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
-          CPC: [
-            { required: true, message: '请输入CPC', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
-          CPM: [
-            { required: true, message: '请输入CPM', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
+//          CTR: [
+//            { required: true, message: '请输入CTR', trigger: 'blur' },
+//            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+//          ],
+//          CPC: [
+//            { required: true, message: '请输入CPC', trigger: 'blur' },
+//            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+//          ],
+//          CPM: [
+//            { required: true, message: '请输入CPM', trigger: 'blur' },
+//            { message: '内容为数字', type: 'number' }
+//          ],
           conversion: [
-            { required: true, message: '请输入conversion', trigger: 'blur' },
+            { required: true, message: '请输入Conversion', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
-          CR: [
-            { required: true, message: '请输入CR', trigger: 'blur' },
+          Spent: [
+            { required: true, message: '请输入Spent', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
-          consume: [
-            { required: true, message: '请输入消耗', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
-          retrieve: [
+          Revenue: [
             { required: true, message: '请输入回收', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
           ROI: [
             { required: true, message: '请输入ROI', trigger: 'blur' },
+            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+          ],
+          profit: [
+            { required: true, message: '请输入Profit', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
           country: [
@@ -234,23 +238,47 @@
         if (value !== '') {
           return '最后保存时间为 ' + value.slice(0, value.indexOf('T'))
         }
+      },
+      surplus: function (value) {
+        if (value) {
+          return value.toFixed(2)
+        } else {
+          return 0
+        }
+      },
+      unit: function (value) {
+        return value + '%'
       }
     },
     computed: {
       getuser () {
         return this.$store.state.user
       },
-      getangleList () {
-        return this.$store.state.angleList
+      getAngleList () {
+        return this.$store.state.AngleList
       },
       getterraceList () {
         return this.$store.state.terraceList
       },
       getcountryList () {
         return this.$store.state.countryList
+      },
+      getCPM () {
+        this.ruleForm.CPM = (this.ruleForm.Spent / this.ruleForm.reveal) * 1000
+        return this.ruleForm.CPM ? this.ruleForm.CPM : 0
+      },
+      getCTR () {
+        this.ruleForm.CTR = this.ruleForm.click / this.ruleForm.reveal
+        return this.ruleForm.CTR ? this.ruleForm.CTR.toFixed(2) + '%' : 0 + '%'
+      },
+      getCPC () { // 计算CPC值
+        this.ruleForm.CPC = this.ruleForm.Spent / this.ruleForm.click
+        return this.ruleForm.CPC ? this.ruleForm.CPC.toFixed(2) : 0
       }
     },
-    mounted () {},
+    mounted () {
+      this.getconfig()
+    },
     methods: {
       uploadsuccess (response, file, filelist) {
         if (response.status === 200) {

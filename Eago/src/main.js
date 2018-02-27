@@ -43,7 +43,6 @@ new Vue({
   template: '<App/>',
   components: { App },
   mounted () {
-    this.getconfig()
     this.getusersCount()
     this.getsourceCount()
   }

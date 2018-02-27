@@ -58,7 +58,7 @@ exports.detailed = (req, res) => {
 exports.update = (req, res) => {
   let query = {}
   query.source = req.body.source
-  query.sourceName = req.body.source.angle
+  query.sourceName = req.body.source.Angle
   query.terrace = req.body.source.terrace
   query.country = req.body.source.country
   let result = {status: 0, message: '素材内容已更新'}

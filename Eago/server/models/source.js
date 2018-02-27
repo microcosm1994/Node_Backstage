@@ -20,7 +20,7 @@ const sourceSchema = new Schema({
     sourceName: {// 名称
       type: String
     },
-    angle: {// 分类
+    Angle: {// 分类
       type: String
     },
     terrace: {// 平台
@@ -33,31 +33,31 @@ const sourceSchema = new Schema({
       type: String
     },
     click: {// 点击数
-      type: String
+      type: Number
     },
     CTR: {
-      type: String
+      type: Number
     },
     CPC: {
-      type: String
+      type: Number
     },
     CPM: {
+      type: Number
+    },
+    conversion: {// 转化
       type: String
     },
-    conversion: {
-      type: String
+    Spent: {// 消耗
+      type: Number
     },
-    CR: {
-      type: String
-    },
-    consume: {// 消耗
-      type: String
-    },
-    retrieve: {// 回收
-      type: String
+    Revenue: {// 回收
+      type: Number
     },
     ROI: {
-      type: String
+      type: Number
+    },
+    profit: {// 收益
+      type: Number
     },
     remarks: {// 备注
       type: String

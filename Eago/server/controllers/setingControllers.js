@@ -2,7 +2,7 @@
 const path = require('path')
 // const qs = require('querystring')
 // const db = require(path.join(__dirname, '../mongo/db.js'))
-const crypto = require('crypto')
+// const crypto = require('crypto')
 const Seting = require(path.join(__dirname, '../models/setings.js'))
 
 exports.getconfig = (req, res) => {

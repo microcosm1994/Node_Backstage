@@ -11,7 +11,7 @@ const setingSchema = new Schema({
     type: Array,
     default: ['facebook']
   },
-  angleList: {
+  AngleList: {
     type: Array,
     default: ['skincare']
   },

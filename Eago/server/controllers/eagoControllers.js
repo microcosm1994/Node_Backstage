@@ -58,10 +58,10 @@ exports.terraceCount = (req, res) => {
   Seting.find({}, (err, data) => {
     if (err) throw err
     if (data) {
-      let angleList = data[0].angleList
+      let AngleList = data[0].AngleList
       let terraceList = data[0].terraceList
       let terraceCount = []
-      let angleCount = []
+      let AngleCount = []
       async.each(terraceList, function (item, callback) {
         Source.count({terrace: item}, (err, data) => {
           if (err) throw err
@@ -73,18 +73,18 @@ exports.terraceCount = (req, res) => {
         })
       }, function (err) {
         if (err) throw err
-        async.each(angleList, function (item, callback) {
-          Source.count({'source.angle': item}, (err, data) => {
+        async.each(AngleList, function (item, callback) {
+          Source.count({'source.Angle': item}, (err, data) => {
             if (err) throw err
             let obj = {}
             obj.name = item
             obj.data = data
-            angleCount.push(obj)
+            AngleCount.push(obj)
             callback()
           })
         }, function (err) {
           if (err) throw err
-          result.angledata = angleCount
+          result.Angledata = AngleCount
           result.terracedata = terraceCount
           res.json(result)
         })

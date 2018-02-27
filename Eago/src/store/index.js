@@ -16,7 +16,7 @@ export default new vuex.Store({
       label: '',
       text: ''
     },
-    angleList: [],
+    AngleList: [],
     terraceList: [],
     countryList: []
   },
@@ -54,8 +54,8 @@ export default new vuex.Store({
       state.sourceCount = number
     },
     // 分类
-    setangleList (state, array) {
-      state.angleList = array
+    setAngleList (state, array) {
+      state.AngleList = array
     },
     // 平台
     setterraceList (state, array) {
