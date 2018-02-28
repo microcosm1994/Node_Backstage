@@ -48,7 +48,7 @@
         </div>
         <div class="three">
           <el-form-item label="Opeavtor" prop="opeavtor">
-            <el-input v-model="ruleForm.opeavtor"></el-input>
+            <el-input :disabled="true" v-model="ruleForm.opeavtor = getuser.nickname"></el-input>
           </el-form-item>
         </div>
         <div></div>
@@ -97,7 +97,7 @@
         <div></div>
         <div class="landingContainer" ref="landingContainer" v-if="this.ruleForm.landingPageList.length">
           <div class="el-form-item" v-for="(item, index) in this.ruleForm.landingPageList">
-            <label class="el-form-item__label" style="width: 100px;">{{'LandingPage' + index}}</label>
+            <label class="el-form-item__label" style="width: 100px;">{{'LandingPage' + (index + 1)}}</label>
             <div class="el-form-item__content" style="margin-left: 100px;">
               <div class="content">
                 <div class="el-input is-disabled" style="width: 36%;">
@@ -170,8 +170,11 @@
             </el-select>
           </el-form-item>
         </div>
-        <el-form-item label="文案" prop="remarks">
-          <el-input type="textarea" v-model="ruleForm.remarks" :autosize="{ minRows: 2, maxRows: 10}"></el-input>
+        <el-form-item label="文案标题" prop="AdvertisingTitle">
+          <el-input v-model="ruleForm.AdvertisingTitle" placeholder="文案标题"></el-input>
+        </el-form-item>
+        <el-form-item label="文案" prop="Advertising">
+          <el-input type="textarea" v-model="ruleForm.Advertising" :autosize="{ minRows: 2, maxRows: 10}" placeholder="文案"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm(ruleForm)">保存</el-button>
@@ -209,7 +212,8 @@
           ROI: '',
           profit: '',
           country: '', // 国家
-          remarks: '', // 文案
+          AdvertisingTitle: '', // 文案标题
+          Advertising: '', // 文案
           landingPageList: []
         },
         rules: {
@@ -273,8 +277,11 @@
             { required: true, message: '请选择国家', trigger: 'blur' },
             { message: '不 能 为 空', trigger: 'blur' }
           ],
-          remarks: [
-            { required: true, message: '请填写备注', trigger: 'blur' }
+          AdvertisingTitle: [
+            { required: true, message: '请填写文案标题', trigger: 'blur' }
+          ],
+          Advertising: [
+            { required: true, message: '请填写文案', trigger: 'blur' }
           ]
         },
         dialogImageUrl: '',
@@ -318,20 +325,24 @@
         return this.$store.state.countryList
       },
       getCPM () {
-        this.ruleForm.CPM = (this.ruleForm.Spent / this.ruleForm.reveal) * 1000
-        return this.ruleForm.CPM ? this.ruleForm.CPM.toFixed(2) : 0
+        let CPM = (this.ruleForm.Spent / this.ruleForm.reveal) * 1000
+        this.ruleForm.CPM = CPM.toFixed(2)
+        return isNaN(this.ruleForm.CPM) ? 0 : this.ruleForm.CPM
       },
       getCTR () {
-        this.ruleForm.CTR = this.ruleForm.click / this.ruleForm.reveal
-        return this.ruleForm.CTR ? this.ruleForm.CTR.toFixed(2) + '%' : 0 + '%'
+        let CTR = this.ruleForm.click / this.ruleForm.reveal
+        this.ruleForm.CTR = CTR.toFixed(2)
+        return isNaN(this.ruleForm.CTR) ? 0 + '%' : this.ruleForm.CTR + '%'
       },
       getCPC () { // 计算CPC值
-        this.ruleForm.CPC = this.ruleForm.Spent / this.ruleForm.click
-        return this.ruleForm.CPC ? this.ruleForm.CPC.toFixed(2) : 0
+        let CPC = this.ruleForm.Spent / this.ruleForm.click
+        this.ruleForm.CPC = CPC.toFixed(2)
+        return isNaN(this.ruleForm.CPC) ? 0 : this.ruleForm.CPC
       },
       getROI () { // 计算ROI
-        this.ruleForm.ROI = this.ruleForm.Revenue / this.ruleForm.Spent
-        return this.ruleForm.ROI ? this.ruleForm.ROI.toFixed(2) + '%' : 0 + '%'
+        let ROI = this.ruleForm.Revenue / this.ruleForm.Spent
+        this.ruleForm.ROI = ROI.toFixed(2)
+        return isNaN(this.ruleForm.ROI) ? 0 + '%' : this.ruleForm.ROI + '%'
       }
     },
     mounted () {
@@ -374,6 +385,13 @@
       submitForm (ruleform) {
         this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
+            if (this.landingPageURL !== '' && this.landingPageClick !== '' && this.landingPageCR !== '' && this.landingPageCVR !== '') {
+              this.$message({
+                message: '请点击对勾按钮保存填写的landingPage',
+                type: 'info'
+              })
+              return false
+            }
             let result = {}
             result.sourceName = ruleform.sourceName
             result.terrace = ruleform.terrace
@@ -468,6 +486,7 @@
     width: 100%;
     height: 100%;
     min-width: 1200px;
+    padding-bottom: 100px;
   }
   .add-photo{
     width: 750px;

@@ -10,8 +10,51 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="文案">
-                <span>{{ props.row.source.remarks }}</span>
+              <el-form-item label="数据展示">
+               <div class="table-expand">
+                 <div class="table-head">
+                   <span>CTR</span>
+                   <span>CPC</span>
+                   <span>CPM</span>
+                   <span>Conversion</span>
+                   <span>Spent</span>
+                   <span>Revenue</span>
+                   <span>ROI</span>
+                 </div>
+                 <div class="table-body">
+                   <span>{{ props.row.source.CTR }}</span>
+                   <span>{{ props.row.source.CPC }}</span>
+                   <span>{{ props.row.source.CPM }}</span>
+                   <span>{{ props.row.source.conversion }}</span>
+                   <span>{{ props.row.source.Spent }}</span>
+                   <span>{{ props.row.source.Revenue }}</span>
+                   <span>{{ props.row.source.ROI }}</span>
+                 </div>
+               </div>
+              </el-form-item>
+              <el-form-item label="landingPage">
+                <div class="table-expand">
+                  <div class="table-head">
+                    <span>名称</span>
+                    <span style="width:240px;">链接</span>
+                    <span>点击</span>
+                    <span>CR</span>
+                    <span>CVR</span>
+                  </div>
+                  <div class="table-body" v-for="(item, index) in props.row.source.landingPageList">
+                    <span>landingPage {{ index + 1 }}</span>
+                    <span style="width:240px;"><a :href="item.landingPageURL">{{ item.landingPageURL }}</a></span>
+                    <span>{{ item.landingPageClick }}</span>
+                    <span>{{ item.landingPageCR }}</span>
+                    <span>{{ item.landingPageCVR }}</span>
+                  </div>
+                </div>
+              </el-form-item>
+              <el-form-item label="文案标题">
+                <div>{{ props.row.source.AdvertisingTitle }}</div>
+              </el-form-item>
+              <el-form-item label="文案内容">
+                <div>{{ props.row.source.Advertising }}</div>
               </el-form-item>
               <!--<el-form-item label="上传账号">-->
                 <!--<span>{{ props.row.user.uname }}</span>-->
@@ -104,70 +147,6 @@
           width="80">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.source.click }}</span>
-          </template>
-        </el-table-column>
-        <!--CTR-->
-        <el-table-column
-          label="CTR"
-          width="60">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.CTR }}</span>
-          </template>
-        </el-table-column>
-        <!--CPC-->
-        <el-table-column
-          label="CPC"
-          width="60">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.CPC }}</span>
-          </template>
-        </el-table-column>
-        <!--CPM-->
-        <el-table-column
-          label="CPM"
-          width="60">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.CPM }}</span>
-          </template>
-        </el-table-column>
-        <!--conversion-->
-        <el-table-column
-          label="conversion"
-          width="100">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.conversion }}</span>
-          </template>
-        </el-table-column>
-        <!--CR-->
-        <el-table-column
-          label="CR"
-          width="60">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.CR }}</span>
-          </template>
-        </el-table-column>
-        <!--消耗-->
-        <el-table-column
-          label="消耗"
-          width="80">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.Spent }}</span>
-          </template>
-        </el-table-column>
-        <!--回收-->
-        <el-table-column
-          label="回收"
-          width="80">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.Revenue }}</span>
-          </template>
-        </el-table-column>
-        <!--ROI-->
-        <el-table-column
-          label="ROI"
-          width="60">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.ROI }}</span>
           </template>
         </el-table-column>
         <!--国家-->
@@ -321,8 +300,8 @@
                 </el-select>
               </el-form-item>
             </div>
-            <el-form-item label="文案" prop="remarks">
-              <el-input type="textarea" v-model="sourceModal.remarks" :autosize="{ minRows: 2, maxRows: 10}"></el-input>
+            <el-form-item label="文案" prop="Advertising">
+              <el-input type="textarea" v-model="sourceModal.Advertising" :autosize="{ minRows: 2, maxRows: 10}"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -359,7 +338,7 @@
           Revenue: '',
           ROI: '',
           country: '',
-          remarks: ''
+          Advertising: ''
         },
         sourceModalRule: {
           sourceName: [
@@ -422,7 +401,7 @@
             { required: true, message: '请输入国家', trigger: 'blur' },
             { min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur' }
           ],
-          remarks: [
+          Advertising: [
             { required: true, message: '请填写文案', trigger: 'blur' }
           ]
         },
@@ -511,7 +490,7 @@
         this.sourceModal.Spent = row.source.Spent
         this.sourceModal.Revenue = row.source.Revenue
         this.sourceModal.ROI = row.source.ROI
-        this.sourceModal.remarks = row.source.remarks
+        this.sourceModal.Advertising = row.source.Advertising
         this.sourceModal.country = row.source.country
       },
       getpic: function (url, name, id, type) {
@@ -735,6 +714,45 @@
   .el-dialog__body img{
     width: 100%;
   }
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+    text-align: right;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 100%;
+    text-align: left;
+  }
+  .table-expand{
+    width: 100%;
+  }
+  .table-expand .table-head span{
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    display: inline-block;
+    color:#99a9bf;
+    margin-left: 10px;
+  }
+  .table-expand .table-body span{
+    width: 120px;
+    height: 70px;
+    line-height: 30px;
+    text-align: center;
+    display: inline-block;
+    font-weight: 600;
+    overflow: auto;
+    margin-left: 10px;
+  }
+  /*.demo-table-expand .el-form-item .el-form-item__label{*/
+   /*text-align: right;*/
+  /*}*/
   .update-form{
     width: 100%;
     max-width: 750px;

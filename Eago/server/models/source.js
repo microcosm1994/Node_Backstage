@@ -59,11 +59,17 @@ const sourceSchema = new Schema({
     profit: {// 收益
       type: Number
     },
-    remarks: {// 备注
+    AdvertisingTitle: { // 文案标题
+      type: String
+    },
+    Advertising: {// 文案
       type: String
     },
     country: {// 国家
       type: String
+    },
+    landingPageList: { // landingPage列表
+      type: Array
     }
   },
   titlePage: {
