@@ -531,9 +531,9 @@
     methods: {
 //      隔行变色
       tableRowClassName: function ({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row'
-        } else if (rowIndex === 3) {
+        if (rowIndex % 2 !== 1) {
+//          return 'warning-row'
+        } else if (rowIndex % 2 === 1) {
           return 'success-row'
         }
         return ''
@@ -584,7 +584,6 @@
         list.id = id
         list.type = type
         this.picdetailed = list
-        console.log(this.picdetailed)
       },
       update: function () {
         let username = this.$cookies.get('_name')
