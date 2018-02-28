@@ -65,7 +65,7 @@
         <div></div>
         <div class="three">
           <el-form-item label="Conversion" prop="conversion">
-            <el-input v-model="ruleForm.conversion"></el-input>
+            <el-input v-model.number="ruleForm.conversion"></el-input>
           </el-form-item>
         </div>
         <div class="three">
@@ -155,11 +155,11 @@
         </div>
         <div class="three">
           <el-form-item label="Profit" prop="profit">
-            <el-input v-model="ruleForm.profit"></el-input>
+            <el-input v-model.number="ruleForm.profit"></el-input>
           </el-form-item>
         </div>
         <div class="three">
-          <el-form-item label="国家" prop="country">
+          <el-form-item label="country" prop="country">
             <el-select v-model="ruleForm.country" placeholder="国家">
               <el-option
                 v-for="item in getcountryList"
@@ -173,7 +173,7 @@
         <el-form-item label="文案标题" prop="AdvertisingTitle">
           <el-input v-model="ruleForm.AdvertisingTitle" placeholder="文案标题"></el-input>
         </el-form-item>
-        <el-form-item label="文案" prop="Advertising">
+        <el-form-item label="文案内容" prop="Advertising">
           <el-input type="textarea" v-model="ruleForm.Advertising" :autosize="{ minRows: 2, maxRows: 10}" placeholder="文案"></el-input>
         </el-form-item>
         <el-form-item>
@@ -255,7 +255,7 @@
 //          ],
           conversion: [
             { required: true, message: '请输入Conversion', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { message: '内容为数字', type: 'number' }
           ],
           Spent: [
             { required: true, message: '请输入消费', trigger: 'blur' },
@@ -271,7 +271,7 @@
 //          ],
           profit: [
             { required: true, message: '请输入Profit', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { message: '内容为数字', type: 'number' }
           ],
           country: [
             { required: true, message: '请选择国家', trigger: 'blur' },

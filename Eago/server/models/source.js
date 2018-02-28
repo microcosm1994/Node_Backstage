@@ -30,7 +30,7 @@ const sourceSchema = new Schema({
       type: String
     },
     reveal: {// 展示
-      type: String
+      type: Number
     },
     click: {// 点击数
       type: Number
@@ -45,7 +45,7 @@ const sourceSchema = new Schema({
       type: Number
     },
     conversion: {// 转化
-      type: String
+      type: Number
     },
     Spent: {// 消耗
       type: Number

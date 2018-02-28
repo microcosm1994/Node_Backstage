@@ -32,7 +32,7 @@
                  </div>
                </div>
               </el-form-item>
-              <el-form-item label="landingPage">
+              <el-form-item label="landingPage" v-if="props.row.source.landingPageList.length">
                 <div class="table-expand">
                   <div class="table-head">
                     <span>名称</span>
@@ -43,7 +43,7 @@
                   </div>
                   <div class="table-body" v-for="(item, index) in props.row.source.landingPageList">
                     <span>landingPage {{ index + 1 }}</span>
-                    <span style="width:240px;"><a :href="item.landingPageURL">{{ item.landingPageURL }}</a></span>
+                    <span style="width:240px;"><a :href="item.landingPageURL" target="_blank">{{ item.landingPageURL }}</a></span>
                     <span>{{ item.landingPageClick }}</span>
                     <span>{{ item.landingPageCR }}</span>
                     <span>{{ item.landingPageCVR }}</span>
@@ -64,7 +64,7 @@
         </el-table-column>
         <el-table-column
           label="类型"
-          width="50">
+          width="70">
           <template slot-scope="scope">
             <i class="el-icon-picture-outline" v-if="scope.row.type === 'image'"></i>
             <i class="video-icon" v-if="scope.row.type === 'video'"></i>
@@ -73,7 +73,7 @@
         <!--日期-->
         <el-table-column
           label="日期"
-          width="115">
+          width="120">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.date | datetostring}}</span>
           </template>
@@ -81,7 +81,7 @@
         <!--缩略图-->
         <el-table-column
           label="缩略图"
-          width="120">
+          width="180">
           <template slot-scope="scope">
             <el-popover trigger="hover" placement="top" v-if="scope.row.type === 'image'">
               <p>图片名字: {{ scope.row.titlePage.name }}</p>
@@ -105,17 +105,17 @@
             </el-popover>
           </template>
         </el-table-column>
+        <el-table-column
+          label="名称">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.source.sourceName }}</span>
+          </template>
+        </el-table-column>
         <!--Angle-->
         <el-table-column
           label="Angle">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.source.Angle }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="名称">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.source.sourceName }}</span>
           </template>
         </el-table-column>
         <!--平台-->
@@ -127,32 +127,28 @@
         </el-table-column>
         <!--opeavtor-->
         <el-table-column
-          label="opeavtor"
-          width="120">
+          label="opeavtor">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.source.opeavtor }}</span>
           </template>
         </el-table-column>
         <!--展示-->
         <el-table-column
-          label="展示"
-          width="80">
+          label="展示">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.source.reveal }}</span>
           </template>
         </el-table-column>
         <!--点击数-->
         <el-table-column
-          label="点击数"
-          width="80">
+          label="点击数">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.source.click }}</span>
           </template>
         </el-table-column>
         <!--国家-->
         <el-table-column
-          label="国家"
-          width="100">
+          label="国家">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.source.country }}</span>
           </template>
@@ -231,65 +227,49 @@
             </div>
             <div class="three">
               <el-form-item label="opeavtor" prop="opeavtor">
-                <el-input v-model="sourceModal.opeavtor"></el-input>
+                <el-input :disabled="true" v-model="sourceModal.opeavtor"></el-input>
               </el-form-item>
             </div>
             <div></div>
             <div class="two">
               <el-form-item label="展示" prop="reveal">
-                <el-input v-model="sourceModal.reveal"></el-input>
+                <el-input v-model.number="sourceModal.reveal"></el-input>
               </el-form-item>
             </div>
             <div class="two">
               <el-form-item label="点击数" prop="click">
-                <el-input v-model="sourceModal.click"></el-input>
-              </el-form-item>
-            </div>
-            <div></div>
-            <div class="four">
-              <el-form-item label="CTR" prop="CTR">
-                <el-input v-model="sourceModal.CTR"></el-input>
-              </el-form-item>
-            </div>
-            <div class="four">
-              <el-form-item label="CPC" prop="CPC">
-                <el-input v-model="sourceModal.CPC"></el-input>
-              </el-form-item>
-            </div>
-            <div class="four">
-              <el-form-item label="CPM" prop="CPM">
-                <el-input v-model="sourceModal.CPM"></el-input>
-              </el-form-item>
-            </div>
-            <div class="four">
-              <el-form-item label="CR" prop="CR">
-                <el-input v-model="sourceModal.CR"></el-input>
+                <el-input v-model.number="sourceModal.click"></el-input>
               </el-form-item>
             </div>
             <div></div>
             <div class="three">
               <el-form-item label="conversion" prop="conversion">
-                <el-input v-model="sourceModal.conversion"></el-input>
+                <el-input v-model.number="sourceModal.conversion"></el-input>
               </el-form-item>
             </div>
             <div class="three">
-              <el-form-item label="消耗" prop="Spent">
-                <el-input v-model="sourceModal.Spent"></el-input>
+              <el-form-item label="Spent" prop="Spent">
+                <el-input v-model.number="sourceModal.Spent"></el-input>
               </el-form-item>
             </div>
             <div class="three">
-              <el-form-item label="回收" prop="Revenue">
-                <el-input v-model="sourceModal.Revenue"></el-input>
+              <el-form-item label="Revenue" prop="Revenue">
+                <el-input v-model.number="sourceModal.Revenue"></el-input>
               </el-form-item>
             </div>
             <div></div>
-            <div class="two">
+            <div class="three">
               <el-form-item label="ROI" prop="ROI">
-                <el-input v-model="sourceModal.ROI"></el-input>
+                <el-input :disabled="true" v-model="getROI"></el-input>
               </el-form-item>
             </div>
-            <div class="two">
-              <el-form-item label="国家" prop="country">
+            <div class="three">
+              <el-form-item label="Profit" prop="profit">
+                <el-input v-model.number="sourceModal.profit"></el-input>
+              </el-form-item>
+            </div>
+            <div class="three">
+              <el-form-item label="country" prop="country">
                 <el-select v-model="sourceModal.country" placeholder="国家">
                   <el-option
                     v-for="item in getcountryList"
@@ -300,7 +280,80 @@
                 </el-select>
               </el-form-item>
             </div>
-            <el-form-item label="文案" prop="Advertising">
+            <div></div>
+            <div class="three">
+              <el-form-item label="CPM" prop="CPM">
+                <el-input :disabled="true" v-model="getCPM"></el-input>
+              </el-form-item>
+            </div>
+            <div class="three">
+              <el-form-item label="CTR" prop="CTR">
+                <el-input :disabled="true" v-model="getCTR"></el-input>
+              </el-form-item>
+            </div>
+            <div class="three">
+              <el-form-item label="CPC" prop="CPC">
+                <el-input :disabled="true" v-model="getCPC"></el-input>
+              </el-form-item>
+            </div>
+            <div></div>
+            <div class="landingContainer" ref="landingContainer" v-if="this.sourceModal.landingPageList.length">
+              <div class="el-form-item" v-for="(item, index) in this.sourceModal.landingPageList">
+                <label class="el-form-item__label" style="width: 100px;">{{'LandingPage' + (index + 1)}}</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">
+                  <div class="content">
+                    <div class="el-input is-disabled" style="width: 36%;">
+                      <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" class="el-input__inner" :value="item.landingPageURL">
+                    </div>
+                    <div class="el-input is-disabled">
+                      <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" clearable="true" class="el-input__inner" :value="item.landingPageClick">
+                    </div>
+                    <div class="el-input is-disabled">
+                      <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" clearable="true" class="el-input__inner" :value="item.landingPageCR">
+                    </div>
+                    <div class="el-input is-disabled">
+                      <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" clearable="true" class="el-input__inner" :value="item.landingPageCVR">
+                    </div>
+                    <button type="button" class="el-button el-button--danger el-button--small" @click="dellandingPage(index)">
+                      <i class="el-icon-close"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="landingBox">
+              <el-form-item label="LandingPage">
+                <div class="content">
+                  <el-input
+                    style="width:36%;"
+                    placeholder="请输入landingPage地址"
+                    v-model="landingPageURL"
+                    clearable>
+                  </el-input>
+                  <el-input
+                    placeholder="请输入点击数"
+                    v-model="landingPageClick"
+                    clearable>
+                  </el-input>
+                  <el-input
+                    placeholder="请输入CR"
+                    v-model="landingPageCR"
+                    clearable>
+                  </el-input>
+                  <el-input
+                    placeholder="请输入CVR"
+                    v-model="landingPageCVR"
+                    clearable>
+                  </el-input>
+                  <el-button size="small" type="primary" icon="el-icon-check" @click="savelandingPage"></el-button>
+                </div>
+              </el-form-item>
+            </div>
+            <div></div>
+            <el-form-item label="文案标题" prop="Advertising">
+              <el-input v-model="sourceModal.AdvertisingTitle" ></el-input>
+            </el-form-item>
+            <el-form-item label="文案内容" prop="Advertising">
               <el-input type="textarea" v-model="sourceModal.Advertising" :autosize="{ minRows: 2, maxRows: 10}"></el-input>
             </el-form-item>
           </el-form>
@@ -322,23 +375,29 @@
         sourceIndex: '',
         sourceModalId: '',
         sourceModalName: '',
+        landingPageURL: '',
+        landingPageClick: '',
+        landingPageCR: '',
+        landingPageCVR: '',
         sourceModal: {
           sourceName: '',
           Angle: '',
           terrace: '',
           opeavtor: '',
-          reveal: '',
-          click: '',
+          reveal: '', // 展示
+          click: '', // 点击
           CTR: '',
           CPC: '',
           CPM: '',
-          conversion: '',
-          CR: '',
-          Spent: '',
-          Revenue: '',
+          conversion: '', // 转化
+          Spent: '', // 消费
+          Revenue: '', // 收益
           ROI: '',
-          country: '',
-          Advertising: ''
+          profit: '',
+          country: '', // 国家
+          AdvertisingTitle: '', // 文案标题
+          Advertising: '', // 文案
+          landingPageList: []
         },
         sourceModalRule: {
           sourceName: [
@@ -346,60 +405,63 @@
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
           Angle: [
-            { required: true, message: '请输入Angle', trigger: 'blur' },
-            { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请选择Angle', trigger: 'blur' },
+            { message: '不 能 为 空', trigger: 'blur' }
           ],
           terrace: [
-            { required: true, message: '请输入terrace', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请选择terrace', trigger: 'blur' },
+            { message: '不 能 为 空', trigger: 'blur' }
           ],
           opeavtor: [
-            { required: true, message: '请输入opeavtor', trigger: 'blur' },
+            { required: true, message: '请输入Opeavtor', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
           ],
           reveal: [
             { required: true, message: '请输入展示', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { message: '内容为数字', type: 'number' }
           ],
           click: [
             { required: true, message: '请输入点击数', trigger: 'blur' },
-            { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+            { message: '内容为数字', type: 'number' }
           ],
-          CTR: [
-            { required: true, message: '请输入CTR', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
-          CPC: [
-            { required: true, message: '请输入CPC', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
-          CPM: [
-            { required: true, message: '请输入CPM', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
+//          CTR: [
+//            { required: true, message: '请输入CTR', trigger: 'blur' },
+//            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+//          ],
+//          CPC: [
+//            { required: true, message: '请输入CPC', trigger: 'blur' },
+//            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+//          ],
+//          CPM: [
+//            { required: true, message: '请输入CPM', trigger: 'blur' },
+//            { message: '内容为数字', type: 'number' }
+//          ],
           conversion: [
-            { required: true, message: '请输入conversion', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
-          CR: [
-            { required: true, message: '请输入CR', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请输入Conversion', trigger: 'blur' },
+            { message: '内容为数字', type: 'number' }
           ],
           Spent: [
-            { required: true, message: '请输入消耗', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请输入消费', trigger: 'blur' },
+            { message: '内容为数字', type: 'number' }
           ],
           Revenue: [
-            { required: true, message: '请输入回收', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请输入收益', trigger: 'blur' },
+            { message: '内容为数字', type: 'number' }
           ],
-          ROI: [
-            { required: true, message: '请输入ROI', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+//          ROI: [
+//            { required: true, message: '请输入ROI', trigger: 'blur' },
+//            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+//          ],
+          profit: [
+            { required: true, message: '请输入Profit', trigger: 'blur' },
+            { message: '内容为数字', type: 'number' }
           ],
           country: [
-            { required: true, message: '请输入国家', trigger: 'blur' },
-            { min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur' }
+            { required: true, message: '请选择国家', trigger: 'blur' },
+            { message: '不 能 为 空', trigger: 'blur' }
+          ],
+          AdvertisingTitle: [
+            { required: true, message: '请填写文案标题', trigger: 'blur' }
           ],
           Advertising: [
             { required: true, message: '请填写文案', trigger: 'blur' }
@@ -410,7 +472,7 @@
         outerVisible: false,
         centerDialogVisible: false,
         currentPage: 1,
-        pageSize: 10
+        pageSize: 20
       }
     },
     mounted () {
@@ -444,6 +506,26 @@
       },
       getcountryList () {
         return this.$store.state.countryList
+      },
+      getCPM () {
+        let CPM = (this.sourceModal.Spent / this.sourceModal.reveal) * 1000
+        this.sourceModal.CPM = CPM.toFixed(2)
+        return isNaN(this.sourceModal.CPM) ? 0 : this.sourceModal.CPM
+      },
+      getCTR () {
+        let CTR = this.sourceModal.click / this.sourceModal.reveal
+        this.sourceModal.CTR = CTR.toFixed(2)
+        return isNaN(this.sourceModal.CTR) ? 0 + '%' : this.sourceModal.CTR + '%'
+      },
+      getCPC () { // 计算CPC值
+        let CPC = this.sourceModal.Spent / this.sourceModal.click
+        this.sourceModal.CPC = CPC.toFixed(2)
+        return isNaN(this.sourceModal.CPC) ? 0 : this.sourceModal.CPC
+      },
+      getROI () { // 计算ROI
+        let ROI = this.sourceModal.Revenue / this.sourceModal.Spent
+        this.sourceModal.ROI = ROI.toFixed(2)
+        return isNaN(this.sourceModal.ROI) ? 0 + '%' : this.sourceModal.ROI + '%'
       }
     },
     methods: {
@@ -486,12 +568,14 @@
         this.sourceModal.CPC = row.source.CPC
         this.sourceModal.CPM = row.source.CPM
         this.sourceModal.conversion = row.source.conversion
-        this.sourceModal.CR = row.source.CR
         this.sourceModal.Spent = row.source.Spent
         this.sourceModal.Revenue = row.source.Revenue
         this.sourceModal.ROI = row.source.ROI
+        this.sourceModal.profit = row.source.profit
+        this.sourceModal.AdvertisingTitle = row.source.AdvertisingTitle
         this.sourceModal.Advertising = row.source.Advertising
         this.sourceModal.country = row.source.country
+        this.sourceModal.landingPageList = row.source.landingPageList
       },
       getpic: function (url, name, id, type) {
         let list = {}
@@ -609,6 +693,34 @@
             }
           })
         }
+      },
+      savelandingPage () {
+        if (this.landingPageURL !== '' && this.landingPageClick !== '' && this.landingPageCR !== '' && this.landingPageCVR !== '') {
+          let data = {}
+          data.landingPageURL = this.landingPageURL
+          data.landingPageClick = this.landingPageClick
+          data.landingPageCR = this.landingPageCR
+          data.landingPageCVR = this.landingPageCVR
+          this.landingPageURL = ''
+          this.landingPageClick = ''
+          this.landingPageCR = ''
+          this.landingPageCVR = ''
+          this.sourceModal.landingPageList.push(data)
+        } else {
+          this.landingPageURL = ''
+          this.landingPageClick = ''
+          this.landingPageCR = ''
+          this.landingPageCVR = ''
+          this.$message({
+            type: 'info',
+            message: '请填写landingPage内容'
+          })
+        }
+      },
+      dellandingPage (index) {
+        let data = this.sourceModal.landingPageList
+        data.splice(index, 1)
+        this.sourceModal.landingPageList = data
       }
     }
   }
@@ -780,5 +892,14 @@
     height: 16px;
     background: url(../../static/img/video.svg) no-repeat;
     background-size:100% 100%;
+  }
+  .landingBox{
+    width: 100%;
+  }
+  .landingContainer .el-input{
+    width: 18%;
+  }
+  .landingBox .content .el-input{
+    width: 18%;
   }
 </style>
