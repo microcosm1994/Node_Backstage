@@ -117,7 +117,7 @@
       },
       handleCommand (command) {
         if (command === 'person') {
-          console.log(1)
+          this.$router.push({path: './personal'})
         }
         if (command === 'setings') {
           this.$router.push({path: './setings'})

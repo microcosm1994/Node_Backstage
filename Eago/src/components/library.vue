@@ -3,7 +3,7 @@
     <h1>{{this.mytitle}}</h1>
     <div class="library-container">
       <el-table
-        :data="this.mysource"
+        :data="mysource"
         :row-class-name="tableRowClassName"
         style="width: 100%;">
         <!--展开行-->
@@ -153,18 +153,6 @@
             <span style="margin-left: 10px">{{ scope.row.source.country }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作"
-        width="160">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="getdetailed(scope.$index, scope.row), outerVisible = true">编辑</el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="del(scope.$index, scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
       </el-table>
       <el-pagination
         @size-change="handleSizeChange"
@@ -190,180 +178,6 @@
         </el-dialog>
       </div>
     </div>
-    <div class="source-modal">
-      <el-dialog
-        title="修改素材"
-        :visible.sync="outerVisible"
-        width="50%"
-        center>
-        <div class="update-form">
-          <el-form :model="sourceModal" :rules="sourceModalRule" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="素材名称" prop="sourceName">
-              <el-input v-model="sourceModal.sourceName"></el-input>
-            </el-form-item>
-            <div class="three">
-              <el-form-item label="素材分类" prop="Angle">
-                <el-select v-model="sourceModal.Angle" placeholder="分类">
-                  <el-option
-                    v-for="item in getAngleList"
-                    :key="item"
-                    :label="item"
-                    :value="item">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </div>
-            <div class="three">
-              <el-form-item label="平台" prop="terrace">
-                <el-select v-model="sourceModal.terrace" placeholder="平台">
-                  <el-option
-                    v-for="item in getterraceList"
-                    :key="item"
-                    :label="item"
-                    :value="item">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </div>
-            <div class="three">
-              <el-form-item label="opeavtor" prop="opeavtor">
-                <el-input :disabled="true" v-model="sourceModal.opeavtor"></el-input>
-              </el-form-item>
-            </div>
-            <div></div>
-            <div class="two">
-              <el-form-item label="展示" prop="reveal">
-                <el-input v-model.number="sourceModal.reveal"></el-input>
-              </el-form-item>
-            </div>
-            <div class="two">
-              <el-form-item label="点击数" prop="click">
-                <el-input v-model.number="sourceModal.click"></el-input>
-              </el-form-item>
-            </div>
-            <div></div>
-            <div class="three">
-              <el-form-item label="conversion" prop="conversion">
-                <el-input v-model.number="sourceModal.conversion"></el-input>
-              </el-form-item>
-            </div>
-            <div class="three">
-              <el-form-item label="Spent" prop="Spent">
-                <el-input v-model.number="sourceModal.Spent"></el-input>
-              </el-form-item>
-            </div>
-            <div class="three">
-              <el-form-item label="Revenue" prop="Revenue">
-                <el-input v-model.number="sourceModal.Revenue"></el-input>
-              </el-form-item>
-            </div>
-            <div></div>
-            <div class="three">
-              <el-form-item label="ROI" prop="ROI">
-                <el-input :disabled="true" v-model="getROI"></el-input>
-              </el-form-item>
-            </div>
-            <div class="three">
-              <el-form-item label="Profit" prop="profit">
-                <el-input v-model.number="sourceModal.profit"></el-input>
-              </el-form-item>
-            </div>
-            <div class="three">
-              <el-form-item label="country" prop="country">
-                <el-select v-model="sourceModal.country" placeholder="国家">
-                  <el-option
-                    v-for="item in getcountryList"
-                    :key="item | country_filters"
-                    :label="item | country_filters"
-                    :value="item | country_filters">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </div>
-            <div></div>
-            <div class="three">
-              <el-form-item label="CPM" prop="CPM">
-                <el-input :disabled="true" v-model="getCPM"></el-input>
-              </el-form-item>
-            </div>
-            <div class="three">
-              <el-form-item label="CTR" prop="CTR">
-                <el-input :disabled="true" v-model="getCTR"></el-input>
-              </el-form-item>
-            </div>
-            <div class="three">
-              <el-form-item label="CPC" prop="CPC">
-                <el-input :disabled="true" v-model="getCPC"></el-input>
-              </el-form-item>
-            </div>
-            <div></div>
-            <div class="landingContainer" ref="landingContainer" v-if="this.sourceModal.landingPageList.length">
-              <div class="el-form-item" v-for="(item, index) in this.sourceModal.landingPageList">
-                <label class="el-form-item__label" style="width: 100px;">{{'LandingPage' + (index + 1)}}</label>
-                <div class="el-form-item__content" style="margin-left: 100px;">
-                  <div class="content">
-                    <div class="el-input is-disabled" style="width: 36%;">
-                      <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" class="el-input__inner" :value="item.landingPageURL">
-                    </div>
-                    <div class="el-input is-disabled">
-                      <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" clearable="true" class="el-input__inner" :value="item.landingPageClick">
-                    </div>
-                    <div class="el-input is-disabled">
-                      <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" clearable="true" class="el-input__inner" :value="item.landingPageCR">
-                    </div>
-                    <div class="el-input is-disabled">
-                      <input autocomplete="off" disabled="disabled" type="text" rows="2" validateevent="true" clearable="true" class="el-input__inner" :value="item.landingPageCVR">
-                    </div>
-                    <button type="button" class="el-button el-button--danger el-button--small" @click="dellandingPage(index)">
-                      <i class="el-icon-close"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="landingBox">
-              <el-form-item label="LandingPage">
-                <div class="content">
-                  <el-input
-                    style="width:36%;"
-                    placeholder="请输入landingPage地址"
-                    v-model="landingPageURL"
-                    clearable>
-                  </el-input>
-                  <el-input
-                    placeholder="请输入点击数"
-                    v-model="landingPageClick"
-                    clearable>
-                  </el-input>
-                  <el-input
-                    placeholder="请输入CR"
-                    v-model="landingPageCR"
-                    clearable>
-                  </el-input>
-                  <el-input
-                    placeholder="请输入CVR"
-                    v-model="landingPageCVR"
-                    clearable>
-                  </el-input>
-                  <el-button size="small" type="primary" icon="el-icon-check" @click="savelandingPage"></el-button>
-                </div>
-              </el-form-item>
-            </div>
-            <div></div>
-            <el-form-item label="文案标题" prop="Advertising">
-              <el-input v-model="sourceModal.AdvertisingTitle" ></el-input>
-            </el-form-item>
-            <el-form-item label="文案内容" prop="Advertising">
-              <el-input type="textarea" v-model="sourceModal.Advertising" :autosize="{ minRows: 2, maxRows: 10}"></el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="update">保 存</el-button>
-          <el-button type="primary" @click="outerVisible = false">关 闭</el-button>
-        </span>
-      </el-dialog>
-    </div>
   </div>
 </template>
 
@@ -372,104 +186,7 @@
     name: 'library',
     data () {
       return {
-        sourceIndex: '',
-        sourceModalId: '',
-        sourceModalName: '',
-        landingPageURL: '',
-        landingPageClick: '',
-        landingPageCR: '',
-        landingPageCVR: '',
-        sourceModal: {
-          sourceName: '',
-          Angle: '',
-          terrace: '',
-          opeavtor: '',
-          reveal: '', // 展示
-          click: '', // 点击
-          CTR: '',
-          CPC: '',
-          CPM: '',
-          conversion: '', // 转化
-          Spent: '', // 消费
-          Revenue: '', // 收益
-          ROI: '',
-          profit: '',
-          country: '', // 国家
-          AdvertisingTitle: '', // 文案标题
-          Advertising: '', // 文案
-          landingPageList: []
-        },
-        sourceModalRule: {
-          sourceName: [
-            { required: true, message: '请输入作品名称', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
-          Angle: [
-            { required: true, message: '请选择Angle', trigger: 'blur' },
-            { message: '不 能 为 空', trigger: 'blur' }
-          ],
-          terrace: [
-            { required: true, message: '请选择terrace', trigger: 'blur' },
-            { message: '不 能 为 空', trigger: 'blur' }
-          ],
-          opeavtor: [
-            { required: true, message: '请输入Opeavtor', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-          ],
-          reveal: [
-            { required: true, message: '请输入展示', trigger: 'blur' },
-            { message: '内容为数字', type: 'number' }
-          ],
-          click: [
-            { required: true, message: '请输入点击数', trigger: 'blur' },
-            { message: '内容为数字', type: 'number' }
-          ],
-//          CTR: [
-//            { required: true, message: '请输入CTR', trigger: 'blur' },
-//            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-//          ],
-//          CPC: [
-//            { required: true, message: '请输入CPC', trigger: 'blur' },
-//            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-//          ],
-//          CPM: [
-//            { required: true, message: '请输入CPM', trigger: 'blur' },
-//            { message: '内容为数字', type: 'number' }
-//          ],
-          conversion: [
-            { required: true, message: '请输入Conversion', trigger: 'blur' },
-            { message: '内容为数字', type: 'number' }
-          ],
-          Spent: [
-            { required: true, message: '请输入消费', trigger: 'blur' },
-            { message: '内容为数字', type: 'number' }
-          ],
-          Revenue: [
-            { required: true, message: '请输入收益', trigger: 'blur' },
-            { message: '内容为数字', type: 'number' }
-          ],
-//          ROI: [
-//            { required: true, message: '请输入ROI', trigger: 'blur' },
-//            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
-//          ],
-          profit: [
-            { required: true, message: '请输入Profit', trigger: 'blur' },
-            { message: '内容为数字', type: 'number' }
-          ],
-          country: [
-            { required: true, message: '请选择国家', trigger: 'blur' },
-            { message: '不 能 为 空', trigger: 'blur' }
-          ],
-          AdvertisingTitle: [
-            { required: true, message: '请填写文案标题', trigger: 'blur' }
-          ],
-          Advertising: [
-            { required: true, message: '请填写文案', trigger: 'blur' }
-          ]
-        },
         picdetailed: {},
-        updateChange: false,
-        outerVisible: false,
         centerDialogVisible: false,
         currentPage: 1,
         pageSize: 20
@@ -477,16 +194,6 @@
     },
     mounted () {
       this.getAll(this.currentPage, this.pageSize)
-    },
-    filters: {
-      country_filters: function (value) {
-        return value.slice(value.indexOf('-') + 1, value.indexOf('('))
-      },
-      dateslice: function (value) {
-        if (value !== '') {
-          return '最后保存时间为 ' + value.slice(0, value.indexOf('T'))
-        }
-      }
     },
     computed: {
       mytitle () {
@@ -497,35 +204,6 @@
       },
       mysourceCount () {
         return this.$store.state.sourceCount
-      },
-      getAngleList () {
-        return this.$store.state.AngleList
-      },
-      getterraceList () {
-        return this.$store.state.terraceList
-      },
-      getcountryList () {
-        return this.$store.state.countryList
-      },
-      getCPM () {
-        let CPM = (this.sourceModal.Spent / this.sourceModal.reveal) * 1000
-        this.sourceModal.CPM = CPM.toFixed(2)
-        return isNaN(this.sourceModal.CPM) ? 0 : this.sourceModal.CPM
-      },
-      getCTR () {
-        let CTR = this.sourceModal.click / this.sourceModal.reveal
-        this.sourceModal.CTR = CTR.toFixed(2)
-        return isNaN(this.sourceModal.CTR) ? 0 + '%' : this.sourceModal.CTR + '%'
-      },
-      getCPC () { // 计算CPC值
-        let CPC = this.sourceModal.Spent / this.sourceModal.click
-        this.sourceModal.CPC = CPC.toFixed(2)
-        return isNaN(this.sourceModal.CPC) ? 0 : this.sourceModal.CPC
-      },
-      getROI () { // 计算ROI
-        let ROI = this.sourceModal.Revenue / this.sourceModal.Spent
-        this.sourceModal.ROI = ROI.toFixed(2)
-        return isNaN(this.sourceModal.ROI) ? 0 + '%' : this.sourceModal.ROI + '%'
       }
     },
     methods: {
@@ -539,6 +217,10 @@
         return ''
       },
       getAll: function (page, size) {
+        // 防止自执行函数对搜索结果数据的覆盖
+        if (this.mytitle === '搜索结果') {
+          return false
+        }
         this.$http.get('/api/resources/all?page=' + page + '&size=' + size).then((response) => {
           let data = response.data
           if (data.status === 0) {
@@ -553,30 +235,6 @@
           }
         })
       },
-      getdetailed: function (index, row) {
-        this.getconfig()
-        this.sourceIndex = index
-        this.sourceModalId = row._id
-        this.sourceModalName = row.user.username
-        this.sourceModal.sourceName = row.source.sourceName
-        this.sourceModal.Angle = row.source.Angle
-        this.sourceModal.terrace = row.source.terrace
-        this.sourceModal.opeavtor = row.source.opeavtor
-        this.sourceModal.reveal = row.source.reveal
-        this.sourceModal.click = row.source.click
-        this.sourceModal.CTR = row.source.CTR
-        this.sourceModal.CPC = row.source.CPC
-        this.sourceModal.CPM = row.source.CPM
-        this.sourceModal.conversion = row.source.conversion
-        this.sourceModal.Spent = row.source.Spent
-        this.sourceModal.Revenue = row.source.Revenue
-        this.sourceModal.ROI = row.source.ROI
-        this.sourceModal.profit = row.source.profit
-        this.sourceModal.AdvertisingTitle = row.source.AdvertisingTitle
-        this.sourceModal.Advertising = row.source.Advertising
-        this.sourceModal.country = row.source.country
-        this.sourceModal.landingPageList = row.source.landingPageList
-      },
       getpic: function (url, name, id, type) {
         let list = {}
         list.url = url
@@ -584,72 +242,6 @@
         list.id = id
         list.type = type
         this.picdetailed = list
-      },
-      update: function () {
-        let username = this.$cookies.get('_name')
-        if (username !== this.sourceModalName) {
-          this.$message({
-            message: '没有修改权限，请联系上传者修改',
-            type: 'error'
-          })
-          return false
-        }
-        let data = {}
-        data._id = this.sourceModalId
-        data.source = this.sourceModal
-        this.$http.put('/api/picture/update', data).then((response) => {
-          if (response.data.status === 0) {
-            let source = this.mysource
-            source[this.sourceIndex].source = response.data.data.source
-            this.$store.commit('source', source)
-            this.$message({
-              message: response.data.message,
-              type: 'success'
-            })
-          } else {
-            this.$message({
-              message: response.data.message,
-              type: 'error'
-            })
-          }
-        })
-      },
-      del: function (index, row) {
-        this.sourceModalName = row.user.username
-//        let source = this.mysource
-//        console.log(source)
-//        return false
-        let username = this.$cookies.get('_name')
-        if (username !== this.sourceModalName) {
-          this.$message({
-            message: '没有修改权限，请联系上传者修改',
-            type: 'error'
-          })
-          return false
-        }
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.get('/api/picture/del?_id=' + row._id).then((response) => {
-            if (response.data.status === 0) {
-              for (let i = 0; i < this.mysource.length; i++) {
-                if (row._id === this.mysource[i]._id) {
-                  this.mysource.splice(i, 1)
-                }
-              }
-              this.$message({
-                message: '已删除!'
-              })
-            } else {
-              this.$message({
-                message: response.data.message,
-                type: 'error'
-              })
-            }
-          })
-        }).catch(() => {})
       },
       handleSizeChange (size) {
         if (this.mytitle === '素材库') {
@@ -692,34 +284,6 @@
             }
           })
         }
-      },
-      savelandingPage () {
-        if (this.landingPageURL !== '' && this.landingPageClick !== '' && this.landingPageCR !== '' && this.landingPageCVR !== '') {
-          let data = {}
-          data.landingPageURL = this.landingPageURL
-          data.landingPageClick = this.landingPageClick
-          data.landingPageCR = this.landingPageCR
-          data.landingPageCVR = this.landingPageCVR
-          this.landingPageURL = ''
-          this.landingPageClick = ''
-          this.landingPageCR = ''
-          this.landingPageCVR = ''
-          this.sourceModal.landingPageList.push(data)
-        } else {
-          this.landingPageURL = ''
-          this.landingPageClick = ''
-          this.landingPageCR = ''
-          this.landingPageCVR = ''
-          this.$message({
-            type: 'info',
-            message: '请填写landingPage内容'
-          })
-        }
-      },
-      dellandingPage (index) {
-        let data = this.sourceModal.landingPageList
-        data.splice(index, 1)
-        this.sourceModal.landingPageList = data
       }
     }
   }
@@ -864,41 +428,11 @@
   /*.demo-table-expand .el-form-item .el-form-item__label{*/
    /*text-align: right;*/
   /*}*/
-  .update-form{
-    width: 100%;
-    max-width: 750px;
-    margin: 0px auto;
-    margin-top: 50px;
-  }
-  .two{
-    width: 370px;
-    display: inline-block;
-    vertical-align: top;
-  }
-  .three{
-    width: 245px;
-    display: inline-block;
-    vertical-align: top;
-  }
-  .four{
-    width: 182px;
-    display: inline-block;
-    vertical-align: top;
-  }
   .video-icon{
     display: inline-block;
     width: 16px;
     height: 16px;
     background: url(../../static/img/video.svg) no-repeat;
     background-size:100% 100%;
-  }
-  .landingBox{
-    width: 100%;
-  }
-  .landingContainer .el-input{
-    width: 18%;
-  }
-  .landingBox .content .el-input{
-    width: 18%;
   }
 </style>

@@ -64,7 +64,6 @@ exports.update = (req, res) => {
   let result = {status: 0, message: '素材内容已更新'}
   source.findByIdAndUpdate(req.body._id, query, {new: true}, (err, data) => {
     if (err) throw err
-    console.log(data)
     if (data) {
       result.data = data
       res.json(result)

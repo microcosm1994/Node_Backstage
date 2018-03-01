@@ -126,10 +126,8 @@ exports.updateAccount = (req, res) => {
   query.password = crypto.createHash('md5').update(req.body.password).digest('hex')
   query.portrait = req.body.portrait ? req.body.portrait : ''
   query.isAdmin = req.body.isAdmin ? req.body.isAdmin : false
-  console.log(query)
   User.findByIdAndUpdate(id, query, {new: true}, (err, data) => {
     if (err) throw err
-    console.log(data)
     if (data) {
       result.data = data
       res.json(result)
