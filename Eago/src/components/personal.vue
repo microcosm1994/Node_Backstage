@@ -2,9 +2,21 @@
   <div calss="library">
     <h1>{{title}}</h1>
     <div class="personal">
-      <div>
+      <div class="personal-portrait" @click="toggleShow">
         <img :src="getuser.portrait" alt="">
       </div>
+      <span>点击上传头像</span>
+      <my-upload :field="getuser.username"
+                 @crop-success="cropSuccess"
+                 @crop-upload-success="cropUploadSuccess"
+                 @crop-upload-fail="cropUploadFail"
+                 v-model="show"
+                 :width="300"
+                 :height="300"
+                 url="/api/picture/portrait"
+                 :params="params"
+                 :headers="headers"
+                 img-format="png"></my-upload>
       <p>用户昵称：<span>{{getuser.nickname}}</span></p>
       <p>用户账号：<span>{{getuser.username}}</span></p>
     </div>
@@ -375,6 +387,8 @@
 </template>
 
 <script>
+  import myUpload from 'vue-image-crop-upload'
+
   export default {
     name: 'library',
     data () {
@@ -479,8 +493,20 @@
         outerVisible: false,
         centerDialogVisible: false,
         currentPage: 1,
-        pageSize: 20
+        pageSize: 20,
+        show: false,
+        params: {
+          token: '123456798',
+          name: 'avatar'
+        },
+        headers: {
+          smail: '*_~'
+        },
+        imgDataUrl: '' // the datebase64 url of created image
       }
+    },
+    components: {
+      'my-upload': myUpload // 头像裁剪组件
     },
     mounted () {
       this.getPersonal(this.currentPage, this.pageSize)
@@ -703,6 +729,22 @@
         let data = this.sourceModal.landingPageList
         data.splice(index, 1)
         this.sourceModal.landingPageList = data
+      },
+      toggleShow () {
+        this.show = !this.show
+        console.log(this.getuser)
+      },
+      cropSuccess (imgDataUrl, field) {
+        console.log('-------- crop success --------')
+        this.imgDataUrl = imgDataUrl
+      },
+      cropUploadSuccess (jsonData, field) {
+        this.$store.commit('setuser', jsonData.data)
+      },
+      cropUploadFail (status, field) {
+        console.log('-------- upload fail --------')
+        console.log(status)
+        console.log('field: ' + field)
       }
     }
   }
@@ -883,5 +925,18 @@
   }
   .landingBox .content .el-input{
     width: 18%;
+  }
+  .personal-portrait{
+    width: 100px;
+    height: 100px;
+    margin: 30px auto;
+    border-radius:50%;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .personal-portrait img{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
   }
 </style>

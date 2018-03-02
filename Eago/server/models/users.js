@@ -14,7 +14,8 @@ const userSchema = new Schema({
     type: String
   },
   portrait: {
-    type: String
+    type: String,
+    default: 'http://eago.oss-cn-hongkong.aliyuncs.com/portrait/timg.jpg'
   },
   isAdmin: {
     type: Boolean

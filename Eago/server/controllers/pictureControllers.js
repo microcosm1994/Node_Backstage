@@ -3,6 +3,7 @@ const path = require('path')
 const oss = require('ali-oss')
 const co = require('co')
 const source = require(path.join(__dirname, '../models/source.js'))
+const User = require(path.join(__dirname, '../models/users.js'))
 
 const client = new oss.Wrapper({
   region: 'oss-cn-hongkong',
@@ -88,6 +89,36 @@ exports.del = (req, res) => {
     }
   })
 }
+
+exports.portrait = (req, res) => {
+  let result = {status: 0, message: '头像上传成功'}
+  let portraitName = req.cookies._name
+  let file = req.files[portraitName]
+  let fileName = file.name
+  let filePath = file.path
+  co(function* () {
+    var results = yield client.put('/portrait/' + fileName, filePath)
+    User.findOneAndUpdate({username: portraitName}, {portrait: results.url}, {new: true}, (err, data) => {
+      if (err) throw err
+      if (data) {
+        result.data = data
+        result.status = 0
+        res.json(result)
+      } else {
+        result.status = 1
+        result.meesage = '头像上传失败，请稍后再试'
+        res.json(result)
+      }
+    })
+  }).catch(function (err) {
+    if (err) {
+      res.status(503)
+      res.set('Content-Type', 'application/json charset=utf-8')
+      res.json(err)
+    }
+  })
+}
+
 // co(function* () {
 //   var result = yield client.listBuckets()
 //   console.log(result)

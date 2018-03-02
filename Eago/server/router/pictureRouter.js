@@ -7,6 +7,7 @@ const pictureRouter = express.Router()
 const pictureControllers = require(path.join(__dirname, '../controllers/pictureControllers.js'))
 
 pictureRouter.post('/upload', multipartMiddleware, pictureControllers.upload)
+pictureRouter.post('/portrait', multipartMiddleware, pictureControllers.portrait)
 pictureRouter.get('/detailed', multipartMiddleware, pictureControllers.detailed)
 pictureRouter.put('/update', multipartMiddleware, pictureControllers.update)
 pictureRouter.get('/del', multipartMiddleware, pictureControllers.del)

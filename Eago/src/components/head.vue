@@ -26,7 +26,7 @@
     </div>
     <div class="person">
       <div class="person-photo">
-        <img src="" alt="">
+        <img :src="getuser.portrait" alt="">
       </div>
       <div class="person-container">
         <el-dropdown trigger="click" @command="handleCommand">
@@ -232,10 +232,11 @@
     width: 50px;
     height: 50px;
     border-radius:50%;
-    background: #ffffff;
     margin-top: 10px;
     display: inline-block;
     vertical-align: top;
+    border-radius: 50%;
+    overflow: hidden;
   }
   .person .person-photo img{
     width: 100%;

@@ -81,7 +81,7 @@
           nickname: '',
           username: '',
           password: '',
-          portrait: '',
+          portrait: 'http://eago.oss-cn-hongkong.aliyuncs.com/portrait/timg.jpg',
           isAdmin: false,
           checkPass: ''
         },
