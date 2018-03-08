@@ -331,8 +331,8 @@
       },
       getCTR () {
         let CTR = this.ruleForm.click / this.ruleForm.reveal
-        this.ruleForm.CTR = CTR.toFixed(2)
-        return isNaN(this.ruleForm.CTR) ? 0 + '%' : this.ruleForm.CTR + '%'
+        this.ruleForm.CTR = CTR.toFixed(4)
+        return isNaN(this.ruleForm.CTR) ? 0 + '%' : this.ruleForm.CTR * 100 + '%'
       },
       getCPC () { // 计算CPC值
         let CPC = this.ruleForm.Spent / this.ruleForm.click
@@ -341,8 +341,8 @@
       },
       getROI () { // 计算ROI
         let ROI = this.ruleForm.Revenue / this.ruleForm.Spent
-        this.ruleForm.ROI = ROI.toFixed(2)
-        return isNaN(this.ruleForm.ROI) ? 0 + '%' : this.ruleForm.ROI + '%'
+        this.ruleForm.ROI = ROI.toFixed(4)
+        return isNaN(this.ruleForm.ROI) ? 0 + '%' : this.ruleForm.ROI * 100 + '%'
       }
     },
     mounted () {

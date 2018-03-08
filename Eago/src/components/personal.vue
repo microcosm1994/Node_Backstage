@@ -551,7 +551,7 @@
       getCTR () {
         let CTR = this.sourceModal.click / this.sourceModal.reveal
         this.sourceModal.CTR = CTR.toFixed(2)
-        return isNaN(this.sourceModal.CTR) ? 0 + '%' : this.sourceModal.CTR + '%'
+        return isNaN(this.sourceModal.CTR) ? 0 + '%' : this.sourceModal.CTR * 100 + '%'
       },
       getCPC () { // 计算CPC值
         let CPC = this.sourceModal.Spent / this.sourceModal.click
@@ -561,7 +561,7 @@
       getROI () { // 计算ROI
         let ROI = this.sourceModal.Revenue / this.sourceModal.Spent
         this.sourceModal.ROI = ROI.toFixed(2)
-        return isNaN(this.sourceModal.ROI) ? 0 + '%' : this.sourceModal.ROI + '%'
+        return isNaN(this.sourceModal.ROI) ? 0 + '%' : this.sourceModal.ROI * 100 + '%'
       }
     },
     methods: {
