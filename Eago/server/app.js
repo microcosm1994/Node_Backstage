@@ -28,9 +28,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 // 测试环境静态目录
-app.use(express.static('../dist'))
+// app.use(express.static('../dist'))
 // 部署服务器静态目录
-// app.use(express.static('/home/www.frzik.com'))
+app.use(express.static('/home/creative.eago.world'))
 
 app.use(function (req, res, next) {
   let end = req.originalUrl.indexOf('?')

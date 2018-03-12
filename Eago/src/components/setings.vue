@@ -121,11 +121,12 @@
         let data = {}
         data.terraceList = this.terraceTags
         data.AngleList = this.AngleTags
-//        data.countryList = this.countryTags
+        data.countryList = this.countryTags
         this.$http.post('/api/seting/saveconfig', data).then((response) => {
           if (response.data.status === 0) {
             this.$store.commit('setAngleList', data.AngleList)
             this.$store.commit('setterraceList', data.terraceList)
+            this.$store.commit('setcountryList', data.countryList)
             this.$message({
               message: response.data.message,
               type: 'success'

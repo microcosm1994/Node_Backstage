@@ -1,7 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import login from '@/components/login'
 import home from '@/components/home'
+import login from '@/components/login'
+// 路由懒加载
+// const eago = () => import('@/components/eago')
+// const add = () => import('@/components/add')
+// const library = () => import('@/components/library')
+// const register = () => import('@/components/register')
+// const accountPage = () => import('@/components/accountPage')
+// const setings = () => import('@/components/setings')
+// const personal = () => import('@/components/personal')
 import eago from '@/components/eago'
 import add from '@/components/add'
 import library from '@/components/library'

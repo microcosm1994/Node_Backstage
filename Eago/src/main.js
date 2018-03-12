@@ -8,7 +8,6 @@ import axios from 'axios'
 import store from './store/index'
 import global from './global'
 import cookie from 'vue-cookies'
-import echarts from 'echarts'
 import world from 'echarts/map/js/world'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -20,7 +19,6 @@ Vue.use(world)
 Vue.config.productionTip = false
 axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
 Vue.prototype.$http = axios
-Vue.prototype.$echarts = echarts
 Vue.filter('datetostring', function (value) {
   if (value !== '') {
     return value.slice(0, value.indexOf('T'))

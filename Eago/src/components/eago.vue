@@ -45,6 +45,8 @@
   </div>
 </template>
 <script>
+  const echarts = require('echarts/lib/echarts')
+
   export default {
     name: 'eago',
     data () {
@@ -111,7 +113,7 @@
         })
       },
       monthCount: function () {
-        let myChart = this.$echarts.init(document.getElementById('monthCount'))
+        let myChart = echarts.init(document.getElementById('monthCount'))
         // 指定图表的配置项和数据
         let option = {
           title: {
@@ -162,7 +164,7 @@
         myChart.setOption(option)
       },
       terraceCount: function () {
-        let myChart = this.$echarts.init(document.getElementById('terraceCount'))
+        let myChart = echarts.init(document.getElementById('terraceCount'))
         let option = {
           tooltip: {
             trigger: 'item',
@@ -218,7 +220,7 @@
         myChart.setOption(option)
       },
       AngleCount: function () {
-        let myChart = this.$echarts.init(document.getElementById('AngleCount'))
+        let myChart = echarts.init(document.getElementById('AngleCount'))
         let option = {
           tooltip: {
             trigger: 'item',
@@ -274,7 +276,7 @@
         myChart.setOption(option)
       },
       sumCount: function () {
-        let myChart = this.$echarts.init(document.getElementById('sumCount'))
+        let myChart = echarts.init(document.getElementById('sumCount'))
         let option = {
           tooltip: {
             trigger: 'item',
@@ -359,7 +361,7 @@
         myChart.setOption(option)
       },
       map: function () {
-        let myChart = this.$echarts.init(document.getElementById('map'))
+        let myChart = echarts.init(document.getElementById('map'))
         var latlong = {}
         latlong.AD = {'latitude': 42.5, 'longitude': 1.5}
         latlong.AE = {'latitude': 24, 'longitude': 54}

@@ -16,7 +16,7 @@ exports.login = (req, res) => {
       let id = data._id.toString()
       let expires = 10 * 24 * 60 * 60 * 1000
       res.cookie('_id', id, {
-        domain: 'www.frzik.com',
+        domain: 'creative.eago.world',
         maxAge: expires,
         path: '/'
       })
@@ -33,7 +33,7 @@ exports.login = (req, res) => {
 
 exports.logout = (req, res) => {
   res.clearCookie('_id', {
-    domain: '.www.frzik.com',
+    domain: '.creative.eago.world',
     path: '/'
   })
   res.json({

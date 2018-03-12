@@ -12,11 +12,11 @@ module.exports = {
     assetsPublicPath: '/',
 
     // Various Dev Server settings
-    host: 'www.frzik.com', // can be overwritten by process.env.HOST
+    host: 'creative.eago.world', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     proxyTable: {
       '/api/**': {
-        target: 'http://www.frzik.com:3000',
+        target: 'http://creative.eago.world:3000',
         changeOrigin: true,
         emulateJSON: true,
         pathRewrite: {

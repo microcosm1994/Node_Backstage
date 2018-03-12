@@ -20,7 +20,7 @@
     loop="loop"
     :style="this.fixStyle"
     >
-      <source src="../../static/img/night.mp4" type="video/mp4"/>
+      <source src="../../static/media/night.mp4" type="video/mp4"/>
       浏览器不支持 video 标签，建议升级浏览器。
       <source src="PATH_TO_WEBM" type="video/webm"/>
       浏览器不支持 video 标签，建议升级浏览器。
@@ -110,7 +110,7 @@
                 this.$store.commit('setuser', user)
                 this.$store.commit('setloginStatus', '退出')
                 this.$cookies.set('_name', data.data.username, {
-                  domain: 'www.frzik.com',
+                  domain: 'creative.eago.world',
                   path: '/'
                 })
                 this.$message({

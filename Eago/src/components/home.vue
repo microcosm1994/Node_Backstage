@@ -37,11 +37,12 @@
   </div>
 </template>
 <script>
-  import headers from './head'
-
   export default {
     name: 'home',
-    components: { headers },
+    components: {
+      // 异步组建
+      'headers': () => import('./head')
+    },
     data () {
       return {
         title: 'home',
