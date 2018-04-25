@@ -204,6 +204,12 @@
       },
       mysourceCount () {
         return this.$store.state.sourceCount
+      },
+      mysearch () {
+        return this.$store.state.search
+      },
+      getpage () {
+        return this.$store.state.page
       }
     },
     methods: {
@@ -244,18 +250,18 @@
         this.picdetailed = list
       },
       handleSizeChange (size) {
+        this.pageSize = size
         if (this.mytitle === '素材库') {
-          this.pageSize = size
           this.$store.commit('page', {page: this.currentPage, size: this.pageSize})
           this.getAll(this.currentPage, this.pageSize)
         } else {
-          this.$http.get('/api/resources/find?' + this.value + '=' + this.searchText + '&page=' + this.currentPage + '&size=' + this.getpage.size).then((response) => {
+          this.$store.commit('page', {page: this.currentPage, size: this.pageSize})
+          this.$http.get('/api/resources/find?' + this.mysearch.label + '=' + this.mysearch.text + '&page=' + this.currentPage + '&size=' + this.getpage.size).then((response) => {
             if (response.data.status === 0) {
               this.$store.commit('sourceCount', response.data.count)
               this.$store.commit('source', response.data.data)
               this.$store.commit('setTitle', '搜索结果')
 //              this.$router.push({path: './library'})
-              this.searchText = ''
             } else {
               this.$alert(response.data.message, '搜索结果提醒', {
                 confirmButtonText: '确定'
@@ -265,18 +271,18 @@
         }
       },
       handleCurrentChange (page) {
+        this.currentPage = page
         if (this.mytitle === '素材库') {
-          this.currentPage = page
           this.$store.commit('page', {page: this.currentPage, size: this.pageSize})
           this.getAll(this.currentPage, this.pageSize)
         } else {
-          this.$http.get('/api/resources/find?' + this.value + '=' + this.searchText + '&page=' + this.currentPage + '&size=' + this.getpage.size).then((response) => {
+          this.$store.commit('page', {page: this.currentPage, size: this.pageSize})
+          this.$http.get('/api/resources/find?' + this.mysearch.label + '=' + this.mysearch.text + '&page=' + this.currentPage + '&size=' + this.getpage.size).then((response) => {
             if (response.data.status === 0) {
               this.$store.commit('sourceCount', response.data.count)
               this.$store.commit('source', response.data.data)
               this.$store.commit('setTitle', '搜索结果')
 //              this.$router.push({path: './library'})
-              this.searchText = ''
             } else {
               this.$alert(response.data.message, '搜索结果提醒', {
                 confirmButtonText: '确定'

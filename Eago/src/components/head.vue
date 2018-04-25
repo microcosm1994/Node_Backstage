@@ -8,11 +8,11 @@
       <span style="color:#00a0df;">go</span>
     </div>
     <!--<div class="headers-nav">-->
-      <!--<a href="javascript:;">图片素材</a>-->
-      <!--<a href="javascript:;">视频素材</a>-->
+    <!--<a href="javascript:;">图片素材</a>-->
+    <!--<a href="javascript:;">视频素材</a>-->
     <!--</div>-->
     <div class="search">
-      <el-input placeholder="请输入查找内容" v-model="searchText"  @keyup.enter.native="getsearch" class="input-with-select">
+      <el-input placeholder="请输入查找内容" v-model="searchText" @keyup.enter.native="getsearch" class="input-with-select">
         <el-select v-model="value" slot="prepend" placeholder="请选择">
           <el-option
             v-for="item in options"
@@ -61,6 +61,12 @@
         }, {
           value: 'terrace',
           label: '平台'
+        }, {
+          value: 'slogan',
+          label: '文案'
+        }, {
+          value: 'slogantitle',
+          label: '文案标题'
         }],
         value: ''
       }
@@ -101,12 +107,22 @@
           })
           return false
         }
-        this.$http.get('/api/resources/find?' + this.value + '=' + this.searchText + '&page=' + this.currentPage + '&size=' + this.getpage.size).then((response) => {
+        let url = '/api/resources/find?'
+        if (this.value === 'slogan' || this.value === 'slogantitle') {
+          url = '/api/resources/sloganfind?'
+        }
+        this.$http.get(url + this.value + '=' + this.searchText + '&page=' + 1 + '&size=' + this.getpage.size).then((response) => {
           if (response.data.status === 0) {
-            this.$store.commit('sourceCount', response.data.count)
-            this.$store.commit('source', response.data.data)
+            if (this.value === 'slogan' || this.value === 'slogantitle') {
+              this.$store.commit('sloganCount', response.data.count)
+              this.$store.commit('slogan', response.data.data)
+              this.$router.push({path: './slogan_library'})
+            } else {
+              this.$store.commit('sourceCount', response.data.count)
+              this.$store.commit('source', response.data.data)
+              this.$router.push({path: './library'})
+            }
             this.$store.commit('setTitle', '搜索结果')
-            this.$router.push({path: './library'})
             this.searchText = ''
           } else {
             this.$alert(response.data.message, '搜索结果提醒', {
@@ -151,13 +167,14 @@
 </script>
 <style>
   /*@import "../../static/css/stars.css";*/
-  *{
+  * {
     padding: 0;
     margin: 0;
     text-decoration: none;
     box-sizing: border-box;
   }
-  .headers{
+
+  .headers {
     width: 100%;
     min-width: 1200px;
     height: 70px;
@@ -165,112 +182,126 @@
     padding-left: 100px;
     padding-right: 100px;
     position: fixed;
-    top:0;
+    top: 0;
     left: 0;
     z-index: 999;
     overflow: hidden;
   }
-  .logo{
+
+  .logo {
     display: inline-block;
     vertical-align: middle;
     width: 150px;
     height: 50px;
     position: absolute;
-    top:10px;
+    top: 10px;
     left: 15px;
   }
-  .logo span{
+
+  .logo span {
     line-height: 50px;
     font-size: 34px;
     font-weight: 700;
   }
+
   /*.headers-nav{*/
-    /*margin-left: 30px;*/
-    /*display: inline-block;*/
-    /*vertical-align: middle;*/
-    /*height: 70px;*/
+  /*margin-left: 30px;*/
+  /*display: inline-block;*/
+  /*vertical-align: middle;*/
+  /*height: 70px;*/
   /*}*/
   /*.headers-nav a{*/
-    /*display: inline-block;*/
-    /*width: 100px;*/
-    /*height: 70px;*/
-    /*line-height: 70px;*/
-    /*text-align: center;*/
-    /*font-size: 18px;*/
-    /*font-weight: 700;*/
-    /*color:#fed189;*/
+  /*display: inline-block;*/
+  /*width: 100px;*/
+  /*height: 70px;*/
+  /*line-height: 70px;*/
+  /*text-align: center;*/
+  /*font-size: 18px;*/
+  /*font-weight: 700;*/
+  /*color:#fed189;*/
   /*}*/
-  .search{
+  .search {
     display: inline-block;
     float: left;
     position: absolute;
-    top:50%;
+    top: 50%;
     left: 50%;
     transform: translateY(-50%) translateX(-50%);
   }
 
-  .search .el-input__inner{
+  .search .el-input__inner {
     width: 90px;
   }
-  .input-with-select>.el-input__inner{
+
+  .input-with-select > .el-input__inner {
     width: 200px !important;
   }
-  .el-scrollbar{
+
+  .el-scrollbar {
     text-align: center;
   }
-  .el-select-dropdown .popper__arrow{
+
+  .el-select-dropdown .popper__arrow {
     left: 90px !important;
   }
-  .person{
+
+  .person {
     width: 200px;
     height: 70px;
     display: inline-block;
     vertical-align: middle;
     float: right;
   }
-  .person .person-photo{
+
+  .person .person-photo {
     width: 50px;
     height: 50px;
-    border-radius:50%;
+    border-radius: 50%;
     margin-top: 10px;
     display: inline-block;
     vertical-align: top;
     border-radius: 50%;
     overflow: hidden;
   }
-  .person .person-photo img{
+
+  .person .person-photo img {
     width: 100%;
     height: 100%;
   }
-  .person .person-container{
+
+  .person .person-container {
     width: 140px;
     height: 70px;
     display: inline-block;
     vertical-align: top;
     position: relative;
   }
-  .person .person-container .el-dropdown-link{
+
+  .person .person-container .el-dropdown-link {
     width: 100%;
     height: 100%;
     text-align: center;
     line-height: 70px;
     font-size: 16px;
-    color:#f5f5f5;
+    color: #f5f5f5;
     cursor: pointer;
   }
-  .el-dropdown-menu .popper__arrow{
-   left: 34px !important;
+
+  .el-dropdown-menu .popper__arrow {
+    left: 34px !important;
   }
-  .person .person-container .person-nav a{
+
+  .person .person-container .person-nav a {
     display: block;
     width: 100%;
     height: 30px;
     line-height: 30px;
     text-align: center;
     font-size: 16px;
-    color:#000;
+    color: #000;
   }
-  .person .person-container .person-nav a:hover{
+
+  .person .person-container .person-nav a:hover {
     background: #e2e2e2;
   }
 </style>

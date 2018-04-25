@@ -17,6 +17,8 @@ import register from '@/components/register'
 import accountPage from '@/components/accountPage'
 import setings from '@/components/setings'
 import personal from '@/components/personal'
+import slogan from '@/components/slogan'
+import sloganlibrary from '@/components/slogan_library'
 // import resource from 'vue-resource'
 
 Vue.use(Router)
@@ -68,6 +70,16 @@ export default new Router({
           path: '/personal',
           name: 'personal',
           component: personal
+        },
+        {
+          path: '/slogan',
+          name: 'slogan',
+          component: slogan
+        },
+        {
+          path: '/slogan_library',
+          name: 'slogan_library',
+          component: sloganlibrary
         }
       ]
     }

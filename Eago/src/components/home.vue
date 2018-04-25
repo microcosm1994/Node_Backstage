@@ -18,11 +18,25 @@
               <router-link to="/library">素材库</router-link>
             </a>
           </li>
+          <li @click="setActive(), getsloganAll()">
+            <a href="javascript:;"
+               v-bind:class="{active:activeClass.slogan_library}"
+            >
+              <router-link to="/slogan_library">文案库</router-link>
+            </a>
+          </li>
           <li @click="setActive()">
             <a href="javascript:;"
               v-bind:class="{active:activeClass.add}"
             >
               <router-link to="/add">添加素材</router-link>
+            </a>
+          </li>
+          <li @click="setActive()">
+            <a href="javascript:;"
+               v-bind:class="{active:activeClass.slogan}"
+            >
+              <router-link to="/slogan">添加文案</router-link>
             </a>
           </li>
         </ul>
@@ -40,7 +54,7 @@
   export default {
     name: 'home',
     components: {
-      // 异步组建
+      // 异步组件
       'headers': () => import('./head')
     },
     data () {
@@ -49,7 +63,9 @@
         activeClass: {
           eago: false,
           library: false,
-          add: false
+          add: false,
+          slogan: false,
+          slogan_library: false
         }
       }
     },
@@ -64,6 +80,20 @@
           if (data.status === 0) {
             this.$store.commit('source', data.data)
             this.$store.commit('setTitle', '素材库')
+          } else {
+            this.$message({
+              message: data.message,
+              type: 'error'
+            })
+          }
+        })
+      },
+      getsloganAll: function () {
+        this.$http.get('/api/resources/slogan_all').then((response) => {
+          let data = response.data
+          if (data.status === 0) {
+            this.$store.commit('slogan', data.data)
+            this.$store.commit('setTitle', '文案库')
           } else {
             this.$message({
               message: data.message,

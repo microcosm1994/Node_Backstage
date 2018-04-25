@@ -143,7 +143,7 @@
                 v-model="landingPageCVR"
                 clearable>
               </el-input>
-              <el-button size="small" type="primary" icon="el-icon-check" @click="savelandingPage"></el-button>
+              <el-button size="small" type="primary" @click="savelandingPage">保存这条landingpage</el-button>
             </div>
           </el-form-item>
         </div>

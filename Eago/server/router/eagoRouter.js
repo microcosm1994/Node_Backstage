@@ -10,5 +10,6 @@ eagoRouter.post('/monthcount', multipartMiddleware, eagoControllers.monthcount)
 eagoRouter.get('/terraceCount', multipartMiddleware, eagoControllers.terraceCount)
 eagoRouter.get('/usersCount', multipartMiddleware, eagoControllers.usersCount)
 eagoRouter.get('/sourceCount', multipartMiddleware, eagoControllers.sourceCount)
+eagoRouter.get('/sloganCount', multipartMiddleware, eagoControllers.sloganCount)
 
 module.exports = eagoRouter

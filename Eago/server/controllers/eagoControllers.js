@@ -5,6 +5,7 @@ const path = require('path')
 // const crypto = require('crypto')
 const async = require('async')
 const Source = require(path.join(__dirname, '../models/source.js'))
+const Slogan = require(path.join(__dirname, '../models/slogan.js'))
 const Seting = require(path.join(__dirname, '../models/setings.js'))
 const Users = require(path.join(__dirname, '../models/users.js'))
 
@@ -105,6 +106,15 @@ exports.usersCount = (req, res) => {
 exports.sourceCount = (req, res) => {
   let result = {status: 0, message: '数据获取成功'}
   Source.count({}, (err, data) => {
+    if (err) throw err
+    result.count = data
+    res.json(result)
+  })
+}
+
+exports.sloganCount = (req, res) => {
+  let result = {status: 0, message: '数据获取成功'}
+  Slogan.count({}, (err, data) => {
     if (err) throw err
     result.count = data
     res.json(result)

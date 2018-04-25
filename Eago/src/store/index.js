@@ -10,8 +10,10 @@ export default new vuex.Store({
     user: {},
     usersCount: 0,
     source: [],
+    slogan: [],
     page: {},
     sourceCount: 0,
+    sloganCount: 0,
     search: {
       label: '',
       text: ''
@@ -33,13 +35,17 @@ export default new vuex.Store({
     setuser (state, obj) {
       state.user = obj
     },
-    // 搜索内容
+    // 搜索
     search (state, obj) {
-      state.search.text = obj
+      state.search = obj
     },
     // 素材
     source (state, data) {
       state.source = data
+    },
+    // 文案
+    slogan (state, data) {
+      state.slogan = data
     },
     // 页数
     page (state, obj) {
@@ -52,6 +58,10 @@ export default new vuex.Store({
     // 素材数量
     sourceCount (state, number) {
       state.sourceCount = number
+    },
+    // 文案数量
+    sloganCount (state, number) {
+      state.sloganCount = number
     },
     // 分类
     setAngleList (state, array) {

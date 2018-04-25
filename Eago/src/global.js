@@ -25,4 +25,11 @@ exports.install = function (Vue, options) {
       }
     })
   }
+  Vue.prototype.getsloganCount = function () {
+    this.$http.get('/api/count/sloganCount').then((response) => {
+      if (response.data.status === 0) {
+        this.$store.commit('sloganCount', response.data.count)
+      }
+    })
+  }
 }

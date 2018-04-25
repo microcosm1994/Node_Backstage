@@ -43,5 +43,6 @@ new Vue({
   mounted () {
     this.getusersCount()
     this.getsourceCount()
+    this.getsloganCount()
   }
 })
