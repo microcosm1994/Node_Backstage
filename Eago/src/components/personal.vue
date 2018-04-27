@@ -764,9 +764,8 @@
         data.source = this.sourceModal
         this.$http.put('/api/picture/update', data).then((response) => {
           if (response.data.status === 0) {
-            let source = this.mysource
-            source[this.sourceIndex].source = response.data.data.source
-            this.$store.commit('source', source)
+            this.mysource[this.sourceIndex].source = response.data.data.source
+            this.$store.commit('source', this.mysource)
             this.$message({
               message: response.data.message,
               type: 'success'
@@ -886,8 +885,12 @@
           data._id = this.sloganid
           this.$http.put('/api/picture/slogan_update', data).then((response) => {
             if (response.data.status === 0) {
-              this.myslogan[this.sloganindex] = response.data.data
-              this.$store.commit('slogan', this.myslogan)
+              let data = this.myslogan
+              data[this.sloganindex].group = response.data.data.group
+              data[this.sloganindex].title = response.data.data.title
+              data[this.sloganindex].slogan = response.data.data.slogan
+              this.$store.commit('slogan', data)
+//              this.getslogan_Personal(this.sloganPage, this.sloganpageSize)
               self.$message({
                 message: response.data.message,
                 type: 'success'
