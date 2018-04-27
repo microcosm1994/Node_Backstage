@@ -185,3 +185,33 @@ exports.personal = (req, res) => {
     }
   })
 }
+
+exports.slogan_personal = (req, res) => {
+  let result = {status: 0, message: '数据获取成功'}
+  let page = (req.query.page - 1) * req.query.size
+  let size = req.query.size - 0
+  console.log(req.cookies._name)
+  slogan.count({'user.username': req.cookies._name}, (err, data) => {
+    if (err) throw err
+    if (data) {
+      console.log(data)
+      let count = data
+      slogan.find({'user.username': req.cookies._name}, (err, data) => {
+        if (err) throw err
+        if (data) {
+          result.data = data
+          result.count = count
+          res.json(result)
+        } else {
+          result.status = 1
+          result.message = '数据获取失败'
+          res.json(result)
+        }
+      }).skip(page).limit(size)
+    } else {
+      result.status = 1
+      result.message = '数据获取失败'
+      res.json(result)
+    }
+  })
+}

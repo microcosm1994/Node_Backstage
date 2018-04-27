@@ -4,6 +4,7 @@ const oss = require('ali-oss')
 const co = require('co')
 const source = require(path.join(__dirname, '../models/source.js'))
 const User = require(path.join(__dirname, '../models/users.js'))
+const slogan = require(path.join(__dirname, '../models/slogan.js'))
 
 const client = new oss.Wrapper({
   region: 'oss-cn-hongkong',
@@ -17,6 +18,7 @@ co(function* () {
 }).catch(function (err) {
   console.log(err)
 })
+
 exports.upload = (req, res) => {
   let file = req.files.file
   let fileName = file.name
@@ -56,6 +58,22 @@ exports.detailed = (req, res) => {
   })
 }
 
+exports.slogan_detailed = (req, res) => {
+  let result = {status: 0, message: '获取成功'}
+  let query = req.query
+  slogan.findById(query._id, (err, data) => {
+    if (err) throw err
+    if (data) {
+      result.data = data
+      res.json(result)
+    } else {
+      result.status = 1
+      result.message = '服务器错误'
+      res.json(result)
+    }
+  })
+}
+
 exports.update = (req, res) => {
   let query = {}
   query.source = req.body.source
@@ -76,9 +94,40 @@ exports.update = (req, res) => {
   })
 }
 
+exports.slogan_update = (req, res) => {
+  console.log(req.body)
+  let query = req.body.slogan
+  let result = {status: 0, message: '素材内容已更新'}
+  slogan.findByIdAndUpdate(req.body._id, query, {new: true}, (err, data) => {
+    if (err) throw err
+    if (data) {
+      result.data = data
+      res.json(result)
+    } else {
+      result.status = 1
+      result.message = '服务器错误'
+      res.json(result)
+    }
+  })
+}
+
 exports.del = (req, res) => {
   let result = {status: 0, message: '已删除'}
   source.findByIdAndRemove(req.query._id, (err, data) => {
+    if (err) throw err
+    if (data) {
+      res.json(result)
+    } else {
+      result.status = 1
+      result.message = '服务器错误'
+      res.json(result)
+    }
+  })
+}
+
+exports.slogan_del = (req, res) => {
+  let result = {status: 0, message: '已删除'}
+  slogan.findByIdAndRemove(req.query._id, (err, data) => {
     if (err) throw err
     if (data) {
       res.json(result)

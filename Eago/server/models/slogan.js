@@ -16,8 +16,8 @@ const sloganSchema = new Schema({
   slogan: {
     type: String
   },
-  opeavtor: {
-    type: String
+  user: {
+    type: Object
   }
 })
 // 将数据模型暴露出去

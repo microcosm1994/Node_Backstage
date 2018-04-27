@@ -13,5 +13,6 @@ resourcesRouter.post('/slogansave', multipartMiddleware, resourcesControllers.sl
 resourcesRouter.get('/find', multipartMiddleware, resourcesControllers.find)
 resourcesRouter.get('/sloganfind', multipartMiddleware, resourcesControllers.sloganfind)
 resourcesRouter.get('/personal', multipartMiddleware, resourcesControllers.personal)
+resourcesRouter.get('/slogan_personal', multipartMiddleware, resourcesControllers.slogan_personal)
 
 module.exports = resourcesRouter

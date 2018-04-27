@@ -39,7 +39,7 @@
         <el-table-column
           label="opeavtor">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.opeavtor }}</span>
+            <span style="margin-left: 10px">{{ scope.row.user.nickname }}</span>
           </template>
         </el-table-column>
       </el-table>

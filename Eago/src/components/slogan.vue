@@ -54,7 +54,7 @@
           result.group = this.group
           result.title = this.slogantitle
           result.slogan = this.slogan
-          result.opeavtor = this.getuser.nickname
+          result.user = this.getuser
           this.$http.post('/api/resources/slogansave', result).then((response) => {
             if (response.data.status === 0) {
               self.$message({
