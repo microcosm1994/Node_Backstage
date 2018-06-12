@@ -95,7 +95,6 @@ exports.update = (req, res) => {
 }
 
 exports.slogan_update = (req, res) => {
-  console.log(req.body)
   let query = req.body.slogan
   let result = {status: 0, message: '素材内容已更新'}
   slogan.findByIdAndUpdate(req.body._id, query, {new: true}, (err, data) => {

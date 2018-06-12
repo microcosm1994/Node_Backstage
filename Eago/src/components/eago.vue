@@ -4,7 +4,7 @@
       <div class="eago-box">
         <div class="eago-subBox user">
           <span class="red"><i class="people"></i></span>
-          <p style="color:#323A45;font-weight: 500;height: 50px;line-height: 50px">{{getuser.nickname}} 您好</p>
+          <p style="color:#323A45;font-weight: 500;height: 50px;line-height: 50px">{{this.getuser.nickname}} 您好</p>
         </div>
         <div class="eago-subBox">
           <span class="blue"><i class="group"></i></span>

@@ -10,7 +10,7 @@ exports.login = (req, res) => {
   let users = req.body
   const hash = crypto.createHash('md5')
   users.password = hash.update(users.password).digest('hex')
-  User.findOne(users, (err, data) => {
+  User.findOne(users, '-password', (err, data) => {
     if (err) throw err
     if (data) {
       let id = data._id.toString()
@@ -21,7 +21,6 @@ exports.login = (req, res) => {
         path: '/'
       })
       result.data = data
-      delete result.data.password
       res.json(result)
     } else {
       result.status = 1
@@ -81,15 +80,9 @@ exports.register = (req, res) => {
 exports.user = (req, res) => {
   let result = {status: 0, message: '获取成功'}
   let query = req.query
-  User.findById(query._id, (err, data) => {
+  User.findById(query._id, '-password', (err, data) => {
     if (err) throw err
     if (data) {
-      let list = ['password']
-      list.forEach(
-        function (key) {
-          delete data[key]
-        }
-      )
       result.data = data
       res.json(result)
     } else {
@@ -102,12 +95,9 @@ exports.user = (req, res) => {
 
 exports.getaccount = (req, res) => {
   let result = {status: 0, message: '获取成功'}
-  User.find({}, (err, data) => {
+  User.find({}, '-password', (err, data) => {
     if (err) throw err
     if (data) {
-      for (let i = 0; i < data.length; i++) {
-        delete data[i].password
-      }
       result.data = data
       res.json(result)
     } else {
